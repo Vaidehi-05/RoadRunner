@@ -1,1 +1,74 @@
+Num_of_Nodes: 7  
+Name: Arrays  
+ConnectedNodes: ArrayBasics ArrayTypes ArrayOperations MemoryManagement SearchingTechniques SortingTechniques ArrayApplications Stacks  
+EdgeStart: Arrays  
+EdgeEnd: ArrayBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: ArrayBasics  
+EdgeEnd: ArrayTypes  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: ArrayBasics  
+EdgeEnd: ArrayOperations  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: ArrayBasics  
+EdgeEnd: MemoryManagement  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: ArrayOperations  
+EdgeEnd: SearchingTechniques  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: ArrayOperations  
+EdgeEnd: SortingTechniques  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4  
+EdgeStart: ArrayApplications  
+EdgeEnd: SearchingTechniques  
+EdgeWeight: 3  
+EdgeTimeNeeded: 5  
+EdgeStart: ArrayApplications  
+EdgeEnd: SortingTechniques  
+EdgeWeight: 3  
+EdgeTimeNeeded: 5  
+EdgeStart: ArrayApplications  
+EdgeEnd: Stacks  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+*****
+Num_of_Nodes: 7  
+Name: Stacks  
+ConnectedNodes: StackBasics StackImplementation StackOperations StackApplications StackMemory StackUseCases Arrays  
+EdgeStart: Stacks  
+EdgeEnd: StackBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: StackBasics  
+EdgeEnd: StackImplementation  
+EdgeWeight: 1  
+EdgeTimeNeeded: 3  
+EdgeStart: StackBasics  
+EdgeEnd: StackOperations  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: StackImplementation  
+EdgeEnd: Arrays  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: StackImplementation  
+EdgeEnd: StackMemory  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: StackOperations  
+EdgeEnd: StackApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4  
+EdgeStart: StackApplications  
+EdgeEnd: StackUseCases  
+EdgeWeight: 3  
+EdgeTimeNeeded: 5  
+*****
+
 
