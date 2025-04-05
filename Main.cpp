@@ -105,6 +105,7 @@ class RoadRunner{
                 {
                     obj.addEdge(edgeDetails[i][0],edgeDetails[i][1],edgeDetails[i][2],edgeDetails[i][3]);
                 }
+                topic.push_back(obj);
                 edgeDetails.clear();
                 mp.clear();
             }
