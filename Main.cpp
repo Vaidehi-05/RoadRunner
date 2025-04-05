@@ -9,7 +9,7 @@ class Graph{
     Graph(int n)
     {
         nodes=n;
-        adjMat.resize(n,vector<pair<int,int>>(n,{0,0}));
+        adjMat.resize(n,vector<pair<int,int>>(n,{0,0}));  //storing pair as: edge weight, edge time taken
     }
     void addEdge(int s, int e, int wt, int time)
     {
@@ -71,6 +71,7 @@ class RoadRunner{
                     wrd+=nodes[i];
                     else
                     mp[wrd]=++n;
+                    i+=1;
                 }
                 mp[wrd]=++n;
             }
