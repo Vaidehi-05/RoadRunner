@@ -11,20 +11,22 @@ vector <string> findMostOptimalPath(string start, int start_lvl, string end, int
     vector <string> shortest_path;  //storing final path from start to end node
     int alpha=alpha_val, beta=beta_val;  //constants that decide the weightage given to weight(level) and time respectively
     Graph start_node, end_node;
+
     vis[start]=1;
     unimap[start]=start_node;
     unimap[end]=end_node;
     shortest[start]=0;
     shortest_path.push_back(start);
     pq.push({start_node, 0});
+
     while(!pq.empty())
     {
             Graph s=pq.top().first;
             int minDist=pq.top().second,st;
 
-            vis[s]=true;
             pq.pop();
-            st=s.node_name[s]
+            st=s.node_name[s];
+            vis[st]=true;
 
             vector<vector<pair<int, int>>> adjMat=s.adjMat;
 
