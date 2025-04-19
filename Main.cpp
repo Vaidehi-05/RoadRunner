@@ -5,7 +5,7 @@ class Graph{
     vector <vector<pair<int,int>>> adjMat; //Creating a matrix so that each node is accessible directly
                                  //no need to traverse the entire list of connections if we know which node we want to connect with
     public:
-    map <string,int> node_name;
+    map <string,int> node_name;    //stores each node number with its respective name    
     Graph(int n)
     {
         nodes=n;
@@ -16,14 +16,13 @@ class Graph{
         if(s<nodes&&e<nodes)
         {
         adjMat[s][e].first=wt;
-        adjMat[e][s].first=wt;
         adjMat[s][e].second=time;
-        adjMat[e][s].second=time;
         }
     }
 };
 class RoadRunner{
     vector <Graph> topic;
+    map <string, Graph> uni_map;
     public:
     void createGraphsUsingFile(string filename)
     {
