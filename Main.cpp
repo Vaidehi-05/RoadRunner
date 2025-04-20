@@ -22,7 +22,7 @@ class Graph{
 };
 class RoadRunner{
     vector <Graph> topic;
-    map <string, Graph> uni_map;
+    map <string, Graph> uni_map;    //storing each Graph mapped to its name
     public:
     void createGraphsUsingFile(string filename)
     {
