@@ -37,7 +37,7 @@ vector <string> findMostOptimalPath(string start, int start_lvl, string end, int
 
             for(int i=0; i<s.no_of_nodes; i++)  //traversing all the connections of the current node
             {
-                if(vis.find(s.node_name[i]==mp.end()))
+                if(adjMat[s][i].first!=-1&&vis.find(s.node_name[i]==mp.end()))
                 {
                     int x=(alpha*adjMat[s][i].first)+(beta*adjMat[s][i].second);  //custom comparator 
                     pq.push_back({uni_map[s.node_name[i]], x});  //doubt: are we storing each node here? 
