@@ -1,14 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 class Graph{
-    int nodes;
+    string name_of_graph;
+    int no_of_nodes;
     vector <vector<pair<int,int>>> adjMat; //Creating a matrix so that each node is accessible directly
                                  //no need to traverse the entire list of connections if we know which node we want to connect with
     public:
     map <string,int> node_name;    //stores each node number with its respective name    
     Graph(int n)
     {
-        nodes=n;
+        no_of_nodes=n;
+        name_of_graph="";
         adjMat.resize(n,vector<pair<int,int>>(n,{0,0}));  //storing pair as: edge weight, edge time taken
     }
     void addEdge(int s, int e, int wt, int time)
@@ -46,7 +48,7 @@ class RoadRunner{
         }
 
         int no_of_nodes,edgeCount;
-        string node_name,line,parent;
+        string node_name,line,parent, nm;
         vector<vector<int>> edgeDetails;  //stores all edges in format: starting node, ending node, edge-weight, time needed
         map <string,int> mp;   //storing node value of each node
         while(getline(file,line))
@@ -59,6 +61,7 @@ class RoadRunner{
             else if(line.rfind("Name: ",0)==0)
             {
                 mp[line.substr(6)]=0;
+                nm=line.substr(6);
             }
             else if(line.rfind("ConnectedNodes: ",0)==0)
             {
@@ -101,6 +104,7 @@ class RoadRunner{
             {
                 Graph obj(no_of_nodes);
                 obj.node_name=mp; 
+                obj.name_of_graph=nm;
                 for(int i=0;i<edgeCount+1;i++)
                 {
                     obj.addEdge(edgeDetails[i][0],edgeDetails[i][1],edgeDetails[i][2],edgeDetails[i][3]);
