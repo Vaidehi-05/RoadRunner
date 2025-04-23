@@ -30,21 +30,21 @@ vector <string> findMostOptimalPath(string start, int start_lvl, string end, int
             string st;
             pq.pop();
         
-            st=s.node_name[s];
-            vis[st]=true;
+            st=s.node_name[s];//error:storing interger
+            vis[st]=true;//error: how bool?
 
             vector<vector<pair<int, int>>> adjMat=s.adjMat;
 
             for(int i=0; i<s.no_of_nodes; i++)  //traversing all the connections of the current node
             {
-                if(adjMat[s][i].first!=-1&&vis.find(s.node_name[i]==mp.end()))
+                if(adjMat[s][i].first!=-1/*must be 0?*/&&vis.find(s.node_name[i]==mp.end()))
                 {
                     int x=(alpha*adjMat[s][i].first)+(beta*adjMat[s][i].second);  //custom comparator 
-                    pq.push_back({uni_map[s.node_name[i]], x});  //doubt: are we storing each node here? 
-                    shortest[s.node_name[i]]=minDist+x;
-                    shortest_path.push_back(s.node_name[i]);
+                    pq.push_back({uni_map[s.node_name[i]]/*use node_index map instead*/, x});  //doubt: are we storing each node here? 
+                    shortest[s.node_name[i]/*use node_index map instead*/]=minDist+x;
+                    shortest_path.push_back(s.node_name[i]/*use node_index map instead*/);
 
-                    if(s.node_name[i]==end)  //returning the path as soon as the ending node is added 
+                    if(s.node_name[i]==end/*use node_index map instead*/)  //returning the path as soon as the ending node is added 
                     return shortest_path;
                 }
             }
