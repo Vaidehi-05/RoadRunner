@@ -6,7 +6,8 @@ class Graph{
     vector <vector<pair<int,int>>> adjMat; //Creating a matrix so that each node is accessible directly
                                  //no need to traverse the entire list of connections if we know which node we want to connect with
     public:
-    map <string,int> node_name;    //stores each node number with its respective name    
+    map <int,string> node_name;     //stores each node index's name
+    map <string,int> node_ind;    //stores each node num mapped to its name
     Graph(int n)
     {
         no_of_nodes=n;
@@ -51,6 +52,7 @@ class RoadRunner{
         string node_name,line,parent, nm;
         vector<vector<int>> edgeDetails;  //stores all edges in format: starting node, ending node, edge-weight, time needed
         map <string,int> mp;   //storing node value of each node
+        map <int,string> rev_mp;  //storing name of each node
         while(getline(file,line))
         {
             if(line.rfind("Num_of_Nodes: ",0)==0)
@@ -62,6 +64,7 @@ class RoadRunner{
             {
                 mp[line.substr(6)]=0;
                 nm=line.substr(6);
+                rev_mp[0]=nm;
             }
             else if(line.rfind("ConnectedNodes: ",0)==0)
             {
@@ -72,10 +75,14 @@ class RoadRunner{
                     if(nodes[i]!=' ')
                     wrd+=nodes[i];
                     else
-                    mp[wrd]=++n;
+                    {
+                        mp[wrd]=++n;
+                        rev_mp[n]=wrd;
+                    }
                     i+=1;
                 }
                 mp[wrd]=++n;
+                rev_mp[n]=wrd;
             }
             else if(line.rfind("EdgeStart: ",0)==0)
             {
@@ -103,7 +110,8 @@ class RoadRunner{
             else if(line.rfind("*****",0)==0)
             {
                 Graph obj(no_of_nodes);
-                obj.node_name=mp; 
+                obj.node_name=rev_mp; 
+                obj.node_ind=mp;
                 obj.name_of_graph=nm;
                 for(int i=0;i<edgeCount+1;i++)
                 {
