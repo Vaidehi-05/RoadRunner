@@ -8,6 +8,8 @@ class Graph{
     public:
     map <int,string> node_name;     //stores each node index's name
     map <string,int> node_ind;    //stores each node num mapped to its name
+    map <string, pair<int, vector<string>>> outDegree; //strore outdegrees and all the reachable neighbours
+
     Graph(int n)
     {
         no_of_nodes=n;
@@ -21,6 +23,24 @@ class Graph{
         adjMat[s][e].first=wt;
         adjMat[s][e].second=time;
         }
+    }
+
+    void outdegree()// gives n_o_n reachable, and their names;
+    {
+        int m=0;
+        vector<string>reachables;
+        for(int i=0; i<n; i++)
+           { 
+            for(int j=0; j<n; j++)
+                if(adjMat[i][j]!=0)
+                {   
+                    reachables.push_back(node_index[i]);
+                    m++;
+                }
+                outDegree[node_index[i]]={m,reachables};
+                m=0;
+                reachables.clear();
+           }
     }
 };
 class RoadRunner{
