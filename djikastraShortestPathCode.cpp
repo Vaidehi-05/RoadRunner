@@ -26,25 +26,27 @@ vector <string> findMostOptimalPath(string start, int start_lvl, string end, int
     while(!pq.empty())
     {
             Graph s=pq.top().first;
-            int minDist=pq.top().second;
+            int minDist=pq.top().second, curr=0;
             string st;
             pq.pop();
         
-            st=s.node_name[s];//error:storing interger
-            vis[st]=true;//error: how bool?
+            st=s.name_of_graph;
+            curr=s.node_ind[st];
+            vis[st]=1
 
             vector<vector<pair<int, int>>> adjMat=s.adjMat;
 
             for(int i=0; i<s.no_of_nodes; i++)  //traversing all the connections of the current node
             {
-                if(adjMat[s][i].first!=-1/*must be 0?*/&&vis.find(s.node_name[i]==mp.end()))
+                if(adjMat[curr][i].first!=0&&vis.find(s.node_name[i])==mp.end()))
                 {
-                    int x=(alpha*adjMat[s][i].first)+(beta*adjMat[s][i].second);  //custom comparator 
-                    pq.push_back({uni_map[s.node_name[i]]/*use node_index map instead*/, x});  //doubt: are we storing each node here? 
-                    shortest[s.node_name[i]/*use node_index map instead*/]=minDist+x;
-                    shortest_path.push_back(s.node_name[i]/*use node_index map instead*/);
+                    int x=(alpha*adjMat[curr][i].first)+(beta*adjMat[curr][i].second);  //custom comparator 
+                    if(present_skillset[uni_map[s.node_name[i]]==present_skillset.end())  //create a present_skillset map to store current skillset of user
+                    pq.push_back({uni_map[s.node_name[i]], x});  
+                    shortest[s.node_name[i]]=minDist+x;
+                    shortest_path.push_back(s.node_name[i];
 
-                    if(s.node_name[i]==end/*use node_index map instead*/)  //returning the path as soon as the ending node is added 
+                    if(s.node_name[i]==end)  //returning the path as soon as the ending node is added 
                     return shortest_path;
                 }
             }
