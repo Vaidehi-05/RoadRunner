@@ -10,7 +10,7 @@ static bool comp_for_temp_pq(pair <string, int> a, pair <string, int> b)
 
 vector<string> completionOfATopic(string topicName)
 {
-    Graph topic=uni_map[topicName];
+    Graph& topic=uni_map[topicName];
     map <int, bool> vis;
     stack <string> st;
     vector <string> completePath;
@@ -27,13 +27,13 @@ vector<string> completionOfATopic(string topicName)
         
         for(int i=0;i<topic.no_of_nodes;i++)
         {
-            if(adjMat[curr][i].first!=0&&vis[topic.node_ind[i]]==false)  
-            pq.push({topic.node_ind[i], topic.adjMat[curr][i].first});
+            if(topic.adjMat[curr][i].first!=0&&vis[i]==false)  
+            pq.push({topic.node_name[i], topic.adjMat[curr][i].first});
         }
 
         while(!pq.empty())  //STORED TEMPORARILY IN THE PRIORITY QUEUE SO THAT NODES ARE ENTERED IN THE STACK ACC. TO THE ORDER
         {
-            st.push_back(pq.top());
+            st.push(pq.top().first);
             pq.pop();
         }
     }
