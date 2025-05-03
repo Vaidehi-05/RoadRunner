@@ -260,13 +260,13 @@ EdgeTimeNeeded: 5
 *****  
 Num_of_Nodes: 7  
 Name: Trees  
-ConnectedNodes: TreeTraversal BinaryTree AVLTree BinarySearchTree TreeApplications  
+ConnectedNodes: TreeTraversal BinaryTrees AVLTree BinarySearchTrees TreeApplications  
 EdgeStart: Trees  
 EdgeEnd: TreeTraversal  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
 EdgeStart: Trees  
-EdgeEnd: BinaryTree  
+EdgeEnd: BinaryTrees 
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 EdgeStart: Trees  
@@ -274,19 +274,23 @@ EdgeEnd: AVLTree
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 EdgeStart: Trees  
-EdgeEnd: BinarySearchTree  
+EdgeEnd: BinarySearchTrees  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
-EdgeStart: BinaryTree  
+EdgeStart: Trees  
 EdgeEnd: TreeApplications  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 *****  
 Num_of_Nodes: 6  
 Name: Heaps  
-ConnectedNodes: HeapOperations HeapApplications PriorityQueue  
+ConnectedNodes: HeapOperations HeapApplications PriorityQueue  BinaryHeap
 EdgeStart: Heaps  
 EdgeEnd: HeapOperations  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3 
+EdgeStart: Heaps  
+EdgeEnd: BinaryHeap  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 EdgeStart: Heaps  
@@ -324,7 +328,7 @@ EdgeTimeNeeded: 3
 *****  
 Num_of_Nodes: 6  
 Name: BinaryTrees  
-ConnectedNodes: BinaryTreeTraversal BinaryTreeOperations BinarySearchTree AVLTree  
+ConnectedNodes: BinaryTreeTraversal BinaryTreeOperations BinarySearchTrees AVLTree  
 EdgeStart: BinaryTrees  
 EdgeEnd: BinaryTreeTraversal  
 EdgeWeight: 1  
@@ -334,7 +338,7 @@ EdgeEnd: BinaryTreeOperations
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 EdgeStart: BinaryTrees  
-EdgeEnd: BinarySearchTree  
+EdgeEnd: BinarySearchTrees  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 EdgeStart: BinaryTreeTraversal  
@@ -396,11 +400,7 @@ ConnectedNodes: MatrixRepresentation MatrixMultiplication MatrixTraversal Transp
 EdgeStart: MatrixOperations  
 EdgeEnd: MatrixRepresentation  
 EdgeWeight: 1  
-EdgeTimeNeeded: 2  
-EdgeStart: MatrixOperations  
-EdgeEnd: MatrixMultiplication  
-EdgeWeight: 2  
-EdgeTimeNeeded: 3  
+EdgeTimeNeeded: 2   
 EdgeStart: MatrixOperations  
 EdgeEnd: MatrixTraversal  
 EdgeWeight: 1  
@@ -480,33 +480,33 @@ EdgeTimeNeeded: 4
 *****  
 Num_of_Nodes: 6  
 Name: AVLTree  
-ConnectedNodes: Rotations Insertions Deletions  
+ConnectedNodes: RotationsAVL InsertionsAVL DeletionsAVL  
 EdgeStart: AVLTree  
-EdgeEnd: Rotations  
+EdgeEnd: RotationsAVL  
 EdgeWeight: 1  
 EdgeTimeNeeded: 4  
 EdgeStart: AVLTree  
-EdgeEnd: Insertions  
+EdgeEnd: InsertionsAVL  
 EdgeWeight: 2  
 EdgeTimeNeeded: 5  
 EdgeStart: AVLTree  
-EdgeEnd: Deletions  
+EdgeEnd: DeletionsAVL  
 EdgeWeight: 2  
 EdgeTimeNeeded: 6  
 *****  
 Num_of_Nodes: 6  
 Name: Trie  
-ConnectedNodes: Insert Search Delete  
+ConnectedNodes: InsertTrie SearchTrie DeleteTrie  
 EdgeStart: Trie  
-EdgeEnd: Insert  
+EdgeEnd: InsertTrie  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
 EdgeStart: Trie  
-EdgeEnd: Search  
+EdgeEnd: SearchTrie  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 EdgeStart: Trie  
-EdgeEnd: Delete  
+EdgeEnd: DeleteTrie  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 *****  
@@ -640,13 +640,13 @@ EdgeTimeNeeded: 5
 *****  
 Num_of_Nodes: 6  
 Name: BinaryHeap  
-ConnectedNodes: Insert Delete MinHeapify MaxHeapify  
+ConnectedNodes: InsertHeap DeleteHeap MinHeapify MaxHeapify  
 EdgeStart: BinaryHeap  
-EdgeEnd: Insert  
+EdgeEnd: InsertHeap  
 EdgeWeight: 1  
 EdgeTimeNeeded: 3  
 EdgeStart: BinaryHeap  
-EdgeEnd: Delete  
+EdgeEnd: DeleteHeap  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 EdgeStart: BinaryHeap  
@@ -700,7 +700,7 @@ EdgeTimeNeeded: 4
 *****  
 Num_of_Nodes: 6  
 Name: PriorityQueue  
-ConnectedNodes: MinPriorityQueue MaxPriorityQueue Insert Delete  
+ConnectedNodes: MinPriorityQueue MaxPriorityQueue InsertPQ DeletePQ  
 EdgeStart: PriorityQueue  
 EdgeEnd: MinPriorityQueue  
 EdgeWeight: 1  
@@ -710,11 +710,11 @@ EdgeEnd: MaxPriorityQueue
 EdgeWeight: 1  
 EdgeTimeNeeded: 3  
 EdgeStart: PriorityQueue  
-EdgeEnd: Insert  
+EdgeEnd: InsertPQ  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 EdgeStart: PriorityQueue  
-EdgeEnd: Delete  
+EdgeEnd: DeletePQ  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 *****  
@@ -836,7 +836,7 @@ EdgeTimeNeeded: 4
 *****
 Num_of_Nodes: 7  
 Name: Queue  
-ConnectedNodes: QueueBasics QueueOperations CircularQueue PriorityQueue QueueApplications Deque QueueVsStack  
+ConnectedNodes: QueueBasics QueueOperations CircularQueue PriorityQueue QueueApplications Deque QueueVsStack  MonotonicQueue
 EdgeStart: Queue  
 EdgeEnd: QueueBasics  
 EdgeWeight: 1  
@@ -845,6 +845,10 @@ EdgeStart: QueueBasics
 EdgeEnd: QueueOperations  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
+EdgeStart: Queue  
+EdgeEnd: MonotonicQueue 
+EdgeWeight: 3  
+EdgeTimeNeeded: 5 
 EdgeStart: QueueOperations  
 EdgeEnd: CircularQueue  
 EdgeWeight: 2  
@@ -866,45 +870,73 @@ EdgeEnd: QueueVsStack
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 *****
-Num_of_Nodes: 8  
+Num_of_Nodes: 10  
 Name: STL  
-ConnectedNodes: STLIntro Vector List Map Set StackSTL QueueSTL STLApplications  
+ConnectedNodes: STLIntroduction Vector List Deque Set Map UnorderedMap Stack Queue PriorityQueue Iterator Algorithm FunctionObject Pair Tuple  
 EdgeStart: STL  
-EdgeEnd: STLIntro  
+EdgeEnd: STLIntroduction  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
-EdgeStart: STLIntro  
+EdgeStart: STL  
 EdgeEnd: Vector  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-EdgeStart: STLIntro  
+EdgeStart: STL  
 EdgeEnd: List  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-EdgeStart: Vector  
-EdgeEnd: Map  
-EdgeWeight: 3  
-EdgeTimeNeeded: 4  
-EdgeStart: Vector  
-EdgeEnd: Set  
-EdgeWeight: 3  
-EdgeTimeNeeded: 4  
-EdgeStart: StackSTL  
-EdgeEnd: STLApplications  
-EdgeWeight: 2  
-EdgeTimeNeeded: 4  
 EdgeStart: STL  
-EdgeEnd: StackSTL  
+EdgeEnd: Deque  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 EdgeStart: STL  
-EdgeEnd: QueueSTL  
+EdgeEnd: Set  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: Map  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: UnorderedMap  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: Stack  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: STL  
+EdgeEnd: Queue  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: STL  
+EdgeEnd: PriorityQueue  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: Iterator  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: Algorithm  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: FunctionObject  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: Pair  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: Tuple  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 *****
 Num_of_Nodes: 9  
 Name: BinarySearchTrees  
-ConnectedNodes: BSTIntro BSTImplementation BSTOperations BSTTraversal BSTApplications BalancedBST AVLTree RedBlackTree TreeBasics  
+ConnectedNodes: BSTIntro BSTImplementation BSTOperations BSTTraversal BSTApplications BalancedBST AVLTree RedBlackTrees TreeBasics  
 EdgeStart: BinarySearchTrees  
 EdgeEnd: BSTIntro  
 EdgeWeight: 1  
@@ -938,7 +970,7 @@ EdgeEnd: AVLTree
 EdgeWeight: 3  
 EdgeTimeNeeded: 5  
 EdgeStart: BalancedBST  
-EdgeEnd: RedBlackTree  
+EdgeEnd: RedBlackTrees  
 EdgeWeight: 3  
 EdgeTimeNeeded: 5  
 ****
@@ -972,11 +1004,7 @@ EdgeTimeNeeded: 3
 EdgeStart: RBTreeRotations  
 EdgeEnd: RBTreeApplications  
 EdgeWeight: 2  
-EdgeTimeNeeded: 4  
-EdgeStart: RedBlackTrees  
-EdgeEnd: BalancedBST  
-EdgeWeight: 3  
-EdgeTimeNeeded: 5  
+EdgeTimeNeeded: 4   
 ****
 Num_of_Nodes: 7  
 Name: BinPacking  
@@ -1129,7 +1157,7 @@ EdgeStart: Monotonic Stack
 EdgeEnd: MonotonicStackBasics  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
-EdgeStart: MonotonicStackBasics  
+EdgeStart: MonotonicStack 
 EdgeEnd: MonotonicStackApplications  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
