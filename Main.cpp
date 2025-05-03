@@ -18,7 +18,7 @@ class Graph{
     }
     void addEdge(int s, int e, int wt, int time)
     {
-        if(s<nodes&&e<nodes)
+        if(s<no_of_nodes&&e<no_of_nodes)
         {
         adjMat[s][e].first=wt;
         adjMat[s][e].second=time;
@@ -84,6 +84,7 @@ class RoadRunner{
             {
                 mp[line.substr(6)]=0;
                 nm=line.substr(6);
+                parent=line.substr(6);
                 rev_mp[0]=nm;
             }
             else if(line.rfind("ConnectedNodes: ",0)==0)
