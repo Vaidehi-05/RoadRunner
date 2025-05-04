@@ -10,7 +10,8 @@ class Graph{
     map <int,string> node_name;     //stores each node index's name
     map <string,int> node_ind;    //stores each node num mapped to its name
     map <string, pair<int, vector<string>>> outDegree; //strore outdegrees and all the reachable neighbours
-
+    int totalImportant;
+    int totalTime;
     Graph(int n)
     {
         no_of_nodes=n;
@@ -42,6 +43,18 @@ class Graph{
                 m=0;
                 reachables.clear();
            }
+    }
+
+    void getTotalTime()
+    {
+        for(int i=0; i<nodes; i++)
+            for(int j=0; j<nodes; j++)
+                totalTime += adjMat[i][j].second;
+    }
+    void getTotalImportance()
+    {
+        for(auto i: outDegree)
+            totalImportant += i.second.first;
     }
 };
 class RoadRunner{
