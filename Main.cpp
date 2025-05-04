@@ -33,7 +33,7 @@ class Graph{
         for(int i=0; i<n; i++)
            { 
             for(int j=0; j<n; j++)
-                if(adjMat[i][j].first!=0 || adjMat[i][j]!=0)
+                if(adjMat[i][j].first!=0 || adjMat[i][j].second!=0)
                 {   
                     reachables.push_back(node_name[j]);
                     m++;
@@ -148,3 +148,10 @@ class RoadRunner{
         return;
     } 
 };
+
+int main()
+{
+    Roadrunner obj;
+    obj.outdegree();
+}
+
