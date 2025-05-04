@@ -5,14 +5,28 @@ struct KnapItem
     int totImp;
 };
 
-vector<string> KnapsackRecommendation(int maxTime, unordered_map<string, int> userCompletedTopics, map<string, int>& indegree) //need to exclude the already done topics
+vector<string> KnapsackRecommendation(int maxTime, unordered_map<string, int> userCompletedTopics, map<string, int>& indegree, map<string, Graph>& uni_map, map<string, int>& subtopic_adjustedImportance) //need to exclude the already done topics
 {
+    unordered_set<string> neighb;
+    for(auto& [a,nonono]:userCompletedTopics)
+        {
+            if(uni_map.find(a)!=uni_map.end())
+            {   Graph& b=uni_map[a];
+                for(auto& neighbour: b.outDegree)
+                    for(string& reachable: neighbour.second.second)
+                        if(userCompletedTopics.find(reachable)==userCompletedTopics.end())
+                            neighb.insert(reachable);
+            }
+        }
+    
     vector<KnapItem> topics;
 
     for(auto graph:uni_map)
     {
+        if (userCompletedTopics.find(graph.first)!=userCompletedTopics.end())
+            continue;
         int imp = subtopic_adjustedImportance[graph.first];
-        if(userCompletedTopics.find(graph.first)!=userCompletedTopics.end()) //prioritizing the neighbours;
+        if(neighb.count(graph.first)) //prioritizing the neighbours;
             imp += 10;
 
         if(indegree.find(graph.first)!= indegree.end() && indegree[graph.first]==0)
