@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 class Graph{
+    public:
     string name_of_graph;
     int no_of_nodes;
     vector <vector<pair<int,int>>> adjMat; //Creating a matrix so that each node is accessible directly
                                  //no need to traverse the entire list of connections if we know which node we want to connect with
-    public:
     map <int,string> node_name;     //stores each node index's name
     map <string,int> node_ind;    //stores each node num mapped to its name
     map <string, pair<int, vector<string>>> outDegree; //strore outdegrees and all the reachable neighbours
