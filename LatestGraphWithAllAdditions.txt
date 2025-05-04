@@ -169,7 +169,6 @@ EdgeStart: GreedyAlgorithms
 EdgeEnd: Backtracking  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3   
-
 *****  
 Num_of_Nodes: 5  
 Name: SearchingTechniques  
