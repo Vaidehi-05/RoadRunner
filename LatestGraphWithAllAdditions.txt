@@ -44,9 +44,13 @@ EdgeTimeNeeded: 3
 *****  
 Num_of_Nodes: 7  
 Name: Stacks  
-ConnectedNodes: StackBasics StackImplementation StackOperations StackApplications StackMemory StackUseCases Arrays  
+ConnectedNodes: StackBasics StackImplementation StackOperations StackApplications StackMemory StackUseCases Arrays StackSTL  
 EdgeStart: Stacks  
 EdgeEnd: StackBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2 
+EdgeStart: Stacks  
+EdgeEnd: StackSTL 
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
 EdgeStart: Stacks  
@@ -288,11 +292,7 @@ EdgeTimeNeeded: 4
 EdgeStart: BinarySearchTrees  
 EdgeEnd: AdvancedTreeStructures  
 EdgeWeight: 3  
-EdgeTimeNeeded: 4  
-EdgeStart: AdvancedTreeStructures  
-EdgeEnd: RBTrees  
-EdgeWeight: 3  
-EdgeTimeNeeded: 4  
+EdgeTimeNeeded: 4   
 EdgeStart: AdvancedTreeStructures  
 EdgeEnd: BTree  
 EdgeWeight: 3  
@@ -425,10 +425,6 @@ EdgeStart: MatrixOperations
 EdgeEnd: MatrixRepresentation  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2   
-EdgeStart: MatrixOperations  
-EdgeEnd: MatrixMultiplication  
-EdgeWeight: 2  
-EdgeTimeNeeded: 3  
 EdgeStart: MatrixOperations  
 EdgeEnd: MatrixTraversal  
 EdgeWeight: 1  
@@ -756,9 +752,13 @@ EdgeTimeNeeded: 4
 *****  
 Num_of_Nodes: 6  
 Name: PriorityQueue  
-ConnectedNodes: MinPriorityQueue MaxPriorityQueue InsertPQ DeletePQ  
+ConnectedNodes: MinPriorityQueue MaxPriorityQueue InsertPQ DeletePQ  PriorityQueueSTL
 EdgeStart: PriorityQueue  
 EdgeEnd: MinPriorityQueue  
+EdgeWeight: 1  
+EdgeTimeNeeded: 3 
+dgeStart: PriorityQueue  
+EdgeEnd: PriorityQueueSTL  
 EdgeWeight: 1  
 EdgeTimeNeeded: 3  
 EdgeStart: PriorityQueue  
@@ -828,7 +828,7 @@ EdgeTimeNeeded: 3
 *****
 Num_of_Nodes: 6
 Name: FenwickTree
-ConnectedNodes: FenwickBasics RangeSum PointUpdate TreeTraversal BITApplications SegmentTree
+ConnectedNodes: FenwickBasics RangeSum PointUpdate RSTreeTraversal BITApplications SegmentTree
 EdgeStart: FenwickTree
 EdgeEnd: FenwickBasics
 EdgeWeight: 1
@@ -842,7 +842,7 @@ EdgeEnd: PointUpdate
 EdgeWeight: 2
 EdgeTimeNeeded: 2
 EdgeStart: RangeSum
-EdgeEnd: TreeTraversal
+EdgeEnd: RSTreeTraversal
 EdgeWeight: 2
 EdgeTimeNeeded: 2
 EdgeStart: PointUpdate
@@ -880,9 +880,17 @@ EdgeTimeNeeded: 4
 *****
 Num_of_Nodes: 7  
 Name: Queue  
-ConnectedNodes: QueueBasics QueueOperations CircularQueue PriorityQueue QueueApplications Deque QueueVsStack  
+ConnectedNodes: QueueBasics QueueOperations CircularQueue PriorityQueue QueueApplications Deque QueueVsStack  QueueSTL DequeSTL
 EdgeStart: Queue  
 EdgeEnd: QueueBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: Queue  
+EdgeEnd: QueueSTL  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2 
+EdgeStart: Deque  
+EdgeEnd: DequeSTL
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
 EdgeStart: QueueBasics  
@@ -1017,7 +1025,7 @@ EdgeStart: BalancedBST
 EdgeEnd: RedBlackTrees  
 EdgeWeight: 3  
 EdgeTimeNeeded: 5  
-****
+*****
 Num_of_Nodes: 7  
 Name: RedBlackTrees  
 ConnectedNodes: RBTreeBasics RBTreeProperties RBTreeInsertion RBTreeDeletion RBTreeRotations RBTreeApplications BalancedBST  
@@ -1049,7 +1057,7 @@ EdgeStart: RBTreeRotations
 EdgeEnd: RBTreeApplications  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4   
-****
+*****
 Num_of_Nodes: 7
 Name: BinPacking
 ConnectedNodes: BinPackingIntro FirstFitAlgorithm BestFitAlgorithm WorstFitAlgorithm BinPackingApplications BinPackingComplexity GreedyAlgorithms
@@ -1089,10 +1097,14 @@ EdgeStart: GreedyAlgorithms
 EdgeEnd: BinPacking
 EdgeWeight: 3
 EdgeTimeNeeded: 4
-****
+*****
 Num_of_Nodes: 7  
 Name: SlidingWindow  
-ConnectedNodes: SlidingWindowIntro FixedSizeWindow VariableSizeWindow SlidingWindowApplications OptimalSlidingWindow ComplexityAnalysis TwoPointerTechnique  
+ConnectedNodes: SlidingWindowIntro FixedSizeWindow VariableSizeWindow SlidingWindowApplications OptimalSlidingWindow ComplexityAnalysis TwoPointerTechnique  SlidingWindowTechniques
+dgeStart: SlidingWindow  
+EdgeEnd: SlidingWindowIntro  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2 
 EdgeStart: TwoPointerTechnique  
 EdgeEnd: SlidingWindowIntro  
 EdgeWeight: 1  
@@ -1117,6 +1129,10 @@ EdgeStart: SlidingWindowApplications
 EdgeEnd: OptimalSlidingWindow  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
+dgeStart: SlidingWindow 
+EdgeEnd: SlidingWindowTechniques
+EdgeWeight: 3  
+EdgeTimeNeeded: 5 
 EdgeStart: OptimalSlidingWindow  
 EdgeEnd: ComplexityAnalysis  
 EdgeWeight: 2  
@@ -1157,7 +1173,7 @@ EdgeStart: PrefixSum1D
 EdgeEnd: ArrayManipulation  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-****
+*****
 Num_of_Nodes: 7  
 Name: Enumeration  
 ConnectedNodes: EnumerationIntro EnumerationAlgorithms EnumerationApplications EnumerationInPractice EnumerationEdgeCases TimeComplexityAnalysis ArrayTraversal  
@@ -1193,7 +1209,7 @@ EdgeStart: EnumerationApplications
 EdgeEnd: ArrayTraversal  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-****
+*****
 Num_of_Nodes: 7  
 Name: Monotonic Stack  
 ConnectedNodes: MonotonicStackBasics MonotonicStackApplications MonotonicStackProblems StackOperations TimeComplexityAnalysis ArrayTraversal SlidingWindowTechniques MonotonicQueue  
@@ -1213,6 +1229,10 @@ EdgeStart: MonotonicStackBasics
 EdgeEnd: StackOperations  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
+EdgeStart: MonotonicStack
+EdgeEnd: MonotonicStackApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3 
 EdgeStart: MonotonicStackApplications  
 EdgeEnd: SlidingWindowTechniques  
 EdgeWeight: 2  
@@ -1229,7 +1249,7 @@ EdgeStart: MonotonicStackApplications
 EdgeEnd: MonotonicQueue  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-****
+*****
 Num_of_Nodes: 7  
 Name: Bitmasking  
 ConnectedNodes: BitmaskingBasics BitmaskingApplications BitmaskingProblems BitwiseOperations DPWithBitmasking NumberTheory Combinatorics  
@@ -1265,7 +1285,7 @@ EdgeStart: BitmaskingApplications
 EdgeEnd: DPWithBitmasking  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-****
+*****
 Num_of_Nodes: 7  
 Name: MonotonicQueue  
 ConnectedNodes: MonotonicQueueBasics QueueOperations MinQueue MaxQueue SlidingWindowMax SlidingWindowMin MonotonicQueueApplications  
@@ -1297,7 +1317,7 @@ EdgeStart: SlidingWindowMax
 EdgeEnd: MonotonicQueueApplications  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-****
+*****
 Num_of_Nodes: 7  
 Name: TwoPointers  
 ConnectedNodes: TwoPointersBasics SortingBasedTwoPointers OppositeEndPointers MovingWindow TechniqueComparisons TwoPointersApplications SlidingWindow  
@@ -1333,7 +1353,7 @@ EdgeStart: TwoPointersApplications
 EdgeEnd: SlidingWindowIntro  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3
-****
+*****
 Num_of_Nodes: 8
 Name: GameTheory
 ConnectedNodes: GameTheoryBasics ZeroSumGames NimGame GrundyNumbers StrategyFormulation MinimaxTheory GameTheoryApplications Recursion
@@ -1369,8 +1389,7 @@ EdgeStart: Recursion
 EdgeEnd: GameTheory
 EdgeWeight: 1
 EdgeTimeNeeded: 2
-
-****
+*****
 Num_of_Nodes: 8  
 Name: Simulation  
 ConnectedNodes: SimulationBasics EventDrivenSimulation GridSimulation TimeComplexitySimulation SimulationApplications Recursion StateTracking Optimization  
@@ -1406,4 +1425,4 @@ EdgeStart: Recursion
 EdgeEnd:  Simulation  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
-****
+*****
