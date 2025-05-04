@@ -6,6 +6,7 @@ class Graph{
     int no_of_nodes;
     vector <vector<pair<int,int>>> adjMat; //Creating a matrix so that each node is accessible directly
                                  //no need to traverse the entire list of connections if we know which node we want to connect with
+   
     map <int,string> node_name;     //stores each node index's name
     map <string,int> node_ind;    //stores each node num mapped to its name
     map <string, pair<int, vector<string>>> outDegree; //strore outdegrees and all the reachable neighbours
@@ -32,9 +33,9 @@ class Graph{
         for(int i=0; i<n; i++)
            { 
             for(int j=0; j<n; j++)
-                if(adjMat[i][j]!=0)
+                if(adjMat[i][j].first!=0 || adjMat[i][j].second!=0)
                 {   
-                    reachables.push_back(node_index[i]);
+                    reachables.push_back(node_name[j]);
                     m++;
                 }
                 outDegree[node_index[i]]={m,reachables};
@@ -44,9 +45,9 @@ class Graph{
     }
 };
 class RoadRunner{
+    public:
     vector <Graph> topic;
     map <string, Graph> uni_map;    //storing each Graph mapped to its name
-    public:
     void createGraphsUsingFile(string filename)
     {
         ifstream file(filename);
@@ -147,3 +148,10 @@ class RoadRunner{
         return;
     } 
 };
+
+int main()
+{
+    Roadrunner obj;
+    obj.outdegree();
+}
+

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-struct StackNode+
+struct StackNode
 {
     string gname;
     int nodeVal;
