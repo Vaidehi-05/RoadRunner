@@ -10,10 +10,12 @@ class Graph{
     map <int,string> node_name;     //stores each node index's name
     map <string,int> node_ind;    //stores each node num mapped to its name
     map <string, pair<int, vector<string>>> outDegree; //strore outdegrees and all the reachable neighbours
-    int totalImportant;
+    int totalImportance;
     int totalTime;
     Graph(int n)
     {
+        totalTime=0;
+        totalImportance=0;
         no_of_nodes=n;
         name_of_graph="";
         adjMat.resize(n,vector<pair<int,int>>(n,{0,0}));  //storing pair as: edge weight, edge time taken
@@ -30,6 +32,7 @@ class Graph{
     void outdegree()// gives n_o_n reachable, and their names;
     {
         int m=0;
+        int n=no_of_nodes;
         vector<string>reachables;
         for(int i=0; i<n; i++)
            { 
@@ -39,7 +42,7 @@ class Graph{
                     reachables.push_back(node_name[j]);
                     m++;
                 }
-                outDegree[node_index[i]]={m,reachables};
+                outDegree[node_name[i]]={m,reachables};
                 m=0;
                 reachables.clear();
            }
@@ -47,20 +50,48 @@ class Graph{
 
     void getTotalTime()
     {
-        for(int i=0; i<nodes; i++)
-            for(int j=0; j<nodes; j++)
+        
+        for(int i=0; i<no_of_nodes; i++)
+            for(int j=0; j<no_of_nodes; j++)
                 totalTime += adjMat[i][j].second;
     }
     void getTotalImportance()
     {
         for(auto i: outDegree)
-            totalImportant += i.second.first;
+            totalImportance += i.second.first;
     }
 };
 class RoadRunner{
     public:
     vector <Graph> topic;
     map <string, Graph> uni_map;    //storing each Graph mapped to its name
+    map<string, int> indegree;
+    map<string, int> subtopic_adjustedImportance;
+    map<string, set<string>> graphConnections;
+
+    void computeIndegree()
+    {
+    for(auto graph: uni_map)
+        for(auto outDegree: graph.second.outDegree)
+        {
+            if(uni_map.find(outDegree.first) != uni_map.end())
+                graphConnections[graph.first].insert(outDegree.first);
+            for(auto neighbour: outDegree.second.second)
+                indegree[neighbour]++;
+        }
+    }
+    void computeAdjustedImportance()
+        {
+            for(auto graph: uni_map)
+            {
+                int imp = graph.second.totalImportant;
+                for(auto subGraph: graphConnections[graph.first])
+                    imp += uni_map[subGraph].totalImportant;
+                
+                subtopic_adjustedImportance[graph.first] = imp;
+            }
+        }
+
     void createGraphsUsingFile(string filename)
     {
         ifstream file(filename);
@@ -164,7 +195,16 @@ class RoadRunner{
 
 int main()
 {
-    Roadrunner obj;
-    obj.outdegree();
+    RoadRunner obj;
+    obj.createGraphsUsingFile("filename.txt");
+
+    for(Graph &g: obj.topic)
+        {
+            g.outdegree();
+            g.getTotalTime();
+            g.getTotalImportance();
+            obj.uni_map[g.name_of_graph]=g;
+        }
+    return 0;
 }
 
