@@ -367,7 +367,7 @@ class RoadRunner{
             return;
         }
 
-        int no_of_nodes,edgeCount;
+        int no_of_nodes,edgeCount, n=0;
         string node_name,line,/*parent,*/ nm;
         vector<vector<int>> edgeDetails;  //stores all edges in format: starting node, ending node, edge-weight, time needed
         map <string,int> mp;   //storing node value of each node
@@ -378,6 +378,7 @@ class RoadRunner{
             {
                 no_of_nodes=stoi(line.substr(14));
                 edgeCount=-1;
+                n=0;
             }
             else if(line.rfind("Name: ",0)==0)
             {
@@ -389,7 +390,7 @@ class RoadRunner{
             else if(line.rfind("ConnectedNodes: ",0)==0)
             {
                 string nodes=line.substr(16),wrd="";
-                int i=0,len=nodes.length(),n=0;
+                int i=0,len=nodes.length();
                 while(i<len)
                 {
                     if(nodes[i]!=' ')
@@ -430,7 +431,7 @@ class RoadRunner{
             }
             else if(line.rfind("*****",0)==0)
             {
-                Graph obj(no_of_nodes);
+                Graph obj(no_of_nodes+1);
                 obj.node_name=rev_mp; 
                 obj.node_ind=mp;
                 obj.name_of_graph=nm;
@@ -438,7 +439,7 @@ class RoadRunner{
                 {
                     obj.addEdge(edgeDetails[i][0],edgeDetails[i][1],edgeDetails[i][2],edgeDetails[i][3]);
                 }
-                uni_map[nm]=obj;
+                uni_map[rev_mp[0]]=obj;
                 topic.push_back(obj);
                 edgeDetails.clear();
                 mp.clear();
@@ -738,8 +739,9 @@ vector<string> completionOfATopic(string topicName, map<string,int>& present_ski
         string currNode = st.top();
         st.pop();
 
-        if (topic.node_ind.find(currNode) == topic.node_ind.end())
+         if (topic.node_ind.find(currNode) == topic.node_ind.end())
             continue; // Skip if node is not present in the graph
+            cout << "Current Node: " << currNode << endl;
 
        // int curr = topic.node_ind[currNode];
 
@@ -758,6 +760,8 @@ vector<string> completionOfATopic(string topicName, map<string,int>& present_ski
             {
             pq.push({topic.node_name[i], topic.adjMat[curr][i].first});
            // vis[topic.node_name[i]]=true;
+           cout << "Pushed to stack from: " << topic.node_name[i] << " with weight " << topic.adjMat[curr][i].first << endl;
+
             }
         }
 
@@ -894,7 +898,7 @@ int main()
     //ask user there things
     map<string, int> present_skillmap;
     unordered_set<string> present_skillset;
-    string startTopic;
+    string startTopic, endTopic;
     int timeConstraint= 0;
     int timeConstraintInUnits= 0;
 
@@ -924,6 +928,9 @@ int main()
     cout << "Enter the starting topic: ";
     getline(cin, startTopic);
 
+    cout << "Enter the ending topic: ";
+    getline(cin, endTopic);
+
     cout << "Enter time constraint (in hours): ";
     cin >> timeConstraint;
 
@@ -936,6 +943,7 @@ int main()
      present_skillset=getCorrectedTopics(trie, allTopics);
     for(auto& word: present_skillset)
         present_skillmap[word]=0;
+
 
     cout<<"Topics in Time:"<<timeConstraint<<endl;
         vector<string> ans=roadrunner.completionOfATopic(startTopic, present_skillmap);
