@@ -345,6 +345,12 @@ class RoadRunner{
                 subtopic_adjustedImportance[graph.first] = imp;
             }
         }
+string trim(string& s) 
+{
+    size_t start = s.find_first_not_of(" \t\r\n");
+    size_t end = s.find_last_not_of(" \t\r\n");
+    return (start == string::npos) ? "" : s.substr(start, end - start + 1);
+}
 
     void createGraphsUsingFile(string filename)
     {
@@ -382,30 +388,39 @@ class RoadRunner{
             }
             else if(line.rfind("Name: ",0)==0)
             {
-                mp[line.substr(6)]=0;
-                nm=line.substr(6);
-               // parent=line.substr(6);
-                rev_mp[0]=nm;
+                nm= trim(line.substr(6));
+                if(mp.find(nm)==mp.end())
+                {
+//                    int id = mp.size();
+                    mp[nm]= 0;
+                    rev_mp[0]= nm;
+                }
+
             }
             else if(line.rfind("ConnectedNodes: ",0)==0)
-            {
-                string nodes=line.substr(16),wrd="";
-                int i=0,len=nodes.length();
-                while(i<len)
                 {
-                    if(nodes[i]!=' ')
-                    wrd+=nodes[i];
-                    else
-                    {
+                    cout<<"ConnectingNodes:"<<endl;
+                    string nodes= trim(line.substr(16)), wrd;
+                     int i=0,len=nodes.length();
+                        while(i<len)
+                        {
+
+                            if(nodes[i]!=' ')
+                            wrd+=nodes[i];
+                            else
+                            {
+                                wrd=trim(wrd);
+                                mp[wrd]=++n;
+                                rev_mp[n]=wrd;
+                                wrd="";
+                            }
+                            i+=1;
+                        }
+                        wrd=trim(wrd);
                         mp[wrd]=++n;
                         rev_mp[n]=wrd;
-                        wrd="";
-                    }
-                    i+=1;
                 }
-                mp[wrd]=++n;
-                rev_mp[n]=wrd;
-            }
+
             else if(line.rfind("EdgeStart: ",0)==0)
             {
                 edgeCount+=1;
