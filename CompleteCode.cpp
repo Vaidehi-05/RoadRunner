@@ -5,7 +5,7 @@ using namespace std;
 struct TrieNode
 {
     bool isEnd;
-    //int freq;  //increase frequency of search // not used///????
+    int freq;  //increase frequency of search // not used///????
     unordered_map<char, TrieNode*> child;
 
     TrieNode(): isEnd(false){}
@@ -442,6 +442,7 @@ class RoadRunner{
                 topic.push_back(obj);
                 edgeDetails.clear();
                 mp.clear();
+                rev_mp.clear();
             }
         }
         file.close();
@@ -676,7 +677,7 @@ vector<string> KnapsackRecommendation(int maxTime, map<string, int>& present_ski
 vector <string> findMostOptimalPath(string start, string end, int alpha_val, int beta_val, map<string, int>& present_skillset)
 {
     map <string, int> vis,shortest; //map storing shortet distance of all uptil now visited
-    priority_queue <pair<Graph, int>, vector<pair<Graph,int>>, decltype (compForPQDjikastra)> pq(compForPQDjikastra);  //pq storing all nodes with their minimum distances
+    priority_queue <pair<Graph, int>, vector<pair<Graph,int>>, bool(*)(pair<Graph, int>, pair<Graph, int>)> pq(compForPQDjikastra);  //pq storing all nodes with their minimum distances
     vector <string> shortest_path;  //storing final path from start to end node
     int alpha=alpha_val, beta=beta_val;  //constants that decide the weightage given to weight(level) and time respectively
     Graph start_node, end_node;
@@ -720,30 +721,44 @@ vector <string> findMostOptimalPath(string start, string end, int alpha_val, int
             }
         return shortest_path;
     }
-}
+}   
 
-
-vector<string> completionOfATopic(string topicName)     // CODE FOR COMPLETING A TOPIC FROM SCRATCH TO ADVANCED
+vector<string> completionOfATopic(string topicName, map<string,int>& present_skillset)     // CODE FOR COMPLETING A TOPIC FROM SCRATCH TO ADVANCED
 {
     Graph& topic=uni_map[topicName];
-    map <int, bool> vis;
+    map <string, bool> vis;
     stack <string> st;
     vector <string> completePath;
-    priority_queue <pair<string, int>, vector<pair<string, int>>, decltype(comp_for_pq_forTopicCompletion)> pq(comp_for_pq_forTopicCompletion);
+    priority_queue <pair<string, int>, vector<pair<string, int>>, bool(*)(pair<string, int>, pair<string, int>)> pq(comp_for_pq_forTopicCompletion);
     st.push(topicName);
+    int num_of_nodes_added=0;
 
     while(!st.empty())
     {
-        int curr=topic.node_ind[st.top()];
-        if(!vis[topic.node_ind[st.top()]])
-        completePath.push_back(st.top());  
-        vis[topic.node_ind[st.top()]]=true;
+        string currNode = st.top();
         st.pop();
+
+        if (topic.node_ind.find(currNode) == topic.node_ind.end())
+            continue; // Skip if node is not present in the graph
+
+       // int curr = topic.node_ind[currNode];
+
+        int curr=topic.node_ind[currNode];
+        if(vis.find(currNode)==vis.end())
+        {
+        completePath.push_back(currNode);  
+        num_of_nodes_added+=1;
+        }
+        vis[currNode]=true;
+       // st.pop();
         
         for(int i=0;i<topic.no_of_nodes;i++)
         {
-            if(topic.adjMat[curr][i].first!=0&&vis[i]==false)  
+            if(topic.adjMat[curr][i].first!=0&&(vis.find(topic.node_name[i])==vis.end()))  
+            {
             pq.push({topic.node_name[i], topic.adjMat[curr][i].first});
+           // vis[topic.node_name[i]]=true;
+            }
         }
 
         while(!pq.empty())  //STORED TEMPORARILY IN THE PRIORITY QUEUE SO THAT NODES ARE ENTERED IN THE STACK ACC. TO THE ORDER
@@ -751,9 +766,11 @@ vector<string> completionOfATopic(string topicName)     // CODE FOR COMPLETING A
             st.push(pq.top().first);
             pq.pop();
         }
+       /* if(num_of_nodes_added>=15)
+        break;*/
     }
     return completePath;
-}
+}   
 
 
 // Graph: node -> list of (neighbor, (difficulty, time))
@@ -857,41 +874,30 @@ unordered_set<string> getCorrectedTopics(Trie& trie, vector<string>& allTopics)
     return skillset;
 }
 
+void BasicDisplayOfRoadmap(vector<string>& vec)
+{
+    cout<<"THE ROADMAP GENERATED ACCORDING TO THE GIVEN CONSTRAINTS IS AS FOLLOWS: "<<endl;
+    for(int i=0; i<vec.size(); i++)
+    {
+        cout<<vec[i]<<endl;
+    }
+}
+
 int main()
 {
 
     Trie trie;
     RoadRunner roadrunner;
-    roadrunner.createGraphsUsingFile("LatestGraphWithAllAdditions.txt");
+    roadrunner.createGraphsUsingFile("Editedtxt.txt");
+    cout<<"graphs created"<<endl;
 
     //ask user there things
-    unordered_map<string, int> present_skillmap;
+    map<string, int> present_skillmap;
     unordered_set<string> present_skillset;
     string startTopic;
     int timeConstraint= 0;
     int timeConstraintInUnits= 0;
-    
-    int n;
-    cout << "Enter number of completed topics: ";
-    cin >> n;
-    cin.ignore();
 
-    cout << "Enter the completed topics (one per line):" << endl;
-    for (int i = 0; i < n; ++i) {
-        string topic;
-        getline(cin, topic);
-        present_skillset.insert(topic);
-    }
-
-    cout << "Enter the starting topic: ";
-    getline(cin, startTopic);
-
-    cout << "Enter time constraint (in increment of 15 minutes): ";
-    cin >> timeConstraint;
-
-    //coverting time to units!
-    timeConstraintInUnits= timeConstraint/15;
-    
     for(auto& graph:roadrunner.uni_map)
     {
         graph.second.outdegree();
@@ -901,16 +907,39 @@ int main()
 
     roadrunner.computeIndegree();
     roadrunner.computeAdjustedImportance();
+    
+    int n;
+    cout << "Enter number of completed topics: ";
+    cin >> n;
+    cin.ignore();
+
+   /* cout << "Enter the completed topics (one per line):" << endl;
+    for (int i = 0; i < n; ++i) {
+        string topic;
+        getline(cin, topic);
+       // present_skillset.insert(topic);
+       // present_skillmap[topic]=1;
+    }   */
+
+    cout << "Enter the starting topic: ";
+    getline(cin, startTopic);
+
+    cout << "Enter time constraint (in hours): ";
+    cin >> timeConstraint;
+
+    //coverting time to units!
+    // timeConstraintInUnits= timeConstraint/15;
 
     vector<string> allTopics=getAllUniqueTopics(roadrunner);
     buildTrie(trie, allTopics);
 
-    unordered_set<string> present_skillset=getCorrectedTopics(trie, allTopics);
+     present_skillset=getCorrectedTopics(trie, allTopics);
     for(auto& word: present_skillset)
         present_skillmap[word]=0;
 
     cout<<"Topics in Time:"<<timeConstraint<<endl;
-        roadrunner.topicsPossibleInTime(startTopic, timeConstraintInUnits, present_skillset);
+        vector<string> ans=roadrunner.completionOfATopic(startTopic, present_skillmap);
+        BasicDisplayOfRoadmap(ans);
 
     // roadrunner.completionOfATopic();//complete grpah
     // roadrunner.findMostOptimalPath();
