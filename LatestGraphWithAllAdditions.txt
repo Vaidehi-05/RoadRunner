@@ -1,25 +1,25 @@
-Num_of_Nodes: 7  
-Name: Arrays  
-ConnectedNodes: ArrayBasics ArrayTypes ArrayOperations MemoryManagement SearchingTechniques SortingTechniques ArrayApplications Stacks  
-EdgeStart: Arrays  
-EdgeEnd: ArrayBasics  
-EdgeWeight: 1  
-EdgeTimeNeeded: 2  
-EdgeStart: ArrayBasics  
-EdgeEnd: ArrayTypes  
-EdgeWeight: 1  
-EdgeTimeNeeded: 2  
-EdgeStart: Arrays  
-EdgeEnd: ArrayOperations  
-EdgeWeight: 2  
-EdgeTimeNeeded: 3  
-EdgeStart: ArrayBasics  
-EdgeEnd: MemoryManagement  
-EdgeWeight: 1  
-EdgeTimeNeeded: 2  
-EdgeStart: ArrayOperations  
-EdgeEnd: SearchingTechniques  
-EdgeWeight: 2  
+Num_of_Nodes: 7
+Name: Arrays
+ConnectedNodes: ArrayBasics ArrayTypes ArrayOperations MemoryManagement SearchingTechniques SortingTechniques ArrayApplications Stacks
+EdgeStart: Arrays
+EdgeEnd: ArrayBasics
+EdgeWeight: 1
+EdgeTimeNeeded: 2
+EdgeStart: ArrayBasics
+EdgeEnd: ArrayTypes
+EdgeWeight: 1
+EdgeTimeNeeded: 2
+EdgeStart: Arrays
+EdgeEnd: ArrayOperations
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: ArrayBasics
+EdgeEnd: MemoryManagement
+EdgeWeight: 1
+EdgeTimeNeeded: 2
+EdgeStart: ArrayOperations
+EdgeEnd: SearchingTechniques
+EdgeWeight: 2
 EdgeTimeNeeded: 3  
 EdgeStart: ArrayOperations  
 EdgeEnd: SortingTechniques  
@@ -93,7 +93,7 @@ EdgeStart: RecursionBasics
 EdgeEnd: RecursionApplications  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-EdgeStart:RecursionApplications 
+EdgeStart: RecursionApplications 
 EdgeEnd: RecursionOptimization  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
@@ -312,7 +312,7 @@ EdgeTimeNeeded: 5
 *****
 Num_of_Nodes: 4  
 Name: Heaps  
-ConnectedNodes: HeapOperations HeapApplications PriorityQueue  BinaryHeap
+ConnectedNodes: HeapOperations HeapApplications PriorityQueue BinaryHeap
 EdgeStart: Heaps  
 EdgeEnd: HeapOperations  
 EdgeWeight: 2  
@@ -1101,7 +1101,7 @@ EdgeTimeNeeded: 4
 Num_of_Nodes: 7  
 Name: SlidingWindow  
 ConnectedNodes: SlidingWindowIntro FixedSizeWindow VariableSizeWindow SlidingWindowApplications OptimalSlidingWindow ComplexityAnalysis TwoPointerTechnique  SlidingWindowTechniques
-dgeStart: SlidingWindow  
+EdgeStart: SlidingWindow  
 EdgeEnd: SlidingWindowIntro  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2 
@@ -1211,7 +1211,7 @@ EdgeWeight: 2
 EdgeTimeNeeded: 3  
 *****
 Num_of_Nodes: 7  
-Name: Monotonic Stack  
+Name: MonotonicStack  
 ConnectedNodes: MonotonicStackBasics MonotonicStackApplications MonotonicStackProblems StackOperations TimeComplexityAnalysis ArrayTraversal SlidingWindowTechniques MonotonicQueue  
 EdgeStart: Monotonic Stack  
 EdgeEnd: MonotonicStackBasics  
@@ -1422,7 +1422,7 @@ EdgeEnd: SimulationApplications
 EdgeWeight: 3  
 EdgeTimeNeeded: 4  
 EdgeStart: Recursion 
-EdgeEnd:  Simulation  
+EdgeEnd: Simulation  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
 *****
