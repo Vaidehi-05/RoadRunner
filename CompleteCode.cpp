@@ -865,8 +865,9 @@ class Graph{
 
                 if(st==end)
                 {
+                    if(vis.find(end)==vis.end())
                     shortest_path.push_back(end);
-                return shortest_path;
+                    return shortest_path;
                 }
 
                // vector<vector<pair<int, int>>> adjMat=s.adjMat;
@@ -953,10 +954,10 @@ class Graph{
                 pq.pop();
             }
 
-            cout << "Current completePath: ";
+          /*  cout << "Current completePath: ";
             for (auto &node : completePath)
                 cout << node << " ";
-            cout << "\n---------------------------\n";
+            cout << "\n---------------------------\n";  */
 
            /* if(num_of_nodes_added>=15)
             break;*/
@@ -971,6 +972,8 @@ class Graph{
         {
             if(present_skillset.find(vec[i])==present_skillset.end())
             cout<<vec[i]<<endl;
+            else
+            cout<<vec[i]<<"     --✔"<<endl;
     }
     }
 
@@ -1150,7 +1153,7 @@ return vector<string>();  // No path found
 
     // ==== Display Options Menu ==== %%%%%%
     int displayOptions() {
-        cout << "\n" << YELLOW << "===== Learning Path Options =====\n" << RESET;
+        cout << "\n" << ORANGE << "===== ROADRUNNER Menu =====\n" << RESET;
         cout << YELLOW << "1. Learning a topic from Scratch from Advanced!"<<endl;
         cout <<YELLOW << "2. Get to know the maximum topics you can cover from your present skillset given the time you can devote!"<<endl;
         //cout << "3. View Connected Topics"<<endl;
@@ -1338,6 +1341,7 @@ vector<string> findConnectedTopics(string& topic,map<string, Graph>& uni_map) {
     roadrunner.computeAdjustedImportance();
 
     int n;
+    cout<<GREEN<<"Welcome to Roadrunner!\nGet ready to embark on a thrilling journey of self assessed growth, where we will provide you with the assistance but the journey will be all yours!\nJust fill up our questionairre and wait until the magic unfolds and we present you with a specially customized roadmap, tailored specifically to your needs and preferences!"<<endl;
     while (true) {
         int choice = roadrunner.displayOptions();
         map<string, int> present_skillset=getPresentSkillset(trie, allTopics);
@@ -1379,7 +1383,7 @@ vector<string> findConnectedTopics(string& topic,map<string, Graph>& uni_map) {
                 cout<<"Enter the skill you're aiming for"<<endl;
                 cin>>end;
                 cout<<"Wait a minute!!! We have an extra customization to offer! Choose what you'd like to prefer: "<<endl;
-                cout<<"Enter 1 if you want to prioritize easier learning and 2 if you want to prioritize lesser time and any number if a balanced is what you'd prefer!"<<endl;
+                cout<<"Enter 1 if you want to prioritize easier learning and 2 if you want to prioritize lesser time and any number if a balanced roadmap is what you'd prefer!"<<endl;
                 cin>>ch;
                 if(ch==1)
                 {
