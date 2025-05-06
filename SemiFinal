@@ -1,0 +1,795 @@
+#include <bits/stdc++.h>
+//#include "abbreviation.h"
+using namespace std;
+class Graph{
+    public:
+    string name_of_graph;
+    int no_of_nodes;
+    vector <vector<pair<int,int>>> adjMat; //Creating a matrix so that each node is accessible directly
+                                 //no need to traverse the entire list of connections if we know which node we want to connect with
+
+    map <int,string> node_name;     //stores each node index's name
+    map <string,int> node_ind;    //stores each node num mapped to its name
+    map <string, pair<int, vector<string>>> outDegree; //strore outdegrees and all the reachable neighbours
+    int totalImportance;    //stores sum of importance of all subnodes --deep
+    int totalTime;      //stores total time of only direct connections --only main
+
+    Graph()
+    {
+        totalTime=0;
+        totalImportance=0;
+        no_of_nodes=0;
+        name_of_graph="";
+       // adjMat.resize(n,vector<pair<int,int>>(n,{0,0}));  //storing pair as: edge weight, edge time taken
+    }
+
+    Graph(int n)
+    {
+        totalTime=0;
+        totalImportance=0;
+        no_of_nodes=n;
+        name_of_graph="";
+        adjMat.resize(n,vector<pair<int,int>>(n,{0,0}));  //storing pair as: edge weight, edge time taken
+    }
+
+    void addEdge(int s, int e, int wt, int time)
+    {
+        if(s<no_of_nodes&&e<no_of_nodes && s!=e)
+        {
+        adjMat[s][e].first=wt;
+        adjMat[s][e].second=time;
+        }
+    }
+
+    void outdegree()// gives n_o_n reachable, and their names;
+    {
+        int m=0;
+        int n=no_of_nodes;
+        vector<string>reachables;
+        for(int i=0; i<n; i++)
+           {
+            for(int j=0; j<n; j++)
+                if(adjMat[i][j].first!=0 || adjMat[i][j].second!=0)
+                {
+                    reachables.push_back(node_name[j]);
+                    m++;
+                }
+                outDegree[node_name[i]]={m,reachables};
+                m=0;
+                reachables.clear();
+           }
+    }
+
+    void getTotalTime()
+    {
+        for(int i=0; i<no_of_nodes; i++)
+            for(int j=0; j<no_of_nodes; j++)
+                totalTime+= adjMat[i][j].second;
+    }
+
+    void getTotalImportance()
+    {
+        for(auto i: outDegree)
+            totalImportance+= i.second.first;
+    }
+
+    };
+
+struct KnapItem
+{
+    string name;
+    int totTime;
+    int totImp;
+};
+
+
+struct StackNode    //USED FOR DFS
+{
+    string gname;
+    int nodeVal;
+    vector<string> path;
+    int totImportance;
+    int totTime;
+    map<string, bool> vis;
+    //int diff; //variable constraints!
+};
+
+class RoadRunner{
+    public:
+    vector <Graph> topic;   //???
+    map <string, Graph> uni_map;    //storing each Graph mapped to its name
+    map <string, int> indegree;
+    map <string, int> subtopic_adjustedImportance;
+    map <string, set<string>> graphConnections;
+
+    void computeIndegree()
+    {
+    for (auto& graph : uni_map)  // Iterate over each graph in the uni_map
+        for (auto& outD : graph.second.outDegree)
+        {
+            if(indegree.count(outD.first)== 0)
+                indegree[outD.first]= 0;
+
+            // Iterate over outgoing edges
+            // For each outgoing connection, increase the indegree of the target nodes
+            for (auto& neighbour : outD.second.second)
+            {
+                if (indegree.count(neighbour) == 0)
+                    indegree[neighbour] = 0;
+                indegree[neighbour]++;  // Increase the indegree for the neighbour node
+            cout<<" "<<neighbour<<":"<<indegree[neighbour]<<endl;
+            }
+        }
+    }
+
+    void createGraphConnections()
+    {
+    for(auto& graph:uni_map) //iterate through all graphs
+        for(auto& outD:graph.second.outDegree)// for each node and its outgoing edges
+            for (string& neighbour : outD.second.second)
+                // Check if this neighbour node exists in any other graph
+                for(auto& otherGraph: uni_map)
+                {
+                    if (graph.first == otherGraph.first) continue;
+                    if(otherGraph.second.node_ind.count(neighbour)>0)   // Found a connection in another graph
+                        {
+                        graphConnections[graph.first].insert(otherGraph.first);
+                        cout << "  Found connection: " << graph.first
+                             << " -> " << otherGraph.first
+                             << " via node " << neighbour << endl;
+                    }
+
+                }
+    }
+
+    void computeAdjustedImportance()
+        {
+            for(auto graph: uni_map)
+            {
+                int imp = graph.second.totalImportance;
+                for(auto subGraph: graphConnections[graph.first])
+                    imp += uni_map[subGraph].totalImportance;
+
+                subtopic_adjustedImportance[graph.first] = imp;
+                cout<<subtopic_adjustedImportance[graph.first]<<endl;
+            }
+        }
+
+    string trim(const string& s)
+    {
+    size_t start = s.find_first_not_of(" \t\r\n");
+    size_t end = s.find_last_not_of(" \t\r\n");
+    return (start == string::npos) ? "" : s.substr(start, end - start + 1);
+    }
+
+    void createGraphsUsingFile(string filename)
+    {
+        ifstream file(filename);
+        /*
+            FORMAT FOLLOWED:
+
+            Num_of_nodes:
+            Name:
+            ConnectedNodes:
+            EdgeStart:
+            EdgeEnd:
+            EdgeWeight:
+            EdgeTimeNeeded:
+
+            */
+        if(!file.is_open())
+        {
+            cout<<"Error! Could not open file. "<<endl;
+            return;
+        }
+
+        int no_of_nodes,edgeCount, n=0;
+        string node_name,line,/*parent,*/ nm;
+        vector<vector<int>> edgeDetails;  //stores all edges in format: starting node, ending node, edge-weight, time needed
+        map <string,int> mp;   //storing node value of each node
+        map <int,string> rev_mp;  //storing name of each node
+        while(getline(file,line))
+        {
+            if(line.rfind("Num_of_Nodes: ",0)==0)
+            {
+                no_of_nodes=stoi(line.substr(14));
+                edgeCount=-1;
+                n=0;
+            }
+            else if(line.rfind("Name: ",0)==0)
+            {
+                nm= trim(line.substr(6));
+                if(mp.find(nm)==mp.end())
+                {
+//                    int id = mp.size();
+                    mp[nm]= 0;
+                    rev_mp[0]= nm;
+                }
+
+            }
+            else if(line.rfind("ConnectedNodes: ",0)==0)
+                {
+                    cout<<"ConnectingNodes:"<<endl;
+                    string nodes= trim(line.substr(16)), wrd="";
+                     int i=0,len=nodes.length();
+                        while(i<len)
+                        {
+
+                            if(nodes[i]!=' ')
+                            wrd+=nodes[i];
+                            else
+                            {
+                                wrd=trim(wrd);
+                                mp[wrd]=++n;
+                                rev_mp[n]=wrd;
+                                wrd="";
+                            }
+                            i+=1;
+                        }
+                        wrd=trim(wrd);
+                        mp[wrd]=++n;
+                        rev_mp[n]=wrd;
+                }
+
+            else if(line.rfind("EdgeStart: ",0)==0)
+            {
+                edgeCount+=1;
+                string start = trim(line.substr(11));
+
+                vector<int> a;
+                a.push_back(mp[start]);
+                edgeDetails.push_back(a);
+            }
+            else if(line.rfind("EdgeEnd: ",0)==0)
+            {
+                string end = trim(line.substr(9));
+                edgeDetails[edgeCount].push_back(mp[end]);
+            }
+            else if(line.rfind("EdgeWeight: ",0)==0)
+            {
+                int weight=stoi(line.substr(12));
+                edgeDetails[edgeCount].push_back(weight);
+            }
+            else if(line.rfind("EdgeTimeNeeded: ",0)==0)
+            {
+                int time=stoi(line.substr(16));
+                edgeDetails[edgeCount].push_back(time);
+            }
+            else if(line.rfind("*****",0)==0)
+            {
+                Graph obj(no_of_nodes);
+                //cout<<no_of_nodes<<endl;
+                obj.node_name=rev_mp;
+                obj.node_ind=mp;
+                //print(mp, rev_mp);
+                obj.name_of_graph=nm;
+                for(int i=0;i<edgeCount+1;i++)
+                {
+                    obj.addEdge(edgeDetails[i][0],edgeDetails[i][1],edgeDetails[i][2],edgeDetails[i][3]);
+                }
+                uni_map[nm]=obj;
+                topic.push_back(obj);
+                edgeDetails.clear();
+                mp.clear();
+                rev_mp.clear();
+            }
+        }
+        file.close();
+        return;
+    }
+
+//    void printSubgraph(string node,
+//                   map<string, vector<pair<string, pair<int, int>>>>& branches,
+//                   int timeConstraint,
+//                   string indent = "", bool isLast = true,
+//                   pair<int, int> edgeInfo = {-1, -1},
+//                   unordered_set<string>& visited = *(new unordered_set<string>()),
+//                   int timeSpent = 0)
+//{
+//    // If the current time spent exceeds the constraint, stop
+//    if (timeSpent > timeConstraint) {
+//        return;
+//    }
+//
+//    // Check if we can print the current node with the edge time
+//    int newTimeSpent = timeSpent + edgeInfo.first;
+//    if (newTimeSpent > timeConstraint) {
+//        return;  // Don't print and stop recursion if we exceed the time constraint
+//    }
+//
+//    if (visited.count(node)) return;
+//    visited.insert(node);
+//
+//    // Print current node
+//    cout << indent;
+//    if (!indent.empty()) {
+//        cout << (isLast ? "└── " : "├── ");
+//    }
+//
+//    cout << node;
+//    if (edgeInfo.first != -1) {
+//        cout << " (Time: " << edgeInfo.first << ", Diff: " << edgeInfo.second << ")";
+//    }
+//    cout << endl;
+//
+//    // Prepare indentation for next level
+//    indent += (isLast ? "    " : "│   ");
+//
+//    // Recurse for all children, updating timeSpent
+//    const auto& children = branches[node];
+//    for (size_t i = 0; i < children.size(); ++i) {
+//        const auto& [child, weight] = children[i];
+//        bool childIsLast = (i == children.size() - 1);
+//
+//        // Add the edge time to timeSpent for next level
+//        printSubgraph(child, branches, timeConstraint, indent, childIsLast, weight, visited, newTimeSpent);
+//    }
+//}
+
+void printSubgraph(string node,
+                   map<string, vector<pair<string, pair<int, int>>>>& branches,
+                   int timeConstraint,
+                   string indent = "", bool isLast = true,
+                   pair<int, int> edgeInfo = {-1, -1},
+                   unordered_set<string>& visited = *(new unordered_set<string>()),
+                   int timeSpent = 0)
+{
+    // If the current time spent exceeds the constraint, stop
+    if (timeSpent > timeConstraint) {
+        return;
+    }
+
+    // Check if we can print the current node with the edge time
+    int newTimeSpent = timeSpent + edgeInfo.first;
+    if (newTimeSpent > timeConstraint) {
+        return;  // Don't print and stop recursion if we exceed the time constraint
+    }
+
+    if (visited.count(node)) return;
+    visited.insert(node);
+
+    // Print current node
+    cout << indent;
+    if (!indent.empty()) {
+        cout << (isLast ? "└── " : "├── ");
+    }
+
+    cout << node;
+    if (edgeInfo.first != -1) {
+        cout << " (Time: " << edgeInfo.first << ", Diff: " << edgeInfo.second << ")";
+    }
+    cout << endl;
+
+    // Prepare indentation for next level
+    indent += (isLast ? "    " : "│   ");
+
+    // Recurse for all children, updating timeSpent
+    const auto& children = branches[node];
+    for (size_t i = 0; i < children.size(); ++i) {
+        const auto& [child, weight] = children[i];
+        bool childIsLast = (i == children.size() - 1);
+
+        // Add the edge time to timeSpent for next level
+        printSubgraph(child, branches, timeConstraint, indent, childIsLast, weight, visited, newTimeSpent);
+    }
+}
+
+    void topicsPossibleInTime(string startNode, int timeConstraint, unordered_set<string>& present_skillset)
+    {
+
+        int nodeVal;
+        string gname;
+        //can create a function
+        for(auto[graphName, graph]: uni_map)    //finding the startNode's(GraphName & NodeIndex) by traverse the whole Graph
+        {
+                if(graph.node_ind.find(startNode)!=graph.node_ind.end())
+                {
+                    gname= graphName;
+                    nodeVal=graph.node_ind[startNode];
+                    break;
+                }
+        }
+
+        stack<StackNode> st; //{GraphName, NodeIndex, PathTraversed, totImp, totTime, NodesVisited}
+
+    set<string> reachableNodes;              //stores all nodes reachable from startNode(under Constraint)
+    map<pair<string, string>, pair<int, int>> reachableEdges;    //<<node, node's_neighbour><Time, Difficulty>>
+    //int maxImportance=0;
+    int totalTimeUsed = 0;
+set<pair<string, string>> usedEdges;
+
+    Graph a = uni_map[gname];
+    st.push({gname, nodeVal, {startNode}, a.outDegree[a.node_name[nodeVal]].first, 0});
+    // map<string, bool> vis;
+    vector<vector<string>> allPaths;
+    while(!st.empty())
+    {
+        int c=0;
+        StackNode curStack= st.top();
+        Graph a=uni_map[curStack.gname];
+        int b=curStack.nodeVal;
+        string curNode=a.node_name[b];
+        int edgeTime, edgeDiff;
+
+        st.pop();
+
+        reachableNodes.insert(curNode);
+        for (const string& node : curStack.path)
+    reachableNodes.insert(node);
+
+        if(curStack.totTime > timeConstraint) continue; //skip if exceedign totalTime
+
+//        if(curStack.vis[curNode]) continue;
+//        curStack.vis[curNode]=true;
+
+        allPaths.push_back(curStack.path);
+
+        for(int i=0; i<a.adjMat.size(); i++) //Check if it is an endNode(leading to another mainTopic)
+            if(a.adjMat[b][i].second!=0)
+                  c++;
+
+        if(c==0 && uni_map.find(curNode)!=uni_map.end()) //if yes, find in uni_map, insert its children in stack(update the newTotTime, newTotImp beforehand, taking consideration present_skillset), reachableNodes, reachableEdges;
+        {
+            Graph a_new=uni_map[curNode];
+            b=a_new.node_ind[curNode];
+            for(int i=0; i<a_new.adjMat.size(); i++)
+                if(a_new.adjMat[b][i].second!=0 &&!curStack.vis[a_new.node_name[i]]) //if(edge exists & notVisited)
+                {
+                    int edgeTime= curStack.totTime;
+                    int importance= curStack.totImportance;
+
+                    bool isCompleted= present_skillset.count(a_new.node_name[i]); //update curStackNode.Time&Imp if userNotCompletedTopic
+                    if(!isCompleted)
+                        {
+                        edgeTime+= a_new.adjMat[b][i].first;
+                        importance+= a_new.outDegree[a_new.node_name[i]].first;
+                        }
+                    pair<string, string> edgeKey = {curNode, a_new.node_name[i]};
+int edgeTimeToAdd = a_new.adjMat[b][i].first;
+
+if (usedEdges.find(edgeKey) == usedEdges.end() && curStack.totTime + edgeTimeToAdd <= timeConstraint) {
+    curStack.totTime += edgeTimeToAdd;
+    usedEdges.insert(edgeKey);
+                        vector<string> newPath= curStack.path;
+                        map<string, bool> newVis= curStack.vis;
+                        newPath.push_back(a_new.node_name[i]);
+                        newVis[a_new.node_name[i]] = true;
+
+                        st.push({a_new.name_of_graph, i, newPath, importance, edgeTime, newVis});
+
+                        reachableNodes.insert(curNode);
+                        reachableNodes.insert(a_new.node_name[i]);
+                        reachableEdges[{curNode, a_new.node_name[i]}]=a_new.adjMat[b][i];
+                    }
+                }
+            continue;
+        }
+
+        for(int i=0; i<a.adjMat.size(); i++)
+        {
+            if(a.adjMat[b][i].second!=0 && !curStack.vis[a.node_name[i]])  //if(edge exists & notVisited)
+            {
+                {
+                    int edgeTime= curStack.totTime;
+                    int importance= curStack.totImportance;
+
+                    bool isCompleted= present_skillset.count(a.node_name[i]); //update curStackNode.Time&Imp if userNotCompletedTopic
+                    if(!isCompleted)
+                        {
+                        edgeTime+= a.adjMat[b][i].first;
+                        importance+= a.outDegree[a.node_name[i]].first;
+                        }
+                    pair<string, string> edgeKey = {curNode, a.node_name[i]};
+int edgeTimeToAdd = a.adjMat[b][i].first;
+
+if (usedEdges.find(edgeKey) == usedEdges.end() && curStack.totTime + edgeTimeToAdd <= timeConstraint) {
+                        curStack.totTime += edgeTimeToAdd;
+                        usedEdges.insert(edgeKey);
+                        vector<string> newPath= curStack.path;
+                        map<string, bool> newVis= curStack.vis;
+                        newPath.push_back(a.node_name[i]);
+                        newVis[a.node_name[i]] = true;
+                        st.push({a.name_of_graph, i, newPath, importance, edgeTime, newVis});
+
+                        reachableNodes.insert(curNode);
+                        reachableNodes.insert(a.node_name[i]);
+                        reachableEdges[{curNode, a.node_name[i]}]=a.adjMat[b][i];
+
+                    }
+                }
+            }
+        }
+    }
+
+    map<string, vector<pair<string, pair<int, int>>>> branches; //displayFormat
+    for(auto e:reachableEdges)
+        {
+            string a=e.first.first;
+            string b=e.first.second;
+            branches[a].push_back({b,e.second});
+        }
+
+    cout<<"Visual Tree:"<<endl;
+    printSubgraph(startNode, branches, timeConstraint);
+
+    // vector<string> topics; // use reachableNodes instead;
+    // for(auto a: vis)
+    //     topics.push_back(a.first);
+}
+
+     vector<string> KnapsackRecommendation(int maxTime, map<string, int>& present_skillset) //need to exclude the already done topics
+{
+    unordered_set<string> neighb;
+    for(auto& [a,nonono]:present_skillset)
+        {
+            if(uni_map.find(a)!=uni_map.end())
+            {   Graph& b=uni_map[a];
+                for(auto& neighbour: b.outDegree)
+                    for(string& reachable: neighbour.second.second)
+                        if(present_skillset.find(reachable)==present_skillset.end())
+                            neighb.insert(reachable);
+            }
+        }
+
+    vector<KnapItem> topics;
+
+    for(auto graph:uni_map)
+    {
+        if (present_skillset.find(graph.first)!=present_skillset.end())
+            continue;
+        int imp = subtopic_adjustedImportance[graph.first];
+        if(neighb.count(graph.first)) //prioritizing the neighbours;
+            imp += 10;
+
+        if(indegree.find(graph.first)!= indegree.end() && indegree[graph.first]==0)
+            imp += 5;
+        topics.push_back({graph.first, graph.second.totalTime, imp});
+        cout << "Adding topic: " << graph.first << " with time " << graph.second.totalTime << " and imp " << imp << endl;
+    }
+
+
+
+    int n = topics.size();
+    vector<vector<int>> dp(n+1, vector<int>(maxTime+1, 0));
+    vector<vector<bool>> vis(n+1, vector<bool>(maxTime+1, false));
+
+    for(int i=1; i<=n; i++)
+        for(int t=0; t<=maxTime; t++)
+        {
+            if(t >= topics[i-1].totTime)
+                {
+                    dp[i][t]= max(dp[i-1][t], dp[i-1][t-topics[i-1].totTime]+ topics[i-1].totImp);
+                    vis[i][t]= true;
+                }
+            else
+                dp[i][t]= dp[i-1][t];
+        }
+
+    vector<string> listOfTopics;
+    int w=maxTime;
+    for(int i = n; i>0; i--)
+    {
+        if(vis[i][w])
+        {
+            listOfTopics.push_back(topics[i-1].name);
+            w -= topics[i-1].totTime;
+        }
+    }
+
+    return listOfTopics;
+}
+
+static bool compForPQDjikastra(pair <pair<Graph,string>, int> a, pair <pair<Graph,string>, int> b)
+        {
+            return a.second>b.second;
+    }
+vector <string> findMostOptimalPath(string start, string end, int alpha_val, int beta_val, map<string, int>& present_skillset)
+{
+    map <string, int> vis,shortest; //map storing shortet distance of all uptil now visited
+    priority_queue <pair<pair<Graph,string>, int>, vector<pair<pair<Graph,string>,int>>, bool(*)(pair<pair<Graph,string>, int>, pair<pair<Graph,string>, int>)> pq(compForPQDjikastra);  //pq storing all nodes with their minimum distances
+    vector <string> shortest_path;  //storing final path from start to end node
+    int alpha=alpha_val, beta=beta_val;  //constants that decide the weightage given to weight(level) and time respectively
+    Graph start_node, end_node;
+
+    vis[start]=1;
+    start_node=uni_map[start];
+    end_node=uni_map[end];
+    shortest[start]=0;
+    shortest_path.push_back(start);
+    pq.push({{start_node,start}, 0});
+
+    while(!pq.empty())
+    {
+            Graph s=pq.top().first.first;
+            int minDist=pq.top().second, curr=s.node_ind[pq.top().first.second];
+            string st=pq.top().first.second;
+            pq.pop();
+
+          //  st=s.name_of_graph;
+            if(!vis[st])
+           { shortest_path.push_back(st);
+           // curr=s.node_ind[st];
+            vis[st]=1;}
+            if(st==end)
+            return shortest_path;
+
+           // vector<vector<pair<int, int>>> adjMat=s.adjMat;
+
+            for(int i=0; i<s.no_of_nodes; i++)  //traversing all the connections of the current node
+            {
+                if(s.adjMat[curr][i].first!=0&&vis.find(s.node_name[i])==vis.end())
+                {
+                    int x=(alpha*s.adjMat[curr][i].first)+(beta*s.adjMat[curr][i].second);  //custom comparator
+                    if(((shortest.find(s.node_name[i])==shortest.end())||(minDist+x<shortest[s.node_name[i]]))) //create a present_skillset map to store current skillset of user
+                    {
+                        if(uni_map.find(s.node_name[i])==uni_map.end())
+                        pq.push({{s, s.node_name[i]}, x});
+                        else
+                        pq.push({{uni_map[s.node_name[i]],s.node_name[i]},x});
+                        shortest[s.node_name[i]]=x+minDist;
+                      //  shortest_path.push_back()
+                        //parent[s.node_name[i]]=st;
+                    }
+                }
+            }
+    }
+    return shortest_path;
+}
+
+static bool comp_for_pq_forTopicCompletion(pair <string, int> a, pair <string, int> b)
+        {
+            return a.second<b.second;
+        }
+
+vector<string> completionOfATopic(string topicName)     // CODE FOR COMPLETING A TOPIC FROM SCRATCH TO ADVANCED
+{
+    Graph& topic=uni_map[topicName];
+    map <string, bool> vis;
+    stack <string> st;
+    vector <string> completePath;
+    priority_queue <pair<string, int>, vector<pair<string, int>>, bool(*)(pair<string, int>, pair<string, int>)> pq(comp_for_pq_forTopicCompletion);
+    st.push(topicName);
+    int num_of_nodes_added=0;
+
+    cout << "Starting topic completion from node: " << topicName << "\n";
+
+    while(!st.empty())
+    {
+        string currNode = st.top();
+        st.pop();
+        cout << "\nPopped from stack: " << currNode << endl;
+
+         if (topic.node_ind.find(currNode) == topic.node_ind.end())
+            continue; // Skip if node is not present in the graph
+          //  cout << "Current Node: " << currNode << endl;
+
+       // int curr = topic.node_ind[currNode];
+
+        int curr=topic.node_ind[currNode];
+        if(vis.find(currNode)==vis.end())
+        {
+        completePath.push_back(currNode);
+        num_of_nodes_added+=1;
+        vis[currNode]=true;
+        cout << "Visited and added to path: " << currNode << "\n";
+        }
+        else
+        continue;
+       // st.pop();
+
+       cout << "Looking at neighbors of: " << currNode << "\n";
+        for(int i=0;i<topic.no_of_nodes;i++)
+        {
+            if(topic.adjMat[curr][i].first!=0&&(vis.find(topic.node_name[i])==vis.end()))
+            {
+            pq.push({topic.node_name[i], topic.adjMat[curr][i].first});
+            cout << "    Neighbor added to PQ: " << topic.node_name[i]
+                     << " with weight: " << topic.adjMat[curr][i].first << "\n";
+           // vis[topic.node_name[i]]=true;
+          // cout << "Pushed to stack from: " << topic.node_name[i] << " with weight " << topic.adjMat[curr][i].first << endl;
+
+            }
+        }
+
+        while(!pq.empty())  //STORED TEMPORARILY IN THE PRIORITY QUEUE SO THAT NODES ARE ENTERED IN THE STACK ACC. TO THE ORDER
+        {
+                st.push(pq.top().first);
+            pq.pop();
+        }
+
+        cout << "Current completePath: ";
+        for (auto &node : completePath)
+            cout << node << " ";
+        cout << "\n---------------------------\n";
+
+       /* if(num_of_nodes_added>=15)
+        break;*/
+}return completePath;
+}
+
+
+void BasicDisplayOfRoadmap(vector<string>& vec, map<string, int>& present_skillset)
+{
+    cout<<"THE ROADMAP GENERATED ACCORDING TO THE GIVEN CONSTRAINTS IS AS FOLLOWS: "<<endl;
+    for(int i=0; i<vec.size(); i++)
+    {
+        if(present_skillset.find(vec[i])==present_skillset.end())
+        cout<<vec[i]<<endl;
+}
+}
+
+};
+
+void displayKnapsackRecommendation(const vector<string>& recommendedTopics) {
+    cout << "\nRecommended Topics to Study (Based on Knapsack Optimization):\n";
+    if (recommendedTopics.empty()) {
+        cout << "No topics could be recommended within the time limit.\n";
+        return;
+    }
+
+    int idx = 0;
+    for (const string& topic : recommendedTopics) {
+        cout << " " << idx++ << ". " << topic << endl;
+    }
+}
+
+int main()
+{
+    //system
+   // Trie trie;
+    RoadRunner roadrunner;
+    roadrunner.createGraphsUsingFile("TestTxt.txt");
+
+    //ask user there things
+    map<string, int> present_skillmap={{"Arrays",0},{"Queue",0}};
+    unordered_set<string> present_skillset={"Arrays","Queue"};
+    string startTopic;
+    int timeConstraint=150;
+    //int timeConstraintInUnits= 0;
+
+    for(auto& graph:roadrunner.uni_map)
+    {
+        graph.second.outdegree();
+        graph.second.getTotalImportance();
+        graph.second.getTotalTime();
+    }
+
+    roadrunner.computeIndegree();
+    roadrunner.createGraphConnections();
+    roadrunner.computeAdjustedImportance();
+
+//    int n;
+//    cout << "Enter number of completed topics: ";
+//    cin >> n;
+//    cin.ignore();
+//
+//    cout << "Enter the starting topic: ";
+//    getline(cin, startTopic);
+//
+//    cout << "Enter time constraint (in increment of 15 minutes): ";
+//    cin >> timeConstraint;
+
+    //coverting time to units!
+    //timeConstraintInUnits= timeConstraint/15;
+
+
+
+//    vector<string> allTopics=getAllUniqueTopics(roadrunner);
+//    buildTrie(trie, allTopics);
+//
+//    present_skillset=getCorrectedTopics(trie, allTopics);
+//    for(auto& word: present_skillset)
+//        present_skillmap[word]=0;
+
+    unordered_set<string> present_skillset={"Arrays","Queue"};
+    map<string, int> present_skillmap={{"Arrays",0},{"Queue",0}};
+
+    displayKnapsackRecommendation(roadrunner.KnapsackRecommendation(timeConstraint, present_skillmap));
+
+
+    vector<string> ans=roadrunner.findMostOptimalPath("Recursion", "DynamicProgramming",6, 1, present_skillmap);
+        roadrunner.BasicDisplayOfRoadmap(ans, present_skillmap);
+
+    cout<<"Topics in Time:"<<timeConstraint<<endl;
+        roadrunner.topicsPossibleInTime(startTopic, timeConstraint, present_skillset);
+}
