@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #include <conio.h>
+#include <iomanip>
 #include "abbreviation.h"
 using namespace std;
 
@@ -9,7 +10,8 @@ const string ORANGE = "\033[38;5;208m";  // For subtopics
 const string CYAN = "\033[36m";          // For main topics
 const string GREEN = "\033[32m";         // For time/difficulty
 const string YELLOW = "\033[33m";        // For headers
-const string BLUE = "\033[34m";          // For menu options
+const string BLUE = "\033[38;5;202m";
+          // For menu options
 struct TrieNode
 {
     bool isEnd;
@@ -106,12 +108,12 @@ string normalize(string  word)
             c=' ';
 
     //Removing extra spaces
-    int start = 0, end = word.size()-1;
+    int start = 0, endN = word.size()-1;
     string temp="";
-    while(start <= end && word[start]==' ') start++;
-    while(start <= end && word[end]==' ')end--;
+    while(start <= endN && word[start]==' ') start++;
+    while(start <= endN && word[endN]==' ')endN--;
 
-    for(int i=start; i<=end; i++)
+    for(int i=start; i<=endN; i++)
         temp+= word[i];
 
     word=temp;
@@ -244,7 +246,7 @@ vector<string> getCorrectedTopics(Trie& trie, vector<string>& allTopics)
         inputs.push_back(topic);
 
     vector<string> corrected= smartSearch(inputs, allTopics, trie);
-    //unordered_set<string> skillset(corrected.begin(), corrected.end());
+    //unordered_set<string> skillset(corrected.begin(), corrected.endN());
     return corrected;
 }
 
@@ -279,6 +281,13 @@ class Graph{
     map <string, pair<int, vector<string>>> outDegree; //strore outdegrees and all the reachable neighbours
     int totalImportance;    //stores sum of importance of all subnodes --deep
     int totalTime;      //stores total time of only direct connections --only main
+
+//    Graph();
+//    Graph(int n);
+//    void addEdge(int s, int e, int wt, int time);
+//    void outdegree();
+//    void getTotalTime();
+//    void getTotalImportance();
 
     Graph()
     {
@@ -344,30 +353,45 @@ class Graph{
     class RoadRunner{
         public:
         vector <Graph> topic;   //???
-        map <string, Graph> uni_map;    //storing each Graph mapped to its name
-        map <string, int> indegree;
-        map <string, int> subtopic_adjustedImportance;
-        map <string, set<string>> graphConnections;
+        map<string, Graph> uni_map;    //storing each Graph mapped to its name
+        map<string, int> indegree;     //storing the no. of indegree of nodes;
+        map<string, vector<tuple<string, int, int>>> indegreeNodes;      //storing the name of indegree nodes
+        map<string, int> subtopic_adjustedImportance;
+        map<string, set<string>> graphConnections; //
 
-        void computeIndegree()
-        {
-        for (auto& graph : uni_map)  // Iterate over each graph in the uni_map
-            for (auto& outD : graph.second.outDegree)
-            {
-                if(indegree.count(outD.first)== 0)
-                    indegree[outD.first]= 0;
+//        void computeAdjustedImportance();
+//        void computeIndegree();
+//        void createGraphConnections();
 
-                // Iterate over outgoing edges
-                // For each outgoing connection, increase the indegree of the target nodes
-                for (auto& neighbour : outD.second.second)
-                {
-                    if (indegree.count(neighbour) == 0)
-                        indegree[neighbour] = 0;
-                    indegree[neighbour]++;  // Increase the indegree for the neighbour node
-               // cout<<" "<<neighbour<<":"<<indegree[neighbour]<<endl;
+void computeIndegree() {
+    indegree.clear();
+    indegreeNodes.clear();
+
+    for (auto &[gname, graph] : uni_map) {
+        int n = graph.no_of_nodes;
+        for (int u = 0; u < n; ++u) {
+            string from = graph.node_name[u];
+            for (int v = 0; v < n; ++v) {
+                auto [difficulty, time] = graph.adjMat[u][v];
+                if (difficulty > 0) {  // or time > 0, depending on your encoding
+                    string to = graph.node_name[v];
+                    indegree[to]++;
+                    indegreeNodes[to].emplace_back(from, difficulty, time);
                 }
             }
         }
+    }
+
+    // Debug print
+    cout << "[DEBUG] indegreeNodes map with weights:\n";
+    for (auto &p : indegreeNodes) {
+        cout << "  " << p.first << " <- ";
+        for (auto &[src, diff, time] : p.second)
+            cout << "(" << src << ", diff=" << diff << ", time=" << time << ") ";
+        cout << "\n";
+    }
+}
+
 
         void createGraphConnections()
         {
@@ -381,9 +405,9 @@ class Graph{
                         if(otherGraph.second.node_ind.count(neighbour)>0)   // Found a connection in another graph
                             {
                             graphConnections[graph.first].insert(otherGraph.first);
-                           // cout << "  Found connection: " << graph.first
-                            //     << " -> " << otherGraph.first
-                             //    << " via node " << neighbour << endl;
+                            cout << "  Found connection: " << graph.first
+                                 << " -> " << otherGraph.first
+                                 << " via node " << neighbour << endl;
                         }
 
                     }
@@ -391,22 +415,23 @@ class Graph{
 
         void computeAdjustedImportance()
             {
-                for(auto graph: uni_map)
+                for(auto& graph: uni_map)
                 {
                     int imp = graph.second.totalImportance;
                     for(auto subGraph: graphConnections[graph.first])
                         imp += uni_map[subGraph].totalImportance;
 
                     subtopic_adjustedImportance[graph.first] = imp;
-                  //  cout<<subtopic_adjustedImportance[graph.first]<<endl;
+                    cout<<subtopic_adjustedImportance[graph.first]<<endl;
                 }
+               // printAllAdjacencyMatrices();/////////////////////////////////////////////////////////////////////////////
             }
 
         string trim( string& s)
         {
         size_t start = s.find_first_not_of(" \t\r\n");
-        size_t end = s.find_last_not_of(" \t\r\n");
-        return (start == string::npos) ? "" : s.substr(start, end - start + 1);
+        size_t endN = s.find_last_not_of(" \t\r\n");
+        return (start == string::npos) ? "" : s.substr(start, endN - start + 1);
         }
 
         void createGraphsUsingFile(string filename)
@@ -431,7 +456,7 @@ class Graph{
             }
 
             int no_of_nodes,edgeCount, n=0;
-            string node_name,line, nm;
+            string node_name,line,/*parent,*/ nm;
             vector<vector<int>> edgeDetails;  //stores all edges in format: starting node, ending node, edge-weight, time needed
             map <string,int> mp;   //storing node value of each node
             map <int,string> rev_mp;  //storing name of each node
@@ -457,7 +482,7 @@ class Graph{
                 }
                 else if(line.rfind("ConnectedNodes: ",0)==0)
                     {
-                     //   cout<<"ConnectingNodes:"<<endl;
+                        cout<<"ConnectingNodes:"<<endl;
                         string str=line.substr(16);
                         string nodes= trim(str), wrd="";
                          int i=0,len=nodes.length();
@@ -493,8 +518,8 @@ class Graph{
                 else if(line.rfind("EdgeEnd: ",0)==0)
                 {
                     string str=line.substr(9);
-                    string end = trim(str);
-                    edgeDetails[edgeCount].push_back(mp[end]);
+                    string endN = trim(str);
+                    edgeDetails[edgeCount].push_back(mp[endN]);
                 }
                 else if(line.rfind("EdgeWeight: ",0)==0)
                 {
@@ -506,7 +531,7 @@ class Graph{
                     int time=stoi(line.substr(16));
                     edgeDetails[edgeCount].push_back(time);
                 }
-                else if(line.rfind("*",0)==0)
+                else if(line.rfind("*****",0)==0)
                 {
                     no_of_nodes=mp.size();
                     Graph obj(no_of_nodes);
@@ -519,6 +544,7 @@ class Graph{
                     {
                         obj.addEdge(edgeDetails[i][0],edgeDetails[i][1],edgeDetails[i][2],edgeDetails[i][3]);
                     }
+                    printNodeMappings(mp, rev_mp);
                     uni_map[nm]=obj;
                     topic.push_back(obj);
                     edgeDetails.clear();
@@ -528,6 +554,48 @@ class Graph{
             }
             file.close();
             return;
+        }
+
+        // void printAllAdjacencyMatrices()
+        // {
+        //     for (auto &[graphName, graph] : uni_map) {
+        //         cout << "\n[DEBUG] Adjacency Matrix for Graph: " << graphName << "\n";
+        //         if (graph.node_name.size() != graph.no_of_nodes || graph.adjMat.size() != graph.no_of_nodes) {
+        //             cout << "[ERROR] Mismatch in node_name or adjMat size for graph: " << graphName << "\n";
+        //             continue;
+        //         }
+        //         // Print header row (node names)
+        //         cout << "      ";
+        //         for (const auto &name : graph.node_name)
+        //             cout << setw(15) << name.first<<" "<<name.second<<" ";
+        //         cout << "\n";
+
+        //         for (int i = 0; i < graph.no_of_nodes; i++) {
+        //             cout << setw(5) << graph.node_name[i] << " ";
+        //             for (int j = 0; j < graph.no_of_nodes; j++) {
+        //                 auto &edge = graph.adjMat[i][j];
+        //                 if (edge.first != 0)
+        //                     cout << setw(15) << "(" + to_string(edge.first) + "," + to_string(edge.second) + ")";
+        //                 else
+        //                     cout << setw(15) << "-";
+        //             }
+        //             cout << "\n";
+        //         }
+        //     }
+        // }
+
+        void printNodeMappings(map<string, int>& ni, map<int, string>& nn) {
+            // Print NodeName Mapping (index -> node name)
+            cout << "NodeName Mapping:\n";
+            for (auto& pair : nn) {
+                cout << pair.first << " -> " << pair.second << endl;
+            }
+
+            // Print NodeIndex Mapping (node name -> index)
+            cout << "\nNodeIndex Mapping:\n";
+            for (auto& pair : ni) {
+                cout << pair.first << " -> " << pair.second << endl;
+            }
         }
 
     //    void printSubgraph(string node,
@@ -578,55 +646,55 @@ class Graph{
     //    }
     //}
 
-    void printSubgraph(string node,
-                       map<string, vector<pair<string, pair<int, int>>>>& branches,
-                       int timeConstraint,
-                       string indent = "", bool isLast = true,
-                       pair<int, int> edgeInfo = {-1, -1},
-                       unordered_set<string>& visited = *(new unordered_set<string>()),
-                       int timeSpent = 0)
-    {
-        // If the current time spent exceeds the constraint, stop
-        if (timeSpent > timeConstraint) {
-            return;
+        void printSubgraph(string node,map<string, vector<pair<string, pair<int, int>>>> &branches,int timeConstraint, unordered_set<string>& present_skillset,string indent = "", bool isLast = true,pair<int, int> edgeInfo = {-1, -1}, unordered_set<string> &visited = *(new unordered_set<string>()),int timeSpent = 0)
+        {
+            // If the current time spent exceeds the constraint, stop
+            if (timeSpent > timeConstraint) return;
+
+
+            // Check if we can print the current node with the edge time
+            int newTimeSpent = timeSpent + edgeInfo.first;
+            if (newTimeSpent > timeConstraint)
+            {
+                return; // Don't print and stop recursion if we exceed the time constraint
+            }
+
+            if (visited.count(node))
+                return;
+            visited.insert(node);
+
+            // Print current node
+            cout << indent;
+            if (!indent.empty())
+            {
+                cout << (isLast ? "└── " : "├── ");
+            }
+
+            cout << node;
+
+            if (edgeInfo.first != -1)
+            {
+                cout << " (Time: " << edgeInfo.first << ", Diff: " << edgeInfo.second << ")";
+            }
+            if(present_skillset.count(node)>0)cout<<"   --✔";
+            cout << endl;
+
+            // Prepare indentation for next level
+            indent += (isLast ? "    " : "│   ");
+
+            // Recurse for all children, updating timeSpent
+            auto &children = branches[node];
+            for (size_t i = 0; i < children.size(); ++i)
+            {
+                auto &[child, weight] = children[i];
+                bool childIsLast = (i == children.size() - 1);
+
+                // Add the edge time to timeSpent for next level
+                printSubgraph(child, branches, timeConstraint, present_skillset, indent, childIsLast, weight, visited, newTimeSpent);
+            }
         }
 
-        // Check if we can print the current node with the edge time
-        int newTimeSpent = timeSpent + edgeInfo.first;
-        if (newTimeSpent > timeConstraint) {
-            return;  // Don't print and stop recursion if we exceed the time constraint
-        }
-
-        if (visited.count(node)) return;
-        visited.insert(node);
-
-        // Print current node
-        cout << indent;
-        if (!indent.empty()) {
-            cout << (isLast ? "└── " : "├── ");
-        }
-
-        cout << node;
-        if (edgeInfo.first != -1) {
-            cout << " (Time: " << edgeInfo.first << ", Diff: " << edgeInfo.second << ")";
-        }
-        cout << endl;
-
-        // Prepare indentation for next level
-        indent += (isLast ? "    " : "│   ");
-
-        // Recurse for all children, updating timeSpent
-         auto& children = branches[node];
-        for (size_t i = 0; i < children.size(); ++i) {
-             auto& [child, weight] = children[i];
-            bool childIsLast = (i == children.size() - 1);
-
-            // Add the edge time to timeSpent for next level
-            printSubgraph(child, branches, timeConstraint, indent, childIsLast, weight, visited, newTimeSpent);
-        }
-    }
-
-        void topicsPossibleInTime(string startNode, int timeConstraint, map<string, int>& present_skillset)
+        void topicsPossibleInTime(string startNode, int timeConstraint, unordered_set<string>& present_skillset)
         {
 
             int nodeVal;
@@ -762,7 +830,7 @@ class Graph{
             }
 
         cout<<"Visual Tree:"<<endl;
-        printSubgraph(startNode, branches, timeConstraint);
+        printSubgraph(startNode, branches, timeConstraint, present_skillset);
 
         // vector<string> topics; // use reachableNodes instead;
         // for(auto a: vis)
@@ -796,7 +864,7 @@ class Graph{
             if(indegree.find(graph.first)!= indegree.end() && indegree[graph.first]==0)
                 imp += 5;
             topics.push_back({graph.first, graph.second.totalTime, imp});
-           // cout << "Adding topic: " << graph.first << " with time " << graph.second.totalTime << " and imp " << imp << endl;
+            cout << "Adding topic: " << graph.first << " with time " << graph.second.totalTime << " and imp " << imp << endl;
         }
 
 
@@ -835,17 +903,17 @@ class Graph{
             {
                 return a.second>b.second;
         }
-    vector <string> findMostOptimalPath(string start, string end, int alpha_val, int beta_val, map<string, int>& present_skillset)
+    vector <string> findMostOptimalPath(string start, string endN, int alpha_val, int beta_val, map<string, int>& present_skillset)
     {
         map <string, int> vis,shortest; //map storing shortet distance of all uptil now visited
         priority_queue <pair<pair<Graph,string>, int>, vector<pair<pair<Graph,string>,int>>, bool(*)(pair<pair<Graph,string>, int>, pair<pair<Graph,string>, int>)> pq(compForPQDjikastra);  //pq storing all nodes with their minimum distances
-        vector <string> shortest_path;  //storing final path from start to end node
+        vector <string> shortest_path;  //storing final path from start to endN node
         int alpha=alpha_val, beta=beta_val;  //constants that decide the weightage given to weight(level) and time respectively
         Graph start_node, end_node;
 
         vis[start]=1;
         start_node=uni_map[start];
-        end_node=uni_map[end];
+        end_node=uni_map[endN];
         shortest[start]=0;
         shortest_path.push_back(start);
         pq.push({{start_node,start}, 0});
@@ -861,15 +929,13 @@ class Graph{
               if(!vis[st])
               {
                shortest_path.push_back(st);
-               vis[st]=1;
+                shortest_path.push_back(st);
+                vis[st]=1;
                }
 
-                if(st==end)
-                {
-                    if(vis.find(end)==vis.end())
-                    shortest_path.push_back(end);
-                    return shortest_path;
-                }
+
+                if(st==endN)
+                return shortest_path;
 
                // vector<vector<pair<int, int>>> adjMat=s.adjMat;
 
@@ -885,12 +951,12 @@ class Graph{
                             else
                             pq.push({{uni_map[s.node_name[i]],s.node_name[i]},x});
                             shortest[s.node_name[i]]=x+minDist;
+                          //  shortest_path.push_back()
+                            //parent[s.node_name[i]]=st;
                         }
                     }
                 }
         }
-        if(vis.find(end)==vis.end())
-        shortest_path.push_back(end);
         return shortest_path;
     }
 
@@ -909,13 +975,13 @@ class Graph{
         st.push(topicName);
         int num_of_nodes_added=0;
 
-      //  cout << "Starting topic completion from node: " << topicName << "\n";
+        cout << "Starting topic completion from node: " << topicName << "\n";
 
         while(!st.empty())
         {
             string currNode = st.top();
             st.pop();
-//            cout << "\nPopped from stack: " << currNode << endl;
+            cout << "\nPopped from stack: " << currNode << endl;
 
              if (topic.node_ind.find(currNode) == topic.node_ind.end())
                 continue; // Skip if node is not present in the graph
@@ -929,20 +995,20 @@ class Graph{
             completePath.push_back(currNode);
             num_of_nodes_added+=1;
             vis[currNode]=true;
-          //  cout << "Visited and added to path: " << currNode << "\n";
+            cout << "Visited and added to path: " << currNode << "\n";
             }
             else
             continue;
            // st.pop();
 
-         //  cout << "Looking at neighbors of: " << currNode << "\n";
+           cout << "Looking at neighbors of: " << currNode << "\n";
             for(int i=0;i<topic.no_of_nodes;i++)
             {
                 if(topic.adjMat[curr][i].first!=0&&(vis.find(topic.node_name[i])==vis.end()))
                 {
                 pq.push({topic.node_name[i], topic.adjMat[curr][i].first});
-              //  cout << "    Neighbor added to PQ: " << topic.node_name[i]
-                //         << " with weight: " << topic.adjMat[curr][i].first << "\n";
+                cout << "    Neighbor added to PQ: " << topic.node_name[i]
+                         << " with weight: " << topic.adjMat[curr][i].first << "\n";
                // vis[topic.node_name[i]]=true;
               // cout << "Pushed to stack from: " << topic.node_name[i] << " with weight " << topic.adjMat[curr][i].first << endl;
 
@@ -955,10 +1021,10 @@ class Graph{
                 pq.pop();
             }
 
-          /*  cout << "Current completePath: ";
+            cout << "Current completePath: ";
             for (auto &node : completePath)
                 cout << node << " ";
-            cout << "\n---------------------------\n";  */
+            cout << "\n---------------------------\n";
 
            /* if(num_of_nodes_added>=15)
             break;*/
@@ -973,284 +1039,363 @@ class Graph{
         {
             if(present_skillset.find(vec[i])==present_skillset.end())
             cout<<vec[i]<<endl;
-            else
-            cout<<vec[i]<<"     --✔"<<endl;
     }
     }
 
     // ==== Display Path with Main and Sub Topics ====
     void displayPathWithMainAndSubTopics(vector<string>& path) {
         if (path.empty()) {
-            cout << "No path found.\n";
+            cout << YELLOW << "\nNo path found.\n" << RESET;
             return;
         }
+
+        cout << YELLOW << "\n===== Learning Path =====\n" << RESET;
 
         for (size_t i = 0; i < path.size(); ++i) {
             string& topic = path[i];
 
-            // Display main topic in cyan
-            cout << CYAN << topic << RESET;
+            // Display main topic with proper indentation
+            cout << string(i * 2, ' ');  // Indentation based on level
 
-            // Check if this topic has subtopics in any graph
-            bool hasSubtopic = false;
-            for ( auto& graph : uni_map) {
-                if (graph.second.node_ind.count(topic)) {
-                    int topicIndex = graph.second.node_ind.at(topic);
-                    for (int j = 0; j < graph.second.no_of_nodes; ++j) {
-                        if (graph.second.adjMat[topicIndex][j].first > 0 ||
-                            graph.second.adjMat[topicIndex][j].second > 0) {
-                            hasSubtopic = true;
-                            break;
-                        }
-                    }
-                }
-            }
+            // Check if this is a main topic (exists in uni_map)
+            if (uni_map.find(topic) != uni_map.end()) {
+                cout << CYAN << "→ " << topic << " (Main Topic)" << RESET << "\n";
 
-            if (hasSubtopic) {
-                cout << " (Main Topic)\n";
-                // Display subtopics in orange
-                for ( auto& graph : uni_map) {
-                    if (graph.second.node_ind.count(topic)) {
-                        int topicIndex = graph.second.node_ind.at(topic);
-                        for (int j = 0; j < graph.second.no_of_nodes; ++j) {
-                            if (graph.second.adjMat[topicIndex][j].first > 0 ||
-                                graph.second.adjMat[topicIndex][j].second > 0) {
-                                cout << "└── " << ORANGE << graph.second.node_name.at(j) << RESET;
-                                cout << " (Time: " << GREEN << graph.second.adjMat[topicIndex][j].first << RESET;
-                                cout << ", Diff: " << GREEN << graph.second.adjMat[topicIndex][j].second << RESET << ")\n";
+                // Display subtopics
+                Graph& g = uni_map[topic];
+                for (const auto& outD : g.outDegree) {
+                    for (const string& subtopic : outD.second.second) {
+                        cout << string((i + 1) * 2, ' ');  // Increased indentation for subtopics
+                        cout << ORANGE << "└─ " << subtopic << RESET;
+
+                        // Find and display edge information
+                        int topicIndex = g.node_ind[topic];
+                        for (int j = 0; j < g.no_of_nodes; ++j) {
+                            if (g.node_name[j] == subtopic) {
+                                cout << " (Time: " << GREEN << g.adjMat[topicIndex][j].second << RESET;
+                                cout << ", Difficulty: " << GREEN << g.adjMat[topicIndex][j].first << RESET << ")\n";
+                                break;
                             }
                         }
                     }
                 }
             } else {
-                cout << "\n";
+                // This is a subtopic
+                cout << ORANGE << "→ " << topic << " (Sub Topic)" << RESET << "\n";
             }
         }
+        cout << "\n";
     }
 
     // ==== Helper to Validate and Correct Topic ====
 
+// Graph& findGraphForNode(const string &node, map<string, Graph> &uni_map) {
+//         for (auto &[gname, graph] : uni_map)
+//             if (graph.node_ind.count(node))
+//                 return graph;
+//         throw runtime_error("Node not found in any graph: " + node);
+//     }
 
-    // Calculate weighted distances to goal using Dijkstra
-map<string, int> calculateDistancesToGoal( string& goal,  map<string, Graph>& uni_map,
-    int alpha = 2, int beta = 1) {
-map<string, int> distances;
-priority_queue<pair<int, string>, vector<pair<int, string>>,
-greater<pair<int, string>>> pq;
 
-// Initialize distances
-for( auto& [topic, _] : uni_map) {
-distances[topic] = INT_MAX;
-}
-distances[goal] = 0;
-pq.push({0, goal});
+//     map<string, int>calculateDistancesToGoal(
+//         const string& goal,
+//         map<string, vector<tuple<string, int, int>>>& indegreeNodes,
+//         int alpha, int beta
+//     ) {
+//         map<string, int> distances;
+//         priority_queue<pair<int, string>, vector<pair<int, string>>, greater<>> pq;
 
-while(!pq.empty()) {
-string current = pq.top().second;
-int currDist = pq.top().first;
-pq.pop();
+//         for (const auto& [graph_name, g] : uni_map) {
+//             for (auto& name : g.node_name) {
+//                 distances[name.second] = 1e9;
+//             }
+//         }
 
-if(currDist > distances[current]) continue;
+//         distances[goal] = 0;
+//         pq.push({0, goal});
 
-Graph& g = uni_map.at(current);
-for(int i = 0; i < g.no_of_nodes; i++) {
-if(g.adjMat[g.node_ind.at(current)][i].first == 0) continue;
+//         while (!pq.empty()) {
+//             auto [currDist, current] = pq.top(); pq.pop();
 
-string neighbor = g.node_name[i];
-if(uni_map.find(neighbor) == uni_map.end()) continue;
+//             if (currDist > distances[current]) continue;
 
-// Calculate weighted distance with priority to steps
-int steps = 1;  // One step to neighbor
-int difficulty = g.adjMat[g.node_ind.at(current)][i].first;
-// Higher weight for steps (alpha) than difficulty (beta)
-int weight = (alpha * steps) + (beta * difficulty);
+//             cout << "[HEURISTIC] Exploring: " << current << " (dist=" << currDist << ")\n";
 
-int newDist = currDist + weight;
+//             for (auto& [from, diff, time] : indegreeNodes[current]) {
+//                 int steps = 1;
+//                 int weight = alpha * steps + beta * diff;
 
-if(newDist < distances[neighbor]) {
-distances[neighbor] = newDist;
-pq.push({newDist, neighbor});
-}
-}
-}
-return distances;
-}
+//                 int newDist = currDist + weight;
+//                 if (newDist < distances[from]) {
+//                     distances[from] = newDist;
+//                     pq.push({newDist, from});
+//                     cout << "[HEURISTIC] Updated: " << from << " --> " << newDist << "\n";
+//                 }
+//             }
+//         }
 
-// A* search using weighted heuristics
-vector<string> findPathWithHeuristics( string& start,  string& end,
- map<string, Graph>& uni_map,
-map<string, int>& present_skillset,
-int alpha = 2, int beta = 1) {  // Default values prioritize steps
-// Calculate weighted heuristic values
-map<string, int> heuristic = calculateDistancesToGoal(end, uni_map, alpha, beta);
+//         return distances;
+//     }
 
-priority_queue<pair<int, string>, vector<pair<int, string>>,
-greater<pair<int, string>>> pq;
-map<string, int> g_score;  // Cost from start to current
-map<string, int> f_score;  // Total estimated cost
-map<string, string> came_from;  // Path reruction
-set<string> closed_set;    // Set of evaluated nodes
 
-// Initialize start node
-g_score[start] = 0;
-f_score[start] = heuristic[start];
-pq.push({f_score[start], start});
+    // You must write this helper if not already present
+// string getGraphNameOfNode(const string& node) {
+//     for (auto& [graph_name, g] : uni_map) {
+//         if (g.node_ind.count(node)) return graph_name;
+//     }
+//     return "";  // Not found
+// }
 
-while (!pq.empty()) {
-string current = pq.top().second;
-pq.pop();
 
-if (current == end) {
-// Reconstruct path
-vector<string> path;
-while (current != start) {
-path.push_back(current);
-current = came_from[current];
-}
-path.push_back(start);
-reverse(path.begin(), path.end());
-return path;
-}
 
-if (closed_set.count(current)) continue;
-closed_set.insert(current);
+// // Heuristic function to estimate the distance from the current node to the goal
+// int heuristic(string curNode, string endNode, Graph& g) {
+//     // A simple heuristic: for now, we return the remaining time or distance.
+//     // In practice, you might use a more advanced heuristic depending on your data.
+//     return 0; // You can replace this with a meaningful heuristic.
+// }
 
- Graph& g = uni_map.at(current);
-for (int i = 0; i < g.no_of_nodes; i++) {
-if(g.adjMat[g.node_ind.at(current)][i].first == 0) continue;
+// vector<string> findPathWithAStar(string startNode, string endNode, int timeConstraint, unordered_set<string>& present_skillset, double alpha, double beta) {
+//     string gname;
+//     int nodeVal;
 
-string neighbor = g.node_name[i];
-if (uni_map.find(neighbor) == uni_map.end()) continue;
+//     // Find the graph and node index for startNode
+//     for (auto& [graphName, graph] : uni_map) {
+//         if (graph.node_ind.count(startNode)) {
+//             gname = graphName;
+//             nodeVal = graph.node_ind[startNode];
+//             break;
+//         }
+//     }
 
-// Skip if neighbor is in closed set
-if (closed_set.count(neighbor)) continue;
+//     priority_queue<PQNode> pq;
+//     Graph g = uni_map[gname];
+//     int startImp = g.outDegree[startNode].first;
 
-// Calculate tentative g_score
-int steps = 1;  // One step to neighbor
-int difficulty = g.adjMat[g.node_ind.at(current)][i].first;
-int weight = (alpha * steps) + (beta * difficulty);
+//     pq.push({gname, nodeVal, {startNode}, startImp, 0, {}, alpha * startImp - beta * 0});
 
-// If the topic is in present_skillset, reduce the weight
-if (present_skillset.count(neighbor)) {
-weight = weight / 2;  // Reduce weight for known topics
-}
+//     set<string> visitedGlobally;
 
-int tentative_g_score = g_score[current] + weight;
+//     while (!pq.empty()) {
+//         PQNode cur = pq.top(); pq.pop();
+//         Graph g = uni_map[cur.gname];
+//         string curNode = g.node_name[cur.nodeVal];
 
-if (g_score.find(neighbor) == g_score.end() ||
-tentative_g_score < g_score[neighbor]) {
-came_from[neighbor] = current;
-g_score[neighbor] = tentative_g_score;
-f_score[neighbor] = g_score[neighbor] + heuristic[neighbor];
-pq.push({f_score[neighbor], neighbor});
-}
-}
-}
+//         if (cur.totTime > timeConstraint) continue;
+//         if (visitedGlobally.count(curNode)) continue;
 
-return vector<string>();  // No path found
-}
+//         visitedGlobally.insert(curNode);
+
+//         // If we reached the endNode, return the path
+//         if (curNode == endNode) {
+//             return cur.path;
+//         }
+
+//         for (int i = 0; i < g.adjMat.size(); ++i) {
+//             if (g.adjMat[cur.nodeVal][i].second == 0) continue;
+//             string neighbor = g.node_name[i];
+
+//             if (cur.vis.count(neighbor)) continue;
+
+//             int edgeTime = g.adjMat[cur.nodeVal][i].first;
+//             int newImp = cur.totImportance;
+//             int newTime = cur.totTime;
+
+//             if (!present_skillset.count(neighbor)) {
+//                 newTime += edgeTime;
+//                 newImp += g.outDegree[neighbor].first;
+//             }
+
+//             if (newTime > timeConstraint) continue;
+
+//             vector<string> newPath = cur.path;
+//             map<string, bool> newVis = cur.vis;
+//             newPath.push_back(neighbor);
+//             newVis[neighbor] = true;
+
+//             double newPriority = alpha * newImp - beta * newTime + heuristic(neighbor, endNode, g);
+//             pq.push({g.name_of_graph, i, newPath, newImp, newTime, newVis, newPriority});
+//         }
+//     }
+
+//     return {}; // No path found within constraints
+// }
+
+
+
+
+
         // ==== Helper to Get Present Skillset ====
 
+        // ==== Display Options Menu ==== %%%%%%
+        int displayOptions()
+        {
+            cout << "\n"
+                << YELLOW << "===== Learning Path Options =====\n"
+                << RESET;
+            cout << BLUE << "1. Learning a topic from Scratch from Advanced!" << endl;
+            cout << BLUE << "2. Get to know the maximum topics you can cover from your present skillset given the time you can devote!" << endl;
+            cout << "3. View Topic Completion Status" << endl;
+            cout << "4. View Connected Topics" << endl;
+            cout << "5. View shortest path from current to aimed skillset" << endl;
+            cout << " 6. Get to know the maximum topics you can cover from a given specific skill given the time you can invest!" << endl;
+            cout << "7. Exit\n\n"
+                << RESET;
 
-    // ==== Display Options Menu ==== %%%%%%
-    int displayOptions() {
-        cout << "\n" << ORANGE << "===== ROADRUNNER Menu =====\n" << RESET;
-        cout << YELLOW << "1. Learning a topic from Scratch from Advanced!"<<endl;
-        cout <<YELLOW << "2. Get to know the maximum topics you can cover from your present skillset given the time you can devote!"<<endl;
-        //cout << "3. View Connected Topics"<<endl;
-        cout<< "3. View shortest path from current to aimed skillset"<<endl;
-        cout<<" 4. Get to know the maximum topics you can cover from a given specific skill given the time you can invest!"<<endl;
-        cout << "5. Exit\n\n" << RESET;
-
-        cout << "Enter your choice (1-5): ";
-        int choice;
-        cin >> choice;
-        return choice;
-    }
+            cout << "Enter your choice (1-5): ";
+            int choice;
+            cin >> choice;
+            return choice;
+        }
 
         // Helper Functions
-    void setColor(string color) {
-        cout << color;
-    }
+        void setColor(string color)
+        {
+            cout << color;
+        }
 
-    void resetText() {
-        cout << RESET;
-    }
+        void resetText()
+        {
+            cout << RESET;
+        }
 
-    void clearScreen() {
-        cout << "\033[2J";
-    }
+        void clearScreen()
+        {
+            cout << "\033[2J";
+        }
 
-    void setTextStyle(bool bold, bool underline, bool italic) {
-        if (bold) cout << "\033[1m";
-        if (underline) cout << "\033[4m";
-    }
+        void setTextStyle(bool bold, bool underline, bool italic)
+        {
+            if (bold)
+                cout << "\033[1m";
+            if (underline)
+                cout << "\033[4m";
+        }
 
-    void moveTo(int x, int y) {
-        cout << "\033[" << y << ";" << x << "H";
-    }
+        void moveTo(int x, int y)
+        {
+            cout << "\033[" << y << ";" << x << "H";
+        }
 
-    void centerText( string& text, int width = 100, int height = 24) {
-        int x = (width - text.length()) / 2;
-        int y = height / 2;
-        moveTo(x, y);
-        cout << text;
-    }
+        void centerText(string &text, int width = 100, int height = 24)
+        {
+            int x = (width - text.length()) / 2;
+            int y = height / 2;
+            moveTo(x, y);
+            cout << text;
+        }
 
         // ==== Display Results ==== %%%%%%
-    void displayResults(vector<string>& path, string& title) {
-        cout << "\n" << YELLOW << "===== " << title << " =====\n" << RESET;
-        displayPathWithMainAndSubTopics(path);
-        cout << "\nPress any key to continue...";
-        _getch();
-    }
+        void displayResults(vector<string> &path, string &title)
+        {
+            cout << "\n"
+                << YELLOW << "===== " << title << " =====\n"
+                << RESET;
+            displayPathWithMainAndSubTopics(path);
+            cout << "\nPress any key to continue...";
+            _getch();
+        }
 
         // ==== Main Display Integration ====
-    void displayMain() {
-
-    }
-
+        void displayMain()
+        {
+        }
 
     // ==== Find Directly Connected Topics ====
-vector<string> findConnectedTopics(string& topic,map<string, Graph>& uni_map) {
-    vector<string> connectedTopics;
-    set<string> visited;
+    vector<string> findConnectedTopics(const string& topic) {
+        vector<string> connectedTopics;
+        set<string> visited;
+        queue<string> q;
 
-    // Check if the topic exists in uni_map
-    if (!uni_map.count(topic)) {
-        cout << "Topic not found in the learning graph.\n";
-        return connectedTopics;
-    }
+        if (uni_map.find(topic) == uni_map.end()) {
+            cout << YELLOW << "\nTopic not found in the learning graph.\n" << RESET;
+            return connectedTopics;
+        }
 
-    // Get the graph for the given topic
-    Graph& g = uni_map.at(topic);
+        q.push(topic);
+        visited.insert(topic);
 
-    // Find the index of the topic in the graph
-    if (!g.node_ind.count(topic)) {
-        cout << "Topic not found in the graph structure.\n";
-        return connectedTopics;
-    }
+        while (!q.empty()) {
+            string current = q.front();
+            q.pop();
 
-    int topicIndex = g.node_ind.at(topic);
+            // Intra-graph traversal
+            if (auto it = uni_map.find(current); it != uni_map.end()) {
+                Graph& g = it->second;
+                for (const auto& [_, data] : g.outDegree) {
+                    const auto& neighbors = data.second;
+                    for (const string& neighbor : neighbors) {
+                        if (visited.insert(neighbor).second) {
+                            connectedTopics.push_back(neighbor);
+                            q.push(neighbor);
+                        }
+                    }
+                }
+            }
 
-    // Find all directly connected topics
-    for (int i = 0; i < g.no_of_nodes; ++i) {
-        // Check if there's a direct connection (edge exists)
-        if (g.adjMat[topicIndex][i].first > 0 || g.adjMat[topicIndex][i].second > 0) {
-            string connectedTopic = g.node_name.at(i);
+            // Inter-graph traversal
+            for (auto [graphName, otherGraph]:uni_map) {
+                if (graphName == current) continue;
 
-            // Add the connected topic if not already visited
-            if (!visited.count(connectedTopic)) {
-                connectedTopics.push_back(connectedTopic);
-                visited.insert(connectedTopic);
+                auto it = otherGraph.node_ind.find(current);
+                if (it != otherGraph.node_ind.end()) {
+                    int currentIndex = it->second;
+                    for (int i = 0; i < otherGraph.no_of_nodes; ++i) {
+                        if (otherGraph.adjMat[currentIndex][i].first > 0 ||
+                            otherGraph.adjMat[currentIndex][i].second > 0) {
+                            string neighbor = otherGraph.node_name[i];
+                            if (visited.insert(neighbor).second) {
+                                connectedTopics.push_back(neighbor);
+                                q.push(neighbor);
+                            }
+                        }
+                    }
+                }
             }
         }
+
+        return connectedTopics;
     }
 
-    return connectedTopics;
-}
 
 
+    void displayConnectedTopics(const vector<string>& topics) {
+        cout << "\n" << YELLOW << "===== Connected Topics =====\n" << RESET;
+
+        if (topics.empty()) {
+            cout << "No connected topics found.\n";
+            return;
+        }
+
+        cout << CYAN << "Connected topics:\n" << RESET;
+        for (size_t i = 0; i < topics.size(); ++i) {
+            cout << "  " << (i + 1) << ". " << ORANGE << topics[i] << RESET;
+
+            // Get the graph for this connected topic
+            if (uni_map.find(topics[i]) != uni_map.end()) {
+                cout << " (Main Topic)";
+            } else {
+                cout << " (Sub Topic)";
+            }
+
+            // Display edge information if available
+            for (const auto& pair : uni_map) {
+                const Graph& g = pair.second;
+                if (g.node_ind.find(topics[i]) != g.node_ind.end()) {
+                    int topicIndex = g.node_ind.at(topics[i]);
+                    for (int j = 0; j < g.no_of_nodes; ++j) {
+                        if (g.adjMat[topicIndex][j].first > 0 || g.adjMat[topicIndex][j].second > 0) {
+                            cout << " (Time: " << GREEN << g.adjMat[topicIndex][j].second << RESET;
+                            cout << ", Difficulty: " << GREEN << g.adjMat[topicIndex][j].first << RESET << ")";
+                            break;
+                        }
+                    }
+                }
+            }
+            cout << "\n";
+        }
+        cout << "\n";
+    }
     };
 
     void displayKnapsackRecommendation( vector<string>& recommendedTopics) {
@@ -1312,6 +1457,7 @@ vector<string> findConnectedTopics(string& topic,map<string, Graph>& uni_map) {
     unordered_set<string> uniqueTopics;
     for(auto& [a,b]:obj.uni_map)
             {uniqueTopics.insert(a);
+            cout<<a<<endl;
             }
     return vector<string>(uniqueTopics.begin(), uniqueTopics.end());
 }
@@ -1322,7 +1468,7 @@ vector<string> findConnectedTopics(string& topic,map<string, Graph>& uni_map) {
     Trie trie;
     RoadRunner roadrunner;
     roadrunner.createGraphsUsingFile("Editedtxt.txt");
-   // cout<<"graphs created"<<endl;
+    cout<<"graphs created"<<endl;
 
     vector<string> allTopics = getAllUniqueTopics(roadrunner);
     map<string, int> present_skillmap;
@@ -1339,14 +1485,14 @@ vector<string> findConnectedTopics(string& topic,map<string, Graph>& uni_map) {
     }
 
     roadrunner.computeIndegree();
+    roadrunner.createGraphConnections();
     roadrunner.computeAdjustedImportance();
 
     int n;
-    cout<<GREEN<<"Welcome to Roadrunner!\nGet ready to embark on a thrilling journey of self assessed growth, where we will provide you with the assistance but the journey will be all yours!\nJust fill up our questionairre and wait until the magic unfolds and we present you with a specially customized roadmap, tailored specifically to your needs and preferences!"<<endl;
     while (true) {
         int choice = roadrunner.displayOptions();
         map<string, int> present_skillset=getPresentSkillset(trie, allTopics);
-        string topic, str, start, end;
+        string topic, str, start, endN;
         int maxTime, alpha, beta, ch;
         vector<string> completePath;
 
@@ -1365,26 +1511,36 @@ vector<string> findConnectedTopics(string& topic,map<string, Graph>& uni_map) {
                 cin >> maxTime;
                 completePath = roadrunner.KnapsackRecommendation(maxTime, present_skillset);
                 str="Maximum topics possible to be covered in "+maxTime;
-                displayKnapsackRecommendation(completePath);
+                roadrunner.displayResults(completePath, str);
                 break;
             }
-          /*  case 3: {
+            case 3: {
+                // cout << "\nEnter the Goal\n";
+                // cin>>endN;
+                // cout << "\nEnter the Start\n";
+                // cin>>start;
+                // map<string, int> present_skillset=getPresentSkillset(trie, allTopics);
+                // completePath=roadrunner.findPathWithAStar(start,endN,timeConstraint,alpha = 2,beta = 1);
+                break;
+            }
+            case 4: {
                // string topic;
                 cout << "\nEnter the topic to find connected topics: ";
                 cin >> topic;
-              //  vector<string> connected = findConnectedTopics(topic, uni_map);
-              //  displayResults(connected, "Topics Connected to " + topic, uni_map);
+               vector<string> connected = roadrunner.findConnectedTopics(topic);
+               str="Maximum topics possible to be covered in "+maxTime;
+              roadrunner.displayResults(connected, str);
                 break;
-            }*/
-            case 3:
-               // string start, end;
+            }
+            case 5:
+               // string start, endN;
               //  int alpha, beta, ch;
                 cout<<"Enter the topic you'd prefer your learning journey to start with"<<endl;
                 cin>>start;
                 cout<<"Enter the skill you're aiming for"<<endl;
-                cin>>end;
+                cin>>endN;
                 cout<<"Wait a minute!!! We have an extra customization to offer! Choose what you'd like to prefer: "<<endl;
-                cout<<"Enter 1 if you want to prioritize easier learning and 2 if you want to prioritize lesser time and any number if a balanced roadmap is what you'd prefer!"<<endl;
+                cout<<"Enter 1 if you want to prioritize easier learning and 2 if you want to prioritize lesser time and any number if a balanced is what you'd prefer!"<<endl;
                 cin>>ch;
                 if(ch==1)
                 {
@@ -1401,28 +1557,27 @@ vector<string> findConnectedTopics(string& topic,map<string, Graph>& uni_map) {
                     alpha=1;
                     beta=1;
                 }
-                completePath = roadrunner.findMostOptimalPath(start, end, alpha, beta, present_skillset);
+                completePath = roadrunner.findMostOptimalPath(start, endN, alpha, beta, present_skillset);
                 cout<<"Most optimal path according to given constraints is: "<<endl;
                 roadrunner.BasicDisplayOfRoadmap(completePath, present_skillset);
                 break;
-                case 4:
+                case 6:
                    // string st;
                     //int maxTime;
                     cout<<"Enter the skill you'd like to begin with: "<<endl;
                     cin>>topic;
                     cout<<"Enter the maximum time you can invest:"<<endl;
                     cin>>maxTime;
-                     roadrunner.topicsPossibleInTime(topic, maxTime, present_skillset);
-                   // str="Maximum topics possible to be covered in "+maxTime;
-                   // roadrunner.printSubgraph(completePath);
+                 //   vector<string> priorityPath = topicsPossibleInTime(st, maxTime, present_skillset);
+                    str="Maximum topics possible to be covered in "+maxTime;
+                    roadrunner.displayResults(completePath, str);
                 break;
-            case 5:
+            case 7:
                 cout << "\nThank you for using ROADRUNNER!\n";
-                return 0;
                 break;
             default:
                 cout << "\nInvalid choice! Please try again.\n";
                 _getch();
         }
     }
-}
+};
