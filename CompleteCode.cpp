@@ -508,6 +508,7 @@ class Graph{
                 }
                 else if(line.rfind("*",0)==0)
                 {
+                    no_of_nodes=mp.size();
                     Graph obj(no_of_nodes);
                     //cout<<no_of_nodes<<endl;
                     obj.node_name=rev_mp;
