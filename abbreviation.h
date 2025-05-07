@@ -1,19 +1,66 @@
-#ifndef ABBREVIATIONS H
-#define ABBREVIATIONS H
+#ifndef ABBREVIATIONS
+#define ABBREVIATIONS
 
 #include <bits/stdc++.h>
 using namespace std;
 
 unordered_map<string, string> abbreviations =
 {
-    {"ai", "artificial intelligence"},
-    {"ml", "machine learning"},
-    {"ds", "data science"},
-    {"cse", "computer science and engineering"},
-    {"dsa", "data structures and algorithms"},
-    {"os", "operating system"},
-    {"cn", "computer networks"},
-    {"oops", "object oriented programming"}
+    {"ads", "AdvancedDataStructures"},
+    {"arr", "Arrays"},
+    {"arra", "Arrays"},
+    {"ar", "Arrays"},
+    {"avl", "AVLTree"},
+    {"bt", "Backtracking"},
+    {"bp", "BinPacking"},
+    {"bh", "BinaryHeap"},
+    {"bs", "BinarySearch"},
+    {"bst", "BinarySearchTrees"},
+    {"btree", "BinaryTrees"},
+    {"bm", "BitManipulation"},
+    {"bmsk", "Bitmasking"},
+    {"cg", "ComputationalGeometry"},
+    {"dac", "DivideAndConquer"},
+    {"dp", "DynamicProgramming"},
+    {"enum", "Enumeration"},
+    {"ft", "FenwickTree"},
+    {"fw", "FloydWarshall"},
+    {"gt", "GameTheory"},
+    {"ga", "GraphAlgorithms"},
+    {"grt", "GraphTheory"},
+    {"gtv", "GraphTraversal"},
+    {"greedy", "GreedyAlgorithms"},
+    {"hash", "Hashing"},
+    {"heap", "Heaps"},
+    {"ll", "LinkedLists"},
+    {"mat", "MatrixOperations"},
+    {"mq", "MonotonicQueue"},
+    {"ms", "MonotonicStack"},
+    {"nf", "NetworkFlow"},
+    {"nt", "NumberTheory"},
+    {"psum", "PrefixSum"},
+    {"pq", "PriorityQueue"},
+    {"q", "Queue"},
+    {"rec", "Recursion"},
+    {"recu", "Recursion"},
+    {"recur", "Recursion"},
+    {"recus", "Recursion"},
+    {"rbt", "RedBlackTrees"},
+    {"stl", "STL"},
+    {"search", "SearchingTechniques"},
+    {"seg", "SegmentTree"},
+    {"spa", "ShortestPathAlgorithms"},
+    {"sim", "Simulation"},
+    {"sw", "SlidingWindow"},
+    {"sort", "SortingTechniques"},
+    {"stk", "Stacks"},
+    {"str", "StringAlgorithms"},
+    {"sm", "StringMatching"},
+    {"suff", "SuffixTree"},
+    {"topo", "TopologicalSort"},
+    {"tree", "Trees"},
+    {"trie", "Trie"},
+    {"tp", "TwoPointers"},
+    {"uf", "UnionFind"}
 };
-
 #endif
