@@ -8,7 +8,7 @@
 <hr>
 
 ## About📝⭐<br>
-Given that hundreds of thousands of CS grads enter the job market every year, DSA being the core skill tested in the interview process, it's importance is undeniable. However the large number of topics need to be studied most optimally for striking the perfect balance between DSA expertise and other skill acquisition. Here's where **_RoadRunner_** comes to your rescue. Just choose the kind of roadmap you'd like to generate and it'll have it ready for you within seconds! 📔
+Given that hundreds of thousands of CS grads enter the job market every year, DSA being the core skill tested in the interview process, its importance is undeniable. However the large number of topics need to be studied most optimally for striking the perfect balance between DSA expertise and other skill acquisition. Here's where **_RoadRunner_** comes to your rescue. Just choose the kind of roadmap you'd like to generate and it'll have it ready for you within seconds! 📔
 
 ## Features 📖✨<br>
 ✔️ An all-in-one personalized DSA roadmap generator.<br>
@@ -57,13 +57,13 @@ g++ CompleteCode.cpp -o RoadRunner
 
 ### File Structure 📖
 💠FORMAT FOLLOWED:<br>
-➡️ Num_of_nodes:<br>
-➡️ Name:<br>
-➡️ ConnectedNodes:<br>
-➡️ EdgeStart:<br>
-➡️ EdgeEnd:<br>
-➡️ EdgeWeight:<br>
-➡️ EdgeTimeNeeded:<br>
+➡ Num_of_nodes:<br>
+➡ Name:<br>
+➡ ConnectedNodes:<br>
+➡ EdgeStart:<br>
+➡ EdgeEnd:<br>
+➡ EdgeWeight:<br>
+➡ EdgeTimeNeeded:<br>
 💠 The graphs formed through this file, can be further visualized using our custom graph visualizer. 🌻
 
 ### Algorithms Implemented 🥇
@@ -73,7 +73,7 @@ g++ CompleteCode.cpp -o RoadRunner
 | Trie                                      | Prefix Search and Matching  (Smart Search)                        |
 | Dynamic Programming (Levenshtein Distance)| Auto-correct and validate user input, fixing typos (Smart Search) |
 | Modified DFS                              | Priority Based Graph Traversal                                    |
-| Modified Dijkastra's Algorithm            | Most Optimal Path from Current to Aimed Skillset                  |
+| Modified Dijkstra's Algorithm            | Most Optimal Path from Current to Aimed Skillset                  |
 | Greedy (0/1 Knapsack Implementation)      | Pick/ Not pick depending on constraints                           |
 <hr>
 
