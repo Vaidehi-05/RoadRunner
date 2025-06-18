@@ -31,9 +31,8 @@ Given that hundreds of thousands of CS grads enter the job market every year, DS
 ✅ Any OS : Windows/ Mac/ Linux<br>
 <br>
 
-###  Build and Run 🚀
-✔️ Clone the Repo<br>
 ### Build and Run 🚀
+
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/RoadRunner.git
@@ -46,8 +45,8 @@ g++ CompleteCode.cpp -o RoadRunner
 
 # Run
 ./RoadRunner
+
 ```
-✔️ Run and enjoy!<br>
 
 ###  How it works 🛠️
 1️⃣ Run RoadRunner and select your preferred roadmap specs.<br>
