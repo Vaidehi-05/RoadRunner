@@ -1394,7 +1394,7 @@ int main()
     system("chcp 65001 > nul");
     Trie trie;
     RoadRunner roadrunner;
-    roadrunner.createGraphsUsingFile("Editedtxt.txt");
+    roadrunner.createGraphsUsingFile("GraphDetails.txt");
     // cout<<"graphs created"<<endl;
 
     vector<string> allTopics = getAllUniqueTopics(roadrunner);
