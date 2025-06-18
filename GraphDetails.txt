@@ -1,60 +1,64 @@
-Num_of_Nodes: 7  
-Name: Arrays  
-ConnectedNodes: ArrayBasics ArrayTypes ArrayOperations MemoryManagement SearchingTechniques SortingTechniques ArrayApplications Stacks  
-EdgeStart: Arrays  
-EdgeEnd: ArrayBasics  
-EdgeWeight: 1  
-EdgeTimeNeeded: 2  
-EdgeStart: ArrayBasics  
-EdgeEnd: ArrayTypes  
-EdgeWeight: 1  
-EdgeTimeNeeded: 2  
-EdgeStart: Arrays  
-EdgeEnd: ArrayOperations  
-EdgeWeight: 2  
+Num_of_Nodes: 8
+Name: Arrays
+ConnectedNodes: ArrayBasics ArrayTypes ArrayOperations MemoryManagement SearchingTechniques SortingTechniques ArrayApplications Stacks
+EdgeStart: Arrays
+EdgeEnd: ArrayBasics
+EdgeWeight: 1
+EdgeTimeNeeded: 2
+EdgeStart: ArrayBasics
+EdgeEnd: ArrayTypes
+EdgeWeight: 1
+EdgeTimeNeeded: 2
+EdgeStart: Arrays
+EdgeEnd: ArrayOperations
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: ArrayBasics
+EdgeEnd: MemoryManagement
+EdgeWeight: 1
+EdgeTimeNeeded: 2
+EdgeStart: ArrayOperations
+EdgeEnd: SearchingTechniques
+EdgeWeight: 2
 EdgeTimeNeeded: 3  
-EdgeStart: ArrayBasics  
-EdgeEnd: MemoryManagement  
-EdgeWeight: 1  
-EdgeTimeNeeded: 2  
-EdgeStart: ArrayOperations  
-EdgeEnd: SearchingTechniques  
-EdgeWeight: 2  
-EdgeTimeNeeded: 3  
-EdgeStart: ArrayOperations  
-EdgeEnd: SortingTechniques  
-EdgeWeight: 2  
-EdgeTimeNeeded: 4  
-EdgeStart: Arrays  
-EdgeEnd: ArrayApplications  
-EdgeWeight: 3  
-EdgeTimeNeeded: 5  
-EdgeStart: ArrayApplications  
-EdgeEnd: SearchingTechniques  
-EdgeWeight: 2  
-EdgeTimeNeeded: 3  
-EdgeStart: ArrayApplications  
-EdgeEnd: SortingTechniques  
-EdgeWeight: 2  
-EdgeTimeNeeded: 3  
-EdgeStart: ArrayApplications  
-EdgeEnd: Stacks  
-EdgeWeight: 2  
-EdgeTimeNeeded: 3  
-*****  
-Num_of_Nodes: 7  
-Name: Stacks  
-ConnectedNodes: StackBasics StackImplementation StackOperations StackApplications StackMemory StackUseCases Arrays  
-EdgeStart: Stacks  
-EdgeEnd: StackBasics  
-EdgeWeight: 1  
-EdgeTimeNeeded: 2  
-EdgeStart: Stacks  
-EdgeEnd: StackOperations  
-EdgeWeight: 2  
-EdgeTimeNeeded: 3  
-EdgeStart: Stacks  
-EdgeEnd: StackImplementation  
+EdgeStart: ArrayOperations
+EdgeEnd: SortingTechniques
+EdgeWeight: 2
+EdgeTimeNeeded: 4
+EdgeStart: Arrays
+EdgeEnd: ArrayApplications
+EdgeWeight: 3
+EdgeTimeNeeded: 5
+EdgeStart: ArrayApplications
+EdgeEnd: SearchingTechniques
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: ArrayApplications
+EdgeEnd: SortingTechniques
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: ArrayApplications
+EdgeEnd: Stacks
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+*****
+Num_of_Nodes: 8
+Name: Stacks
+ConnectedNodes: StackBasics StackImplementation StackOperations StackApplications StackMemory StackUseCases Arrays StackSTL
+EdgeStart: Stacks
+EdgeEnd: StackBasics
+EdgeWeight: 1
+EdgeTimeNeeded: 2
+EdgeStart: Stacks
+EdgeEnd: StackSTL
+EdgeWeight: 1
+EdgeTimeNeeded: 2
+EdgeStart: Stacks
+EdgeEnd: StackOperations
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: Stacks
+EdgeEnd: StackImplementation
 EdgeWeight: 3  
 EdgeTimeNeeded: 5  
 EdgeStart: StackBasics  
@@ -78,61 +82,45 @@ EdgeEnd: StackUseCases
 EdgeWeight: 2  
 EdgeTimeNeeded: 5  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 5  
 Name: Recursion  
-ConnectedNodes: RecursionBasics RecursionApplications RecursionOptimization DynamicProgramming Backtracking  
+ConnectedNodes: RecursionBasics RecursionApplications RecursionOptimization DynamicProgramming Backtracking
 EdgeStart: Recursion  
 EdgeEnd: RecursionBasics  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
-EdgeStart: Recursion  
+EdgeStart: RecursionBasics    
 EdgeEnd: RecursionApplications  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-EdgeStart: Recursion  
+EdgeStart: RecursionApplications 
 EdgeEnd: RecursionOptimization  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-EdgeStart: Recursion  
+EdgeStart: RecursionOptimization  
 EdgeEnd: DynamicProgramming  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
-EdgeStart: RecursionBasics  
-EdgeEnd: DynamicProgramming  
+EdgeStart: Recursion  
+EdgeEnd: Backtracking  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
 EdgeStart: RecursionApplications  
 EdgeEnd: Backtracking  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-EdgeStart: RecursionOptimization  
-EdgeEnd: DynamicProgramming  
-EdgeWeight: 2  
-EdgeTimeNeeded: 4  
 *****  
 Num_of_Nodes: 7  
 Name: DynamicProgramming  
-ConnectedNodes: DPConcepts DPOptimization DPApplications Recursion Backtracking Greedy Algorithms  
+ConnectedNodes: DPConcepts DPOptimization DPApplications Recursion Backtracking GreedyAlgorithms Algorithms
 EdgeStart: DynamicProgramming  
 EdgeEnd: DPConcepts  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
-EdgeStart: DynamicProgramming  
+EdgeStart: DPConcepts  
 EdgeEnd: DPOptimization  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-EdgeStart: DynamicProgramming  
-EdgeEnd: DPApplications  
-EdgeWeight: 2  
-EdgeTimeNeeded: 4  
-EdgeStart: DynamicProgramming  
-EdgeEnd: Recursion  
-EdgeWeight: 1  
-EdgeTimeNeeded: 2  
-EdgeStart: DPConcepts  
-EdgeEnd: Recursion  
-EdgeWeight: 1  
-EdgeTimeNeeded: 2  
 EdgeStart: DPOptimization  
 EdgeEnd: DPApplications  
 EdgeWeight: 2  
@@ -142,9 +130,9 @@ EdgeEnd: GreedyAlgorithms
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 5  
 Name: Backtracking  
-ConnectedNodes: BacktrackingConcepts BacktrackingApplications Recursion DPApplications GreedyAlgorithms  
+ConnectedNodes: BacktrackingConcepts BacktrackingApplications Recursion DPApplications GreedyAlgorithms
 EdgeStart: Backtracking  
 EdgeEnd: BacktrackingConcepts  
 EdgeWeight: 1  
@@ -153,10 +141,6 @@ EdgeStart: Backtracking
 EdgeEnd: BacktrackingApplications  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-EdgeStart: Backtracking  
-EdgeEnd: Recursion  
-EdgeWeight: 1  
-EdgeTimeNeeded: 2  
 EdgeStart: BacktrackingConcepts  
 EdgeEnd: DPApplications  
 EdgeWeight: 1  
@@ -166,18 +150,18 @@ EdgeEnd: GreedyAlgorithms
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 5  
 Name: GreedyAlgorithms  
-ConnectedNodes: GreedyConcepts GreedyOptimization GreedyApplications DynamicProgramming Backtracking  
+ConnectedNodes: GreedyConcepts GreedyOptimization GreedyApplications DynamicProgramming Backtracking
 EdgeStart: GreedyAlgorithms  
 EdgeEnd: GreedyConcepts  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
-EdgeStart: GreedyAlgorithms  
+EdgeStart: GreedyConcepts  
 EdgeEnd: GreedyOptimization  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-EdgeStart: GreedyAlgorithms  
+EdgeStart: GreedyOptimization  
 EdgeEnd: GreedyApplications  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
@@ -185,14 +169,14 @@ EdgeStart: GreedyAlgorithms
 EdgeEnd: DynamicProgramming  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
-EdgeStart: GreedyOptimization  
-EdgeEnd: GreedyApplications  
+EdgeStart: GreedyAlgorithms  
+EdgeEnd: Backtracking  
 EdgeWeight: 2  
-EdgeTimeNeeded: 3  
+EdgeTimeNeeded: 3   
 *****  
-Num_of_Nodes: 5  
+Num_of_Nodes: 4  
 Name: SearchingTechniques  
-ConnectedNodes: LinearSearch BinarySearch BinarySearchApplications SearchingInStrings  
+ConnectedNodes: LinearSearch BinarySearch BinarySearchApplications SearchingInStrings
 EdgeStart: SearchingTechniques  
 EdgeEnd: LinearSearch  
 EdgeWeight: 1  
@@ -212,31 +196,35 @@ EdgeTimeNeeded: 2
 *****  
 Num_of_Nodes: 6  
 Name: SortingTechniques  
-ConnectedNodes: BubbleSort SelectionSort InsertionSort MergeSort QuickSort HeapSort  
+ConnectedNodes: BubbleSort SelectionSort InsertionSort MergeSort QuickSort HeapSort
 EdgeStart: SortingTechniques  
 EdgeEnd: BubbleSort  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
-EdgeStart: SortingTechniques  
+EdgeStart: BubbleSort  
 EdgeEnd: SelectionSort  
 EdgeWeight: 1  
-EdgeTimeNeeded: 3  
-EdgeStart: SortingTechniques  
+EdgeTimeNeeded: 2  
+EdgeStart: SelectionSort  
+EdgeEnd: InsertionSort  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: InsertionSort  
 EdgeEnd: MergeSort  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
-EdgeStart: SortingTechniques  
+EdgeStart: InsertionSort  
 EdgeEnd: QuickSort  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
-EdgeStart: MergeSort  
+EdgeStart: QuickSort  
 EdgeEnd: HeapSort  
-EdgeWeight: 2  
-EdgeTimeNeeded: 5  
-*****  
-Num_of_Nodes: 6  
+EdgeWeight: 3  
+EdgeTimeNeeded: 4  
+*****
+Num_of_Nodes: 5  
 Name: GraphTheory  
-ConnectedNodes: GraphRepresentation GraphTraversal ShortestPath Algorithms GraphApplications  
+ConnectedNodes: GraphRepresentation GraphTraversal ShortestPath Algorithms GraphApplications
 EdgeStart: GraphTheory  
 EdgeEnd: GraphRepresentation  
 EdgeWeight: 1  
@@ -249,6 +237,10 @@ EdgeStart: GraphTheory
 EdgeEnd: ShortestPath  
 EdgeWeight: 3  
 EdgeTimeNeeded: 5  
+EdgeStart: GraphTheory  
+EdgeEnd: Algorithms  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4 
 EdgeStart: GraphTraversal  
 EdgeEnd: GraphApplications  
 EdgeWeight: 2  
@@ -257,16 +249,24 @@ EdgeStart: ShortestPath
 EdgeEnd: GraphApplications  
 EdgeWeight: 3  
 EdgeTimeNeeded: 5  
+EdgeStart: Algorithms  
+EdgeEnd: ShortestPath  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3 
+EdgeStart: GraphApplications  
+EdgeEnd: GraphRepresentation  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 7  
+Num_of_Nodes: 12  
 Name: Trees  
-ConnectedNodes: TreeTraversal BinaryTree AVLTree BinarySearchTree TreeApplications  
+ConnectedNodes: TreeTraversal BinaryTrees AVLTree BinarySearchTrees TreeApplications AdvancedTreeStructures GenericTrees RBTrees BTree BPlusTree Trie SuffixTree
 EdgeStart: Trees  
 EdgeEnd: TreeTraversal  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
 EdgeStart: Trees  
-EdgeEnd: BinaryTree  
+EdgeEnd: BinaryTrees  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 EdgeStart: Trees  
@@ -274,19 +274,51 @@ EdgeEnd: AVLTree
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 EdgeStart: Trees  
-EdgeEnd: BinarySearchTree  
+EdgeEnd: BinarySearchTrees  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
-EdgeStart: BinaryTree  
+EdgeStart: Trees  
+EdgeEnd: TreeApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: Trees  
+EdgeEnd: GenericTrees  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: BinaryTrees  
 EdgeEnd: TreeApplications  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
-*****  
-Num_of_Nodes: 6  
+EdgeStart: BinarySearchTrees  
+EdgeEnd: AdvancedTreeStructures  
+EdgeWeight: 3  
+EdgeTimeNeeded: 4   
+EdgeStart: AdvancedTreeStructures  
+EdgeEnd: BTree  
+EdgeWeight: 3  
+EdgeTimeNeeded: 5  
+EdgeStart: AdvancedTreeStructures  
+EdgeEnd: BPlusTree  
+EdgeWeight: 4  
+EdgeTimeNeeded: 5  
+EdgeStart: GenericTrees  
+EdgeEnd: Trie  
+EdgeWeight: 3  
+EdgeTimeNeeded: 4  
+EdgeStart: Trie  
+EdgeEnd: SuffixTree  
+EdgeWeight: 4  
+EdgeTimeNeeded: 5  
+*****
+Num_of_Nodes: 4  
 Name: Heaps  
-ConnectedNodes: HeapOperations HeapApplications PriorityQueue  
+ConnectedNodes: HeapOperations HeapApplications PriorityQueue BinaryHeap
 EdgeStart: Heaps  
 EdgeEnd: HeapOperations  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3 
+EdgeStart: Heaps  
+EdgeEnd: BinaryHeap  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 EdgeStart: Heaps  
@@ -302,9 +334,9 @@ EdgeEnd: HeapApplications
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 4  
 Name: LinkedLists  
-ConnectedNodes: LinkedListTraversal SinglyLinkedList DoublyLinkedList CircularLinkedList  
+ConnectedNodes: LinkedListTraversal SinglyLinkedList DoublyLinkedList CircularLinkedList
 EdgeStart: LinkedLists  
 EdgeEnd: LinkedListTraversal  
 EdgeWeight: 1  
@@ -322,29 +354,25 @@ EdgeEnd: CircularLinkedList
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 4  
 Name: BinaryTrees  
-ConnectedNodes: BinaryTreeTraversal BinaryTreeOperations BinarySearchTree AVLTree  
+ConnectedNodes: BinaryTreeTraversal BinaryTreeOperations BinarySearchTrees AVLTree
 EdgeStart: BinaryTrees  
 EdgeEnd: BinaryTreeTraversal  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
-EdgeStart: BinaryTrees  
+EdgeStart: BinaryTreeTraversal  
 EdgeEnd: BinaryTreeOperations  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
-EdgeStart: BinaryTrees  
-EdgeEnd: BinarySearchTree  
+EdgeStart: BinaryTreeOperations  
+EdgeEnd: BinarySearchTrees  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
-EdgeStart: BinaryTreeTraversal  
-EdgeEnd: AVLTree  
-EdgeWeight: 2  
-EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 7  
+Num_of_Nodes: 5  
 Name: GraphAlgorithms  
-ConnectedNodes: Dijkstra BellmanFord FloydWarshall Prim Kruskal  
+ConnectedNodes: Dijkstra BellmanFord FloydWarshall Prim Kruskal
 EdgeStart: GraphAlgorithms  
 EdgeEnd: Dijkstra  
 EdgeWeight: 2  
@@ -361,14 +389,14 @@ EdgeStart: GraphAlgorithms
 EdgeEnd: Prim  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
-EdgeStart: Kruskal  
-EdgeEnd: GraphAlgorithms  
+EdgeStart: GraphAlgorithms  
+EdgeEnd: Kruskal
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 *****  
-Num_of_Nodes: 7  
+Num_of_Nodes: 5  
 Name: StringAlgorithms  
-ConnectedNodes: StringMatching StringPatternRecognition KnuthMorrisPratt RabinKarp BoyerMoore  
+ConnectedNodes: StringMatching StringPatternRecognition KnuthMorrisPratt RabinKarp BoyerMoore
 EdgeStart: StringAlgorithms  
 EdgeEnd: StringMatching  
 EdgeWeight: 1  
@@ -390,17 +418,13 @@ EdgeEnd: BoyerMoore
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 7  
+Num_of_Nodes: 4  
 Name: MatrixOperations  
-ConnectedNodes: MatrixRepresentation MatrixMultiplication MatrixTraversal TransposeMatrix  
+ConnectedNodes: MatrixRepresentation MatrixMultiplication MatrixTraversal TransposeMatrix
 EdgeStart: MatrixOperations  
 EdgeEnd: MatrixRepresentation  
 EdgeWeight: 1  
-EdgeTimeNeeded: 2  
-EdgeStart: MatrixOperations  
-EdgeEnd: MatrixMultiplication  
-EdgeWeight: 2  
-EdgeTimeNeeded: 3  
+EdgeTimeNeeded: 2   
 EdgeStart: MatrixOperations  
 EdgeEnd: MatrixTraversal  
 EdgeWeight: 1  
@@ -412,11 +436,19 @@ EdgeTimeNeeded: 4
 EdgeStart: MatrixTraversal  
 EdgeEnd: MatrixMultiplication  
 EdgeWeight: 2  
-EdgeTimeNeeded: 4  
+EdgeTimeNeeded: 4
+EdgeStart: MatrixMultiplication  
+EdgeEnd: MatrixApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: TransposeMatrix  
+EdgeEnd: MatrixApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3   
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 3  
 Name: BitManipulation  
-ConnectedNodes: BitwiseOperations BitwiseApplications BinaryRepresentation  
+ConnectedNodes: BitwiseOperations BitwiseApplications BinaryRepresentation
 EdgeStart: BitManipulation  
 EdgeEnd: BitwiseOperations  
 EdgeWeight: 1  
@@ -434,9 +466,9 @@ EdgeEnd: BitwiseApplications
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 4  
 Name: AdvancedDataStructures  
-ConnectedNodes: SegmentTree FenwickTree DisjointSet UnionFind  
+ConnectedNodes: SegmentTree FenwickTree DisjointSet UnionFind
 EdgeStart: AdvancedDataStructures  
 EdgeEnd: SegmentTree  
 EdgeWeight: 2  
@@ -458,9 +490,9 @@ EdgeEnd: DisjointSet
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 *****  
-Num_of_Nodes: 7  
+Num_of_Nodes: 5  
 Name: DivideAndConquer  
-ConnectedNodes: MergeSort QuickSort ClosestPair  
+ConnectedNodes: MergeSort QuickSort ClosestPair BinarySearch KaratsubaMultiplication
 EdgeStart: DivideAndConquer  
 EdgeEnd: MergeSort  
 EdgeWeight: 1  
@@ -473,46 +505,66 @@ EdgeStart: DivideAndConquer
 EdgeEnd: ClosestPair  
 EdgeWeight: 2  
 EdgeTimeNeeded: 5  
+EdgeStart: DivideAndConquer  
+EdgeEnd: BinarySearch  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: DivideAndConquer  
+EdgeEnd: KaratsubaMultiplication  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4  
 EdgeStart: MergeSort  
 EdgeEnd: ClosestPair  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
+EdgeStart: MergeSort  
+EdgeEnd: BinarySearch  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: MergeSort  
+EdgeEnd: KaratsubaMultiplication  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4  
+EdgeStart: QuickSort  
+EdgeEnd: BinarySearch  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 3  
 Name: AVLTree  
-ConnectedNodes: Rotations Insertions Deletions  
+ConnectedNodes: RotationsAVL InsertionsAVL DeletionsAVL
 EdgeStart: AVLTree  
-EdgeEnd: Rotations  
+EdgeEnd: RotationsAVL  
 EdgeWeight: 1  
 EdgeTimeNeeded: 4  
 EdgeStart: AVLTree  
-EdgeEnd: Insertions  
+EdgeEnd: InsertionsAVL  
 EdgeWeight: 2  
 EdgeTimeNeeded: 5  
 EdgeStart: AVLTree  
-EdgeEnd: Deletions  
+EdgeEnd: DeletionsAVL  
 EdgeWeight: 2  
 EdgeTimeNeeded: 6  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 3  
 Name: Trie  
-ConnectedNodes: Insert Search Delete  
+ConnectedNodes: InsertTrie SearchTrie DeleteTrie
 EdgeStart: Trie  
-EdgeEnd: Insert  
+EdgeEnd: InsertTrie  
 EdgeWeight: 1  
 EdgeTimeNeeded: 2  
 EdgeStart: Trie  
-EdgeEnd: Search  
+EdgeEnd: SearchTrie  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 EdgeStart: Trie  
-EdgeEnd: Delete  
+EdgeEnd: DeleteTrie  
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 7  
+Num_of_Nodes: 2  
 Name: BinarySearch  
-ConnectedNodes: RecursiveBinarySearch IterativeBinarySearch  
+ConnectedNodes: RecursiveBinarySearch IterativeBinarySearch
 EdgeStart: BinarySearch  
 EdgeEnd: RecursiveBinarySearch  
 EdgeWeight: 1  
@@ -522,25 +574,25 @@ EdgeEnd: IterativeBinarySearch
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 6  
-Name: SegmentTrees  
-ConnectedNodes: RangeQuery PointUpdate LazyPropagation  
-EdgeStart: SegmentTrees  
+Num_of_Nodes: 3  
+Name: SegmentTree  
+ConnectedNodes: RangeQuery PointUpdate LazyPropagation
+EdgeStart: SegmentTree  
 EdgeEnd: RangeQuery  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
-EdgeStart: SegmentTrees  
+EdgeStart: RangeQuery  
 EdgeEnd: PointUpdate  
 EdgeWeight: 2  
-EdgeTimeNeeded: 5  
-EdgeStart: SegmentTrees  
+EdgeTimeNeeded: 3  
+EdgeStart: PointUpdate  
 EdgeEnd: LazyPropagation  
 EdgeWeight: 3  
-EdgeTimeNeeded: 6  
+EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 3  
 Name: BitManipulation  
-ConnectedNodes: BitwiseOperations BitShifting ParityCheck  
+ConnectedNodes: BitwiseOperations BitShifting ParityCheck
 EdgeStart: BitManipulation  
 EdgeEnd: BitwiseOperations  
 EdgeWeight: 1  
@@ -554,9 +606,9 @@ EdgeEnd: ParityCheck
 EdgeWeight: 2  
 EdgeTimeNeeded: 3  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 3  
 Name: NetworkFlow  
-ConnectedNodes: FordFulkerson EdmondsKarp Dinic  
+ConnectedNodes: FordFulkerson EdmondsKarp Dinic
 EdgeStart: NetworkFlow  
 EdgeEnd: FordFulkerson  
 EdgeWeight: 1  
@@ -570,9 +622,9 @@ EdgeEnd: Dinic
 EdgeWeight: 2  
 EdgeTimeNeeded: 6  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 3  
 Name: ShortestPathAlgorithms  
-ConnectedNodes: BellmanFord Dijkstra FloydWarshall  
+ConnectedNodes: BellmanFord Dijkstra FloydWarshall
 EdgeStart: ShortestPathAlgorithms  
 EdgeEnd: BellmanFord  
 EdgeWeight: 1  
@@ -586,9 +638,9 @@ EdgeEnd: FloydWarshall
 EdgeWeight: 2  
 EdgeTimeNeeded: 5  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 3  
 Name: ComputationalGeometry  
-ConnectedNodes: ConvexHull LineIntersection PointInPolygon  
+ConnectedNodes: ConvexHull LineIntersection PointInPolygon
 EdgeStart: ComputationalGeometry  
 EdgeEnd: ConvexHull  
 EdgeWeight: 1  
@@ -606,9 +658,9 @@ EdgeEnd: PointInPolygon
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 3  
 Name: MatrixOperations  
-ConnectedNodes: MatrixMultiplication MatrixExponentiation MatrixInversion  
+ConnectedNodes: MatrixMultiplication MatrixExponentiation MatrixInversion
 EdgeStart: MatrixOperations  
 EdgeEnd: MatrixMultiplication  
 EdgeWeight: 1  
@@ -622,9 +674,9 @@ EdgeEnd: MatrixInversion
 EdgeWeight: 2  
 EdgeTimeNeeded: 6  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 3  
 Name: GraphTraversal  
-ConnectedNodes: BFS DFS TopologicalSort  
+ConnectedNodes: BFS DFS TopologicalSort
 EdgeStart: GraphTraversal  
 EdgeEnd: BFS  
 EdgeWeight: 1  
@@ -638,15 +690,15 @@ EdgeEnd: TopologicalSort
 EdgeWeight: 2  
 EdgeTimeNeeded: 5  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 4  
 Name: BinaryHeap  
-ConnectedNodes: Insert Delete MinHeapify MaxHeapify  
+ConnectedNodes: InsertHeap DeleteHeap MinHeapify MaxHeapify
 EdgeStart: BinaryHeap  
-EdgeEnd: Insert  
+EdgeEnd: InsertHeap  
 EdgeWeight: 1  
 EdgeTimeNeeded: 3  
 EdgeStart: BinaryHeap  
-EdgeEnd: Delete  
+EdgeEnd: DeleteHeap  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 EdgeStart: BinaryHeap  
@@ -658,9 +710,9 @@ EdgeEnd: MaxHeapify
 EdgeWeight: 2  
 EdgeTimeNeeded: 5  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 2  
 Name: FloydWarshall  
-ConnectedNodes: Algorithm Path Reconstruction  
+ConnectedNodes: Algorithm PathReconstruction
 EdgeStart: FloydWarshall  
 EdgeEnd: Algorithm  
 EdgeWeight: 1  
@@ -670,9 +722,9 @@ EdgeEnd: PathReconstruction
 EdgeWeight: 2  
 EdgeTimeNeeded: 5  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 3  
 Name: UnionFind  
-ConnectedNodes: Find Union PathCompression  
+ConnectedNodes: Find Union PathCompression
 EdgeStart: UnionFind  
 EdgeEnd: Find  
 EdgeWeight: 1  
@@ -686,9 +738,9 @@ EdgeEnd: PathCompression
 EdgeWeight: 2  
 EdgeTimeNeeded: 5  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 2  
 Name: TopologicalSort  
-ConnectedNodes: KahnAlgorithm DFSMethod  
+ConnectedNodes: KahnAlgorithm DFSMethod
 EdgeStart: TopologicalSort  
 EdgeEnd: KahnAlgorithm  
 EdgeWeight: 1  
@@ -698,11 +750,15 @@ EdgeEnd: DFSMethod
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 *****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 5  
 Name: PriorityQueue  
-ConnectedNodes: MinPriorityQueue MaxPriorityQueue Insert Delete  
+ConnectedNodes: MinPriorityQueue MaxPriorityQueue InsertPQ DeletePQ  PriorityQueueSTL
 EdgeStart: PriorityQueue  
 EdgeEnd: MinPriorityQueue  
+EdgeWeight: 1  
+EdgeTimeNeeded: 3 
+dgeStart: PriorityQueue  
+EdgeEnd: PriorityQueueSTL  
 EdgeWeight: 1  
 EdgeTimeNeeded: 3  
 EdgeStart: PriorityQueue  
@@ -710,15 +766,15 @@ EdgeEnd: MaxPriorityQueue
 EdgeWeight: 1  
 EdgeTimeNeeded: 3  
 EdgeStart: PriorityQueue  
-EdgeEnd: Insert  
+EdgeEnd: InsertPQ  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 EdgeStart: PriorityQueue  
-EdgeEnd: Delete  
+EdgeEnd: DeletePQ  
 EdgeWeight: 2  
 EdgeTimeNeeded: 4  
 *****  
-Num_of_Nodes: 7  
+Num_of_Nodes: 2  
 Name: SuffixTree  
 ConnectedNodes: Construction Search  
 EdgeStart: SuffixTree  
@@ -730,19 +786,11 @@ EdgeEnd: Search
 EdgeWeight: 3  
 EdgeTimeNeeded: 6  
 *****  
-Num_of_Nodes: 6  
-Name: MatrixChainMultiplication  
-ConnectedNodes: DynamicProgramming  
-EdgeStart: MatrixChainMultiplication  
-EdgeEnd: DynamicProgramming  
-EdgeWeight: 1  
-EdgeTimeNeeded: 6  
-*****  
-Num_of_Nodes: 6  
+Num_of_Nodes: 2  
 Name: StringMatching  
-ConnectedNodes: NaiveKMP  
+ConnectedNodes: NaiveMatching KMP  
 EdgeStart: StringMatching  
-EdgeEnd: NaiveKMP  
+EdgeEnd: NaiveMatching
 EdgeWeight: 2  
 EdgeTimeNeeded: 5  
 EdgeStart: StringMatching  
@@ -780,7 +828,7 @@ EdgeTimeNeeded: 3
 *****
 Num_of_Nodes: 6
 Name: FenwickTree
-ConnectedNodes: FenwickBasics RangeSum PointUpdate TreeTraversal BITApplications SegmentTree
+ConnectedNodes: FenwickBasics RangeSum PointUpdate RSTreeTraversal BITApplications SegmentTree
 EdgeStart: FenwickTree
 EdgeEnd: FenwickBasics
 EdgeWeight: 1
@@ -794,17 +842,13 @@ EdgeEnd: PointUpdate
 EdgeWeight: 2
 EdgeTimeNeeded: 2
 EdgeStart: RangeSum
-EdgeEnd: TreeTraversal
+EdgeEnd: RSTreeTraversal
 EdgeWeight: 2
 EdgeTimeNeeded: 2
 EdgeStart: PointUpdate
 EdgeEnd: BITApplications
 EdgeWeight: 3
 EdgeTimeNeeded: 3
-EdgeStart: BITApplications
-EdgeEnd: SegmentTree
-EdgeWeight: 3
-EdgeTimeNeeded: 2
 *****
 Num_of_Nodes: 6
 Name: NumberTheory
@@ -833,4 +877,552 @@ EdgeStart: EulerTotient
 EdgeEnd: FermatTheorem
 EdgeWeight: 3
 EdgeTimeNeeded: 4
+*****
+Num_of_Nodes: 9  
+Name: Queue  
+ConnectedNodes: QueueBasics QueueOperations CircularQueue PriorityQueue QueueApplications Deque QueueVsStack  QueueSTL DequeSTL
+EdgeStart: Queue  
+EdgeEnd: QueueBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: Queue  
+EdgeEnd: QueueSTL  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2 
+EdgeStart: Deque  
+EdgeEnd: DequeSTL
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: QueueBasics  
+EdgeEnd: QueueOperations  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: Queue  
+EdgeEnd: MonotonicQueue 
+EdgeWeight: 3  
+EdgeTimeNeeded: 5 
+EdgeStart: QueueOperations  
+EdgeEnd: CircularQueue  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4  
+EdgeStart: QueueOperations  
+EdgeEnd: PriorityQueue  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4  
+EdgeStart: CircularQueue  
+EdgeEnd: Deque  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4  
+EdgeStart: PriorityQueue  
+EdgeEnd: QueueApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4  
+EdgeStart: Queue  
+EdgeEnd: QueueVsStack  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+*****
+Num_of_Nodes: 15  
+Name: STL  
+ConnectedNodes: STLIntroduction VectorSTL ListSTL DequeSTL SetSTL MapSTL UnorderedMapSTL StackSTL QueueSTL PriorityQueueSTL IteratorSTL Algorithm FunctionObjectSTL PairSTL TupleSTL
+EdgeStart: STL  
+EdgeEnd: STLIntroduction  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: STL  
+EdgeEnd: VectorSTL
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: ListSTL  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: DequeSTL  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: SetSTL  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: MapSTL  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: UnorderedMapSTL  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: StackSTL  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: STL  
+EdgeEnd: QueueSTL  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: STL  
+EdgeEnd: PriorityQueueSTL  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: IteratorSTL  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: Algorithm  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: FunctionObjectSTL  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: PairSTL  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: STL  
+EdgeEnd: TupleSTL  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+*****
+Num_of_Nodes: 9  
+Name: BinarySearchTrees  
+ConnectedNodes: BSTIntro BSTImplementation BSTOperations BSTTraversal BSTApplications BalancedBST AVLTree RedBlackTrees TreeBasics
+EdgeStart: BinarySearchTrees  
+EdgeEnd: BSTIntro  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: BSTIntro  
+EdgeEnd: BSTImplementation  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: BSTIntro  
+EdgeEnd: TreeBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: BSTImplementation  
+EdgeEnd: BSTOperations  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: BSTOperations  
+EdgeEnd: BSTTraversal  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: BSTTraversal  
+EdgeEnd: BSTApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4  
+EdgeStart: BSTApplications  
+EdgeEnd: BalancedBST  
+EdgeWeight: 3  
+EdgeTimeNeeded: 5  
+EdgeStart: BalancedBST  
+EdgeEnd: AVLTree  
+EdgeWeight: 3  
+EdgeTimeNeeded: 5  
+EdgeStart: BalancedBST  
+EdgeEnd: RedBlackTrees  
+EdgeWeight: 3  
+EdgeTimeNeeded: 5  
+*****
+Num_of_Nodes: 7  
+Name: RedBlackTrees  
+ConnectedNodes: RBTreeBasics RBTreeProperties RBTreeInsertion RBTreeDeletion RBTreeRotations RBTreeApplications BalancedBST
+EdgeStart: RedBlackTrees  
+EdgeEnd: RBTreeBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: RBTreeBasics  
+EdgeEnd: RBTreeProperties  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: RedBlackTrees  
+EdgeEnd: RBTreeInsertion  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: RedBlackTrees  
+EdgeEnd: RBTreeDeletion  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: RBTreeInsertion  
+EdgeEnd: RBTreeRotations  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: RBTreeDeletion  
+EdgeEnd: RBTreeRotations  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: RBTreeRotations  
+EdgeEnd: RBTreeApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4   
+*****
+Num_of_Nodes: 7
+Name: BinPacking
+ConnectedNodes: BinPackingIntro FirstFitAlgorithm BestFitAlgorithm WorstFitAlgorithm BinPackingApplications BinPackingComplexity GreedyAlgorithms
+EdgeStart: BinPacking
+EdgeEnd: BinPackingIntro
+EdgeWeight: 1
+EdgeTimeNeeded: 2
+EdgeStart: BinPackingIntro
+EdgeEnd: FirstFitAlgorithm
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: BinPackingIntro
+EdgeEnd: BestFitAlgorithm
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: BinPackingIntro
+EdgeEnd: WorstFitAlgorithm
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: FirstFitAlgorithm
+EdgeEnd: BinPackingComplexity
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: BestFitAlgorithm
+EdgeEnd: BinPackingComplexity
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: WorstFitAlgorithm
+EdgeEnd: BinPackingComplexity
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: BinPackingComplexity
+EdgeEnd: BinPackingApplications
+EdgeWeight: 3
+EdgeTimeNeeded: 4
+EdgeStart: GreedyAlgorithms
+EdgeEnd: BinPacking
+EdgeWeight: 3
+EdgeTimeNeeded: 4
+*****
+Num_of_Nodes: 8  
+Name: SlidingWindow  
+ConnectedNodes: SlidingWindowIntro FixedSizeWindow VariableSizeWindow SlidingWindowApplications OptimalSlidingWindow ComplexityAnalysis TwoPointerTechnique  SlidingWindowTechniques
+EdgeStart: SlidingWindow  
+EdgeEnd: SlidingWindowIntro  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2 
+EdgeStart: TwoPointerTechnique  
+EdgeEnd: SlidingWindowIntro  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: SlidingWindowIntro  
+EdgeEnd: FixedSizeWindow  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: SlidingWindowIntro  
+EdgeEnd: VariableSizeWindow  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: FixedSizeWindow  
+EdgeEnd: SlidingWindowApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: VariableSizeWindow  
+EdgeEnd: SlidingWindowApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: SlidingWindowApplications  
+EdgeEnd: OptimalSlidingWindow  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+dgeStart: SlidingWindow 
+EdgeEnd: SlidingWindowTechniques
+EdgeWeight: 3  
+EdgeTimeNeeded: 5 
+EdgeStart: OptimalSlidingWindow  
+EdgeEnd: ComplexityAnalysis  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+*****
+Num_of_Nodes: 7  
+Name: PrefixSum  
+ConnectedNodes: PrefixSumIntro PrefixSum1D PrefixSum2D PrefixSumApplications PrefixSumOptimizations TimeComplexityAnalysis ArrayManipulation
+EdgeStart: PrefixSum  
+EdgeEnd: PrefixSumIntro  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: PrefixSum  
+EdgeEnd: PrefixSum1D  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: PrefixSum  
+EdgeEnd: PrefixSum2D  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: PrefixSum1D  
+EdgeEnd: PrefixSumApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: PrefixSum2D  
+EdgeEnd: PrefixSumApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: PrefixSum  
+EdgeEnd: PrefixSumOptimizations  
+EdgeWeight: 3  
+EdgeTimeNeeded: 4  
+EdgeStart: PrefixSum  
+EdgeEnd: TimeComplexityAnalysis  
+EdgeWeight: 3  
+EdgeTimeNeeded: 4  
+EdgeStart: PrefixSum1D  
+EdgeEnd: ArrayManipulation  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+*****
+Num_of_Nodes: 7  
+Name: Enumeration  
+ConnectedNodes: EnumerationIntro EnumerationAlgorithms EnumerationApplications EnumerationInPractice EnumerationEdgeCases TimeComplexityAnalysis ArrayTraversal
+EdgeStart: Enumeration  
+EdgeEnd: EnumerationIntro  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: Enumeration  
+EdgeEnd: EnumerationAlgorithms  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: Enumeration  
+EdgeEnd: EnumerationApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: EnumerationAlgorithms  
+EdgeEnd: EnumerationInPractice  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: EnumerationApplications  
+EdgeEnd: EnumerationInPractice  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: Enumeration  
+EdgeEnd: EnumerationEdgeCases  
+EdgeWeight: 3  
+EdgeTimeNeeded: 4  
+EdgeStart: EnumerationAlgorithms  
+EdgeEnd: TimeComplexityAnalysis  
+EdgeWeight: 3  
+EdgeTimeNeeded: 4  
+EdgeStart: EnumerationApplications  
+EdgeEnd: ArrayTraversal  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+*****
+Num_of_Nodes: 8  
+Name: MonotonicStack  
+ConnectedNodes: MonotonicStackBasics MonotonicStackApplications MonotonicStackProblems StackOperations TimeComplexityAnalysis ArrayTraversal SlidingWindowTechniques MonotonicQueue
+EdgeStart: Monotonic Stack  
+EdgeEnd: MonotonicStackBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: MonotonicStack 
+EdgeEnd: MonotonicStackApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: MonotonicStack  
+EdgeEnd: MonotonicStackProblems  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: MonotonicStackBasics  
+EdgeEnd: StackOperations  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: MonotonicStack
+EdgeEnd: MonotonicStackApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3 
+EdgeStart: MonotonicStackApplications  
+EdgeEnd: SlidingWindowTechniques  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: MonotonicStackApplications  
+EdgeEnd: TimeComplexityAnalysis  
+EdgeWeight: 3  
+EdgeTimeNeeded: 4  
+EdgeStart: MonotonicStackProblems  
+EdgeEnd: ArrayTraversal  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: MonotonicStackApplications  
+EdgeEnd: MonotonicQueue  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+*****
+Num_of_Nodes: 7  
+Name: Bitmasking  
+ConnectedNodes: BitmaskingBasics BitmaskingApplications BitmaskingProblems BitwiseOperations DPWithBitmasking NumberTheory Combinatorics
+EdgeStart: Bitmasking  
+EdgeEnd: BitmaskingBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: BitmaskingBasics  
+EdgeEnd: BitmaskingApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: Bitmasking  
+EdgeEnd: BitmaskingProblems  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: BitmaskingBasics  
+EdgeEnd: BitwiseOperations  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: BitmaskingApplications  
+EdgeEnd: DPWithBitmasking  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: BitmaskingApplications  
+EdgeEnd: NumberTheory  
+EdgeWeight: 3  
+EdgeTimeNeeded: 4  
+EdgeStart: BitmaskingProblems  
+EdgeEnd: Combinatorics  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: BitmaskingApplications  
+EdgeEnd: DPWithBitmasking  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+*****
+Num_of_Nodes: 7  
+Name: MonotonicQueue  
+ConnectedNodes: MonotonicQueueBasics QueueOperations MinQueue MaxQueue SlidingWindowMax SlidingWindowMin MonotonicQueueApplications
+EdgeStart: MonotonicQueue  
+EdgeEnd: MonotonicQueueBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: MonotonicQueueBasics  
+EdgeEnd: QueueOperations  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: QueueOperations  
+EdgeEnd: MinQueue  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: QueueOperations  
+EdgeEnd: MaxQueue  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: MinQueue  
+EdgeEnd: SlidingWindowMin  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: MaxQueue  
+EdgeEnd: SlidingWindowMax  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: SlidingWindowMax  
+EdgeEnd: MonotonicQueueApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+*****
+Num_of_Nodes: 7  
+Name: TwoPointers  
+ConnectedNodes: TwoPointersBasics SortingBasedTwoPointers OppositeEndPointers MovingWindow TechniqueComparisons TwoPointersApplications SlidingWindow
+EdgeStart: TwoPointers  
+EdgeEnd: TwoPointersBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: TwoPointersBasics  
+EdgeEnd: SortingBasedTwoPointers  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: TwoPointersBasics  
+EdgeEnd: OppositeEndPointers  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: OppositeEndPointers  
+EdgeEnd: MovingWindow  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: MovingWindow  
+EdgeEnd: SlidingWindow  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: MovingWindow  
+EdgeEnd: TechniqueComparisons  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: TechniqueComparisons  
+EdgeEnd: TwoPointersApplications  
+EdgeWeight: 2  
+EdgeTimeNeeded: 4  
+EdgeStart: TwoPointersApplications  
+EdgeEnd: SlidingWindowIntro  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3
+*****
+Num_of_Nodes: 8
+Name: GameTheory
+ConnectedNodes: GameTheoryBasics ZeroSumGames NimGame GrundyNumbers StrategyFormulation MinimaxTheory GameTheoryApplications Recursion
+EdgeStart: GameTheory
+EdgeEnd: GameTheoryBasics
+EdgeWeight: 1
+EdgeTimeNeeded: 2
+EdgeStart: GameTheoryBasics
+EdgeEnd: ZeroSumGames
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: GameTheoryBasics
+EdgeEnd: NimGame
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: NimGame
+EdgeEnd: GrundyNumbers
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: GameTheoryBasics
+EdgeEnd: StrategyFormulation
+EdgeWeight: 2
+EdgeTimeNeeded: 3
+EdgeStart: StrategyFormulation
+EdgeEnd: MinimaxTheory
+EdgeWeight: 3
+EdgeTimeNeeded: 5
+EdgeStart: GameTheory
+EdgeEnd: GameTheoryApplications
+EdgeWeight: 3
+EdgeTimeNeeded: 4
+EdgeStart: Recursion
+EdgeEnd: GameTheory
+EdgeWeight: 1
+EdgeTimeNeeded: 2
+*****
+Num_of_Nodes: 8  
+Name: Simulation  
+ConnectedNodes: SimulationBasics EventDrivenSimulation GridSimulation TimeComplexitySimulation SimulationApplications Recursion StateTracking Optimization
+EdgeStart: Simulation  
+EdgeEnd: SimulationBasics  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
+EdgeStart: SimulationBasics  
+EdgeEnd: EventDrivenSimulation  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: SimulationBasics  
+EdgeEnd: GridSimulation  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: GridSimulation  
+EdgeEnd: TimeComplexitySimulation  
+EdgeWeight: 2  
+EdgeTimeNeeded: 2  
+EdgeStart: SimulationBasics  
+EdgeEnd: StateTracking  
+EdgeWeight: 2  
+EdgeTimeNeeded: 3  
+EdgeStart: StateTracking  
+EdgeEnd: Optimization  
+EdgeWeight: 3  
+EdgeTimeNeeded: 4  
+EdgeStart: Simulation  
+EdgeEnd: SimulationApplications  
+EdgeWeight: 3  
+EdgeTimeNeeded: 4  
+EdgeStart: Recursion 
+EdgeEnd: Simulation  
+EdgeWeight: 1  
+EdgeTimeNeeded: 2  
 *****
