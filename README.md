@@ -57,13 +57,13 @@ g++ CompleteCode.cpp -o RoadRunner
 
 ### File Structure 📖
 💠FORMAT FOLLOWED:<br>
-            Num_of_nodes:<br>
-            Name:<br>
-            ConnectedNodes:<br>
-            EdgeStart:<br>
-            EdgeEnd:<br>
-            EdgeWeight:<br>
-            EdgeTimeNeeded:<br>
+➡️ Num_of_nodes:<br>
+➡️ Name:<br>
+➡️ ConnectedNodes:<br>
+➡️ EdgeStart:<br>
+➡️ EdgeEnd:<br>
+➡️ EdgeWeight:<br>
+➡️ EdgeTimeNeeded:<br>
 💠 The graphs formed through this file, can be further visualized using our custom graph visualizer. 🌻
 
 ### Algorithms Implemented 🥇
