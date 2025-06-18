@@ -8,11 +8,11 @@
 <hr>
 
 ## About📝⭐<br>
-Given that hundreds of thousands of CS grads enter the job market every year, DSA being the core skill tested in the interview process, it's importance is pretty much undeniable. However the large number of topics need to be studied most optimally for striking the perfect balance between DSA expertise and other skill acquisition. Here's where **_RoadRunner_** comes to your rescue. Just choose the kind of roadmap you'd like to generate and it'll have it ready for you within seconds! 📔
+Given that hundreds of thousands of CS grads enter the job market every year, DSA being the core skill tested in the interview process, it's importance undeniable. However the large number of topics need to be studied most optimally for striking the perfect balance between DSA expertise and other skill acquisition. Here's where **_RoadRunner_** comes to your rescue. Just choose the kind of roadmap you'd like to generate and it'll have it ready for you within seconds! 📔
 
 ## Features 📖✨<br>
 ✔️ An all in one personalized DSA roadmap generator.<br>
-✔️ Get to decide your own journey!<br>
+✔️  Define your own learning journey!<br>
 ✔️ Learn a topic from Scratch to Advanced!<br>
 ✔️ Have time constraints followed as well.<br>
 ✔️ Use your present skillset to the best of your benefit.<br>
