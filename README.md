@@ -20,3 +20,56 @@ Given that hundreds of thousands of CS grads enter the job market every year, DS
 ✔️ A simple menu based UI for easy interaction.<br>
 ✔️ A colorful UX for a more engaging experience.<br>
 
+## Preview 👀<br>
+![image](https://github.com/user-attachments/assets/3c766e10-22b8-488c-bdc3-7d2757759583)
+<hr>
+
+## Getting Started ⚡
+
+### Prerequisites 📌
+✅ A C++ compatible compiler<br>
+✅ Any OS : Windows/ Mac/ Linux<br>
+<br>
+
+###  Build and Run 🚀
+✔️ Clone the Repo<br>
+✔️ Run and enjoy!<br>
+
+###  How it works 🛠️
+1️⃣ Run RoadRunner and select your preferred roadmap specs.<br>
+2️⃣ Enter your current skillset.<br>
+3️⃣ All the topics are stored internally in a txt file, through which graphs are internally created through file parsing.<br>
+
+### File Structure 📖
+💠FORMAT FOLLOWED:<br>
+            Num_of_nodes:<br>
+            Name:<br>
+            ConnectedNodes:<br>
+            EdgeStart:<br>
+            EdgeEnd:<br>
+            EdgeWeight:<br>
+            EdgeTimeNeeded:<br>
+💠 The graphs formed through this file, can be further visualised using our custom graph visualizer. 🌻
+
+### Algorithms Implemented 🥇
+
+| Algorithm                                | Purpose                                                           |
+| -----------------------------------------| ------------------------------------------------------------------|
+| Trie                                     | Prefix Search and Matching  (Smart Search)                        |
+| Dynamic Programming (Levishtein Distance)| Auto-correct and validate user input, fixing typos (Smart Search) |
+| Modified DFS                             | Priority Based Graph Traversal                                    |
+| Modified Djikastra Algorithm             | Most Optimal Path from Current to Aimed Skillset                  |
+| Greedy (0/1 Knapsack Implementation)     | Pick/ Not pick depending on constraints                           |
+<hr>
+
+## Project Structure 📁
+
+| File               | Purpose                                         |
+| -------------------| ------------------------------------------------|
+| `CompleteCode.cpp` | Core logic and menu system                      |
+| `GraphDetails.txt` | File storing all Topic Graphs                   |
+| `abbreviation.h`   | Header file storing popular topic abbreviations |
+| `README.md`        | Project Documentation                           |
+<hr>
+
+>Happy Studying! 📖🥇
