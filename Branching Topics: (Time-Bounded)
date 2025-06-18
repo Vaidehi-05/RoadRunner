@@ -1,4 +1,4 @@
-/*Enter a Topic and Total Time Constraint(hrs)=> Get Topics which can be done within gthe time constraint*/ 
+/*Enter a Topic and Total Time Constraint(hrs)=> Get Topics which can be done within the time constraint*/ 
 #include <bits/stdc++.h>
 
 using namespace std;
