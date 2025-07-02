@@ -1,19 +1,22 @@
 #include <bits/stdc++.h>
-#include <conio.h>
+#include <conio.h> //needed for getch() - Windoews Only
 #include "abbreviation.h"
 using namespace std;
 
 // ANSI Color Codes
 string RESET = "\033[0m";
-const string ORANGE = "\033[38;5;208m"; // For subtopics
-const string CYAN = "\033[36m";         // For main topics
-const string GREEN = "\033[32m";        // For time/difficulty
-const string YELLOW = "\033[33m";       // For headers
-const string BLUE = "\033[34m";         // For menu options
+const string ORANGE = "\033[38;5;208m";
+const string CYAN = "\033[36m";
+const string GREEN = "\033[32m";
+const string YELLOW = "\033[33m";
+const string BLUE = "\033[34m";
+//----------//
+
+//----------------------Trie------------------------//
+
 struct TrieNode
 {
     bool isEnd;
-    int freq; // increase frequency of search // not used///????
     unordered_map<char, TrieNode *> child;
 
     TrieNode() : isEnd(false) {}
@@ -27,19 +30,19 @@ class Trie
 public:
     Trie() { root = new TrieNode(); }
 
-    void remains(TrieNode *node, string &word, vector<string> &res) // helper function to find all words that can be made using given prefix
+    // Helper function for {getSuggestions}-- stores all words from a given node 
+    void remains(TrieNode *node, string &prefix, vector<string> &res) 
     {
         if (node->isEnd)
         {
-            // cout << "[DEBUG] Suggestion found: " << word << endl;
-            res.push_back(word);
+            res.push_back(prefix);
         }
 
         for (auto [c, next] : node->child)
         {
-            word.push_back(c);
-            remains(next, word, res);
-            word.pop_back();
+            prefix.push_back(c);
+            remains(next, prefix, res);
+            prefix.pop_back();
         }
     }
 
@@ -51,21 +54,26 @@ public:
             if (node->child[c])
                 node = node->child[c];
             else
-                node = node->child[c] = new TrieNode();
+                node->child[c] = new TrieNode();
+                node = node->child[c];
         }
         node->isEnd = true;
-        // node->freq++;
-        // cout << "[DEBUG] Inserted into Trie:-" << word << endl;
+        //why?
         correctedWords.push_back(word);
     }
 
+    //Provides the whole word[exists] or suggestions[semi-exists]
     vector<string> getSuggestions(string &word)
     {
         TrieNode *node = root;
+        //Find the word till it matches.
         for (char c : word)
         {
             if (node->child.find(c) == node->child.end())
-                return {};
+                if(node==root)
+                    return {};
+                else
+                    break;
             node = node->child[c];
         }
 
@@ -83,6 +91,7 @@ public:
         return result;
     }
 
+    //Checks existence of word
     bool search(string &word)
     {
         TrieNode *node = root;
@@ -95,18 +104,21 @@ public:
         return node->isEnd;
     }
 };
+//--------------------------------------------------//
 
-string normalize(string word)   //normalizing string
+//Normalize String
+string normalize(string word)   
 {
-    transform(word.begin(), word.end(), word.begin(), ::tolower); // to lower
-
-    string specialChars = "-_/.,!&#";
+    //lowerCase
+    transform(word.begin(), word.end(), word.begin(), ::tolower); 
+    
+    string specialChars = "-_/.,!&#@$%^*()+=:;\"\'|\\<>?~`";
     for (char &c : word)
         if (specialChars.find(c) != string::npos)
-            c = ' ';
+            c=' ';
 
     // Removing extra spaces
-    int start = 0, end = word.size() - 1;
+    int start= 0, end= word.size()-1;
     string temp = "";
     while (start <= end && word[start] == ' ')
         start++;
@@ -119,13 +131,11 @@ string normalize(string word)   //normalizing string
     word = temp;
     temp.clear();
 
-    for (int i = 0; i < word.size(); i++)
+    for (int i= 0; i < word.size(); i++)
     {
-        if (!(i + 1 < word.size() && word[i] == ' ' && word[i + 1] == ' '))
-            temp += word[i];
+        if (!(word[i] == ' ' && word[i + 1] == ' '))
+            temp+= word[i];
     }
-
-    // cout << "[DEBUG] Normalized: " << word << endl;
 
     // Abbreviation Decoder
     if (abbreviations.find(word) != abbreviations.end())
@@ -134,7 +144,8 @@ string normalize(string word)   //normalizing string
     return word;
 }
 
-int editDistance(string a, string b) // Levishtein Distance(number of operations from Word1 to Word2)
+// Levishtein Distance(number of operations from Word1 to Word2)
+int editDistance(string a, string b) 
 {
     int m = a.size(), n = b.size();
 
@@ -153,7 +164,9 @@ int editDistance(string a, string b) // Levishtein Distance(number of operations
     return dp[m][n];
 }
 
-vector<pair<string, int>> topMatches(string userInput, vector<string> topics) // stores top matches of a word along w/ their score!
+
+// Stores top matches of a word along w/ their score!
+vector<pair<string, int>> topLevenMatches(string userInput, vector<string> topics) 
 {
     int s;
     vector<pair<string, int>> score;
@@ -172,45 +185,67 @@ vector<pair<string, int>> topMatches(string userInput, vector<string> topics) //
     return top;
 }
 
-vector<string> smartSearch(vector<string> topicsInput, vector<string> topics, Trie &trie)
+/*  Stores best matches from Trie and Leven-Distance search (in final_match)*/
+vector<string> top3Matches(string word, vector<string>& allTopics, Trie &trie)
+{
+        vector<pair<string, int>> leviMatches = topLevenMatches(word, allTopics);
+        vector<string> trieMatches = trie.getSuggestions(word);
+        set<string> matches;
+        vector<string> final_match;
+
+        for(auto &a: trieMatches)
+            matches.insert(a);
+        for(auto &a: leviMatches)
+            matches.insert(a.first);
+
+        //top 3
+        int c = 0;
+        for(auto &a: matches)
+            {
+                final_match.push_back(a);
+                c++;
+                if(c == 3)
+                    break;
+            }
+
+    return final_match;
+}
+
+//  Standardize the inputed topics
+vector<string> smartSearch(vector<string> topicsInput, vector<string>& allTopics, Trie &trie)
 {
     vector<string> results;
     for (string w : topicsInput)
     {
         string corrected = normalize(w);
+
+        //Store input if in Trie
         if (trie.search(corrected))
         {
             results.push_back(corrected);
             continue;
         }
 
-        // Compute top matches using edit distance to all topics
-        vector<pair<string, int>> matches = topMatches(corrected, topics);
+        vector<string> final_match = top3Matches(corrected, allTopics, trie);
 
         cout << "For the word: " << w << "\nDid you mean:\n";
-        for (int i = 0; i < matches.size(); ++i)
-        {
-            cout << i + 1 << ") " << matches[i].first
-                 << " (score: " << matches[i].second << ")\n";
-        }
+        for (int i = 0; i < final_match.size(); i++)
+            cout << i+1 << ". " << final_match[i] << endl;
 
-        cout << "Enter the number of the correct topic (1-" << matches.size()
-             << "), or 0 to enter manually: ";
+        cout << "Enter the number of the correct topic (1" << (final_match.size()==1? "" : ("-" + to_string(final_match.size()))) << "), or 0 to enter manually: ";
         int choice;
         cin >> choice;
 
-        if (choice >= 1 && choice <= matches.size())
-        {
-            results.push_back(matches[choice - 1].first);
-        }
+        if (choice >= 1 && choice <= final_match.size())
+            results.push_back(final_match[choice - 1]);
         else
         {
+            cout << "Enter the correct word manually: ";
             string manual;
             bool correct = false;
             cin.ignore();
             while (!correct)
             {
-                cout << "Enter the correct word manually: ";
                 getline(cin, manual);
                 manual = normalize(manual);
                 if (trie.search(manual))
@@ -218,38 +253,50 @@ vector<string> smartSearch(vector<string> topicsInput, vector<string> topics, Tr
                     correct = true;
                     results.push_back(manual);
                 }
+                else if(manual == "cancel")
+                    break;
                 else
-                {
-                    cout << "You have entered the wrong topic. Try again.\n";
-                }
+                    cout << "No such topic in database. Try again. Type 'cancel' to leave this topic\n";
             }
         }
     }
-
     return results;
 }
 
-void buildTrie(Trie &trie, vector<string> &topics)
+/*  Promopts user to input their Present Skillset (topics-completed) */
+map<string, int> getPresentSkillset(Trie &trie, vector<string> &allTopics)
 {
-    for (auto a : topics)
+    map<string, int> present_skillset;
+
+    cout << "\nDo you have any previous skills? (y/n): ";
+    char hasSkills;
+    cin >> hasSkills;
+
+    if (hasSkills == 'y' || hasSkills == 'Y')
     {
-        string word = normalize(a);
-        trie.insert(word);
+        vector<string> inputs;
+        string topic;
+
+        
+        cout << "Enter topics you already know (type 'done' to finish):\n";
+        while (cin >> topic && topic != "done")
+            inputs.push_back(topic);
+
+        vector<string> correctedSkill = smartSearch(inputs, allTopics, trie);
+
+        for (const string &word : correctedSkill)
+            present_skillset[word] = 0;
+
+        if (!present_skillset.empty())
+        {
+            cout << "\n"
+                 << CYAN << "Your current skillset includes:\n"
+                 << RESET;
+            for (auto &skill : present_skillset)
+                cout << "• " << skill.first << "\n";
+        }
     }
-}
-
-vector<string> getCorrectedTopics(Trie &trie, vector<string> &allTopics)
-{
-    vector<string> inputs;
-    string topic;
-
-    cout << "Enter topics you already know(type 'done' to finish):\n";
-    while (cin >> topic && topic != "done")
-        inputs.push_back(topic);
-
-    vector<string> corrected = smartSearch(inputs, allTopics, trie);
-    // unordered_set<string> skillset(corrected.begin(), corrected.end());
-    return corrected;
+    return present_skillset;
 }
 
 struct KnapItem
@@ -373,6 +420,7 @@ public:
             }
     }
 
+    //Main Graph Connections
     void createGraphConnections()
     {
         for (auto &graph : uni_map)                   // iterate through all graphs
@@ -386,13 +434,12 @@ public:
                         if (otherGraph.second.node_ind.count(neighbour) > 0) // Found a connection in another graph
                         {
                             graphConnections[graph.first].insert(otherGraph.first);
-                            // cout << "  Found connection: " << graph.first
-                            //     << " -> " << otherGraph.first
-                            //    << " via node " << neighbour << endl;
+                            // Connection: "graph.first" -> "otherGraph.first" via node "neighbour"
                         }
                     }
     }
 
+    // Main Graph's Importance (along w/ children)
     void computeAdjustedImportance()
     {
         for (auto graph : uni_map)
@@ -402,15 +449,19 @@ public:
                 imp += uni_map[subGraph].totalImportance;
 
             subtopic_adjustedImportance[graph.first] = imp;
-            //  cout<<subtopic_adjustedImportance[graph.first]<<endl;
         }
     }
 
+    //Utility function to remove hidden whitespaces
     string trim(string &s)
     {
-        size_t start = s.find_first_not_of(" \t\r\n");
-        size_t end = s.find_last_not_of(" \t\r\n");
-        return (start == string::npos) ? "" : s.substr(start, end - start + 1);
+        int start = s.find_first_not_of(" \t\r\n");
+        int end = s.find_last_not_of(" \t\r\n");
+        if(start == -1) return ""; //string::npos =-1
+        string res="";
+        for(int i=start; i<=end; i++)
+            res+=s[i];
+        return res;
     }
 
     void createGraphsUsingFile(string filename)
@@ -453,14 +504,13 @@ public:
                 nm = trim(str);
                 if (mp.find(nm) == mp.end())
                 {
-                    //                    int id = mp.size();
                     mp[nm] = 0;
                     rev_mp[0] = nm;
                 }
             }
             else if (line.rfind("ConnectedNodes: ", 0) == 0)
             {
-                //   cout<<"ConnectingNodes:"<<endl;
+                // "ConnectingNodes:"
                 string str = line.substr(16);
                 string nodes = trim(str), wrd = "";
                 int i = 0, len = nodes.length();
@@ -513,10 +563,8 @@ public:
             {
                 no_of_nodes = mp.size();
                 Graph obj(no_of_nodes);
-                // cout<<no_of_nodes<<endl;
                 obj.node_name = rev_mp;
                 obj.node_ind = mp;
-                // print(mp, rev_mp);
                 obj.name_of_graph = nm;
                 for (int i = 0; i < edgeCount + 1; i++)
                 {
@@ -533,54 +581,7 @@ public:
         return;
     }
 
-    //    void printSubgraph(string node,
-    //                   map<string, vector<pair<string, pair<int, int>>>>& branches,
-    //                   int timeConstraint,
-    //                   string indent = "", bool isLast = true,
-    //                   pair<int, int> edgeInfo = {-1, -1},
-    //                   unordered_set<string>& visited = *(new unordered_set<string>()),
-    //                   int timeSpent = 0)
-    //{
-    //    // If the current time spent exceeds the constraint, stop
-    //    if (timeSpent > timeConstraint) {
-    //        return;
-    //    }
-    //
-    //    // Check if we can print the current node with the edge time
-    //    int newTimeSpent = timeSpent + edgeInfo.first;
-    //    if (newTimeSpent > timeConstraint) {
-    //        return;  // Don't print and stop recursion if we exceed the time constraint
-    //    }
-    //
-    //    if (visited.count(node)) return;
-    //    visited.insert(node);
-    //
-    //    // Print current node
-    //    cout << indent;
-    //    if (!indent.empty()) {
-    //        cout << (isLast ? "└── " : "├── ");
-    //    }
-    //
-    //    cout << node;
-    //    if (edgeInfo.first != -1) {
-    //        cout << " (Time: " << edgeInfo.first << ", Diff: " << edgeInfo.second << ")";
-    //    }
-    //    cout << endl;
-    //
-    //    // Prepare indentation for next level
-    //    indent += (isLast ? "    " : "│   ");
-    //
-    //    // Recurse for all children, updating timeSpent
-    //    const auto& children = branches[node];
-    //    for (size_t i = 0; i < children.size(); ++i) {
-    //        const auto& [child, weight] = children[i];
-    //        bool childIsLast = (i == children.size() - 1);
-    //
-    //        // Add the edge time to timeSpent for next level
-    //        printSubgraph(child, branches, timeConstraint, indent, childIsLast, weight, visited, newTimeSpent);
-    //    }
-    //}
-
+    // A Beautiful display of branching Topics
     void printSubgraph(string node,
                        map<string, vector<pair<string, pair<int, int>>>> &branches,
                        int timeConstraint,
@@ -635,6 +636,24 @@ public:
         }
     }
 
+    // Display function for Knapsack Recommendation 
+    void displayKnapsackRecommendation(vector<string> &recommendedTopics)
+    {
+        cout << "\nRecommended Topics to Study (Based on Knapsack Optimization):\n";
+        if (recommendedTopics.empty())
+        {
+            cout << "No topics could be recommended within the time limit.\n";
+            return;
+        }
+
+        int idx = 0;
+        for (string &topic : recommendedTopics)
+        {
+            cout << " " << idx++ << ". " << topic << endl;
+        }
+    }
+
+    //  Branching Topics from a starting node within time-period
     void topicsPossibleInTime(string startNode, int timeConstraint, map<string, int> &present_skillset)
     {
 
@@ -651,7 +670,8 @@ public:
             }
         }
 
-        stack<StackNode> st; //{GraphName, NodeIndex, PathTraversed, totImp, totTime, NodesVisited}
+        stack<StackNode> st; 
+        //{GraphName, NodeIndex, PathTraversed, totImp, totTime, NodesVisited}
 
         set<string> reachableNodes;                               // stores all nodes reachable from startNode(under Constraint)
         map<pair<string, string>, pair<int, int>> reachableEdges; //<<node, node's_neighbour><Time, Difficulty>>
@@ -681,9 +701,6 @@ public:
             if (curStack.totTime > timeConstraint)
                 continue; // skip if exceedign totalTime
 
-            //        if(curStack.vis[curNode]) continue;
-            //        curStack.vis[curNode]=true;
-
             allPaths.push_back(curStack.path);
 
             for (int i = 0; i < a.adjMat.size(); i++) // Check if it is an endNode(leading to another mainTopic)
@@ -709,6 +726,7 @@ public:
                         pair<string, string> edgeKey = {curNode, a_new.node_name[i]};
                         int edgeTimeToAdd = a_new.adjMat[b][i].first;
 
+                        //  Creates path that can be traversed, stores it w/(TotalImportance, TotalTime, Visited nodes)
                         if (usedEdges.find(edgeKey) == usedEdges.end() && curStack.totTime + edgeTimeToAdd <= timeConstraint)
                         {
                             curStack.totTime += edgeTimeToAdd;
@@ -742,6 +760,8 @@ public:
                             edgeTime += a.adjMat[b][i].first;
                             importance += a.outDegree[a.node_name[i]].first;
                         }
+
+                        //  Creates path that can be traversed, stores it w/(TotalImportance, TotalTime, Visited nodes)
                         pair<string, string> edgeKey = {curNode, a.node_name[i]};
                         int edgeTimeToAdd = a.adjMat[b][i].first;
 
@@ -764,6 +784,7 @@ public:
             }
         }
 
+
         map<string, vector<pair<string, pair<int, int>>>> branches; // displayFormat
         for (auto e : reachableEdges)
         {
@@ -774,12 +795,9 @@ public:
 
         cout << "Visual Tree:" << endl;
         printSubgraph(startNode, branches, timeConstraint);
-
-        // vector<string> topics; // use reachableNodes instead;
-        // for(auto a: vis)
-        //     topics.push_back(a.first);
     }
 
+    // Main topic recommendations (excluding Children time)
     vector<string> KnapsackRecommendation(int maxTime, map<string, int> &present_skillset) // need to exclude the already done topics
     {
         unordered_set<string> neighb;
@@ -808,7 +826,6 @@ public:
             if (indegree.find(graph.first) != indegree.end() && indegree[graph.first] == 0)
                 imp += 5;
             topics.push_back({graph.first, graph.second.totalTime, imp});
-            // cout << "Adding topic: " << graph.first << " with time " << graph.second.totalTime << " and imp " << imp << endl;
         }
 
         int n = topics.size();
@@ -841,10 +858,15 @@ public:
         return listOfTopics;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Comparator for Dijikastra
     static bool compForPQDjikastra(pair<pair<Graph, string>, int> a, pair<pair<Graph, string>, int> b)
     {
         return a.second > b.second;
     }
+
+    // Shorest Route to cover necessary material before starting w/ a topic - Dijikastra Path Generation
     vector<string> findMostOptimalPath(string start, string end, int alpha_val, int beta_val, map<string, int> &present_skillset)
     {
         map<string, int> vis, shortest;                                                                                                                                                          // map storing shortet distance of all uptil now visited
@@ -867,7 +889,6 @@ public:
             string st = pq.top().first.second;
             pq.pop();
 
-            //  st=s.name_of_graph;
             if (!vis[st])
             {
                 shortest_path.push_back(st);
@@ -880,8 +901,6 @@ public:
                     shortest_path.push_back(end);
                 return shortest_path;
             }
-
-            // vector<vector<pair<int, int>>> adjMat=s.adjMat;
 
             for (int i = 0; i < s.no_of_nodes; i++) // traversing all the connections of the current node
             {
@@ -904,11 +923,13 @@ public:
         return shortest_path;
     }
 
+    //  Comparator for TopicCompletion
     static bool comp_for_pq_forTopicCompletion(pair<string, int> a, pair<string, int> b)
     {
         return a.second < b.second;
     }
 
+    //  Completion of a topic from Scratch to Advance
     vector<string> completionOfATopic(string topicName) // CODE FOR COMPLETING A TOPIC FROM SCRATCH TO ADVANCED
     {
         Graph &topic = uni_map[topicName];
@@ -919,19 +940,13 @@ public:
         st.push(topicName);
         int num_of_nodes_added = 0;
 
-        //  cout << "Starting topic completion from node: " << topicName << "\n";
-
         while (!st.empty())
         {
             string currNode = st.top();
             st.pop();
-            //            cout << "\nPopped from stack: " << currNode << endl;
 
             if (topic.node_ind.find(currNode) == topic.node_ind.end())
                 continue; // Skip if node is not present in the graph
-                          //  cout << "Current Node: " << currNode << endl;
-
-            // int curr = topic.node_ind[currNode];
 
             int curr = topic.node_ind[currNode];
             if (vis.find(currNode) == vis.end())
@@ -939,22 +954,16 @@ public:
                 completePath.push_back(currNode);
                 num_of_nodes_added += 1;
                 vis[currNode] = true;
-                //  cout << "Visited and added to path: " << currNode << "\n";
             }
             else
                 continue;
-            // st.pop();
 
-            //  cout << "Looking at neighbors of: " << currNode << "\n";
             for (int i = 0; i < topic.no_of_nodes; i++)
             {
                 if (topic.adjMat[curr][i].first != 0 && (vis.find(topic.node_name[i]) == vis.end()))
                 {
                     pq.push({topic.node_name[i], topic.adjMat[curr][i].first});
-                    //  cout << "    Neighbor added to PQ: " << topic.node_name[i]
-                    //         << " with weight: " << topic.adjMat[curr][i].first << "\n";
-                    // vis[topic.node_name[i]]=true;
-                    // cout << "Pushed to stack from: " << topic.node_name[i] << " with weight " << topic.adjMat[curr][i].first << endl;
+                    // Neighbor added to PQ: "topic.node_name[i]" with weight: "topic.adjMat[curr][i].first"
                 }
             }
 
@@ -963,14 +972,6 @@ public:
                 st.push(pq.top().first);
                 pq.pop();
             }
-
-            /*  cout << "Current completePath: ";
-              for (auto &node : completePath)
-                  cout << node << " ";
-              cout << "\n---------------------------\n";  */
-
-            /* if(num_of_nodes_added>=15)
-             break;*/
         }
         return completePath;
     }
@@ -986,6 +987,9 @@ public:
                 cout << vec[i] << "     --✔" << endl;
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //      =======================================================================     //
 
     // ==== Display Path with Main and Sub Topics ====
     void displayPathWithMainAndSubTopics(vector<string> &path)
@@ -1050,8 +1054,6 @@ public:
             }
         }
     }
-
-    // ==== Helper to Validate and Correct Topic ====
 
     // Calculate weighted distances to goal using Dijkstra
     map<string, int> calculateDistancesToGoal(string &goal, map<string, Graph> &uni_map,
@@ -1192,7 +1194,6 @@ public:
 
         return vector<string>(); // No path found
     }
-    // ==== Helper to Get Present Skillset ====
 
     // ==== Display Options Menu ==== %%%%%%
     int displayOptions()
@@ -1313,70 +1314,13 @@ public:
     }
 };
 
-void displayKnapsackRecommendation(vector<string> &recommendedTopics)
+void buildTrie(Trie &trie, vector<string> &topics)
 {
-    cout << "\nRecommended Topics to Study (Based on Knapsack Optimization):\n";
-    if (recommendedTopics.empty())
+    for (auto a : topics)
     {
-        cout << "No topics could be recommended within the time limit.\n";
-        return;
+        string word = normalize(a);
+        trie.insert(word);
     }
-
-    int idx = 0;
-    for (string &topic : recommendedTopics)
-    {
-        cout << " " << idx++ << ". " << topic << endl;
-    }
-}
-
-map<string, int> getPresentSkillset(Trie &trie, vector<string> &allTopics)
-{
-    map<string, int> present_skillset;
-
-    cout << "\nDo you have any previous skills? (y/n): ";
-    char hasSkills;
-    cin >> hasSkills;
-
-    if (hasSkills == 'y' || hasSkills == 'Y')
-    {
-        // cout << "\nEnter your skills (one per line, empty line to finish):\n";
-        // string skill;
-        // cin.ignore();  // Clear newline
-
-        // while(getline(cin, skill) && !skill.empty()) {
-        vector<string> correctedSkill = getCorrectedTopics(trie, allTopics);
-        for (const string &word : correctedSkill)
-        {
-            present_skillset[word] = 0;
-        }
-
-        if (!present_skillset.empty())
-        {
-            cout << "\n"
-                 << CYAN << "Your current skillset includes:\n"
-                 << RESET;
-            for (auto &skill : present_skillset)
-            {
-                cout << "• " << skill.first << "\n";
-            }
-        }
-    }
-
-    return present_skillset;
-}
-string validateAndCorrectTopic(string &input, Trie &trie, vector<string> &allTopics)
-{
-    // Use smartSearch to validate and correct the topic
-    vector<string> corrected = getCorrectedTopics(trie, allTopics);
-    if (corrected.empty())
-    {
-        cout << "\nNo matching topics found.\n";
-        cout << "Press any key to continue...";
-        _getch();
-        return ""; // Return empty string to indicate no valid topic
-    }
-
-    return corrected[0]; // Return the corrected topic
 }
 
 vector<string> getAllUniqueTopics(RoadRunner &obj)
@@ -1388,6 +1332,7 @@ vector<string> getAllUniqueTopics(RoadRunner &obj)
     }
     return vector<string>(uniqueTopics.begin(), uniqueTopics.end());
 }
+
 int main()
 {
 
@@ -1446,7 +1391,7 @@ int main()
             cin >> maxTime;
             completePath = roadrunner.KnapsackRecommendation(maxTime, present_skillset);
             str = "Maximum topics possible to be covered in " + maxTime;
-            displayKnapsackRecommendation(completePath);
+            roadrunner.displayKnapsackRecommendation(completePath);
             break;
         }
             /*  case 3: {
