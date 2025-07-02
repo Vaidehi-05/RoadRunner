@@ -84,6 +84,7 @@ g++ CompleteCode.cpp -o RoadRunner
 | `CompleteCode.cpp` | Core logic and menu system                      |
 | `GraphDetails.txt` | File storing all Topic Graphs                   |
 | `abbreviation.h`   | Header file storing popular topic abbreviations |
+| `graph_visual.html`| Visualization and Editing of Graphs with interaction |
 | `README.md`        | Project Documentation                           |
 <hr>
 
