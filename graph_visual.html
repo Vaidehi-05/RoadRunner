@@ -1,0 +1,433 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graph Builder</title>
+  <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
+  <link href="https://unpkg.com/vis-network@9.1.2/styles/vis-network.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 1rem;
+    }
+    h1 {
+      text-align: center;
+    }
+    #graph-container {
+      width: 100%;
+      height: 80vh;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      margin-top: 1rem;
+    }
+    .form-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .form-section > div {
+      flex: 1;
+      min-width: 300px;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    input, select, button {
+      padding: 0.5rem;
+      margin: 0.25rem 0;
+      width: 100%;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Interactive Graph Editor</h1>
+
+  <div class="form-section">
+    <!-- Node Editing -->
+    <div>
+      <h2>Edit / Delete Node</h2>
+      <input type="text" id="editNodeLabelOld" placeholder="Old Label" />
+      <input type="text" id="editNodeLabel" placeholder="New Label" />
+      <input type="color" id="editNodeColor" value="#ffd700" />
+      <button onclick="editNode()">Edit Node</button>
+      <button onclick="deleteNode()">Delete Node</button>
+    </div>
+
+    <!-- Add Node -->
+    <div>
+      <h2>Add Node</h2>
+      <input type="text" id="nodeLabel" placeholder="Node Label" />
+      <input type="color" id="nodeColor" value="#90ee90" />
+      <button onclick="addNode()">Add Node</button>
+    </div>
+
+    <!-- Add Edge -->
+    <div>
+      <h2>Add Edge</h2>
+      <input type="text" id="edgeStart" placeholder="Start Node Label" />
+      <input type="text" id="edgeEnd" placeholder="End Node Label" />
+      <input type="number" id="edgeWeight" placeholder="Edge Weight" />
+      <input type="number" id="edgeTime" placeholder="Time Needed" />
+      <button onclick="addEdge()">Add Edge</button>
+    </div>
+
+    <!-- Edit Edge -->
+    <div>
+      <h2>Edit Edge</h2>
+      <input type="text" id="editEdgeStart" placeholder="Start Node Label" />
+      <input type="text" id="editEdgeEnd" placeholder="End Node Label" />
+      <input type="number" id="editEdgeWeight" placeholder="New Edge Weight" />
+      <input type="number" id="editEdgeTime" placeholder="New Time Needed" />
+      <button onclick="editEdge()">Edit Edge</button>
+    </div>
+
+    <!-- Define Subgraph -->
+    <div>
+      <h2>Define Subgraph</h2>
+      <input type="text" id="manualSubgraph" placeholder="Subgraph Name" />
+      <button onclick="addManualSubgraph()">Add Subgraph</button>
+    </div>
+  
+
+    <!-- Upload File -->
+    <div>
+      <h2>Load Graph from File</h2>
+      <input type="file" id="fileInput" accept=".txt" />
+      <button onclick="loadFromFile()">Load File</button>
+      <button onclick="downloadGraphData()">Download Graph Data</button>
+    </div>
+  </div>
+
+  <div id="graph-container"></div>
+
+  <script>
+    const nodes = new vis.DataSet();  //Nodes
+    const edges = new vis.DataSet();  //Edges
+    const validSubgraphs = new Set(); //Will hold subgraph names from the file or manual input
+
+    const container = document.getElementById("graph-container");
+    const data = {nodes, edges};
+    const options ={
+      physics: {enabled: true, stabilization: false},
+      interaction: {hover: true, navigationButtons: true},
+    };
+    const network = new vis.Network(container, data, options);
+
+    function addNode() 
+    {
+        const label = document.getElementById("nodeLabel").value.trim();
+        const color = document.getElementById("nodeColor").value;
+
+        if(!label)
+        {
+          alert("Please enter a label.");
+          return;
+        }
+
+        const existing = nodes.get().find(n => n.label === label);
+        if(existing)
+        {
+          alert("A node with this label already exists.");
+          return;
+        }
+
+        const id=nodes.length + 1 + Math.floor(Math.random() * 1000);
+        nodes.add({ id, label, color, group: label }); // <-- Add group field
+    }
+
+
+
+      function addEdge() {
+        const fromLabel = document.getElementById("edgeStart").value.trim();
+        const toLabel = document.getElementById("edgeEnd").value.trim();
+        const weight = document.getElementById("edgeWeight").value.trim();
+        const time = document.getElementById("edgeTime").value.trim();
+
+        if (!fromLabel || !toLabel || !weight || !time) {
+          alert("Please fill all edge fields.");
+          return;
+        }
+
+        const allNodes = nodes.get();
+        const fromNode = allNodes.find(n => n.label === fromLabel);
+        const toNode = allNodes.find(n => n.label === toLabel);
+
+        if (!fromNode || !toNode) {
+          alert("Invalid node labels. Make sure both nodes exist.");
+          return;
+        }
+
+        edges.add({
+          from: fromNode.id,
+          to: toNode.id,
+          label: `${weight}, ${time}`,
+          weight: parseInt(weight),
+          time: parseInt(time),
+          arrows: 'to'
+        });
+      }
+
+
+
+    function editNode() {
+  const oldLabel = document.getElementById("editNodeLabelOld").value.trim();
+  const newLabel = document.getElementById("editNodeLabel").value.trim();
+  const newColor = document.getElementById("editNodeColor").value;
+
+  const node = nodes.get().find(n => n.label === oldLabel);
+  if (!node) {
+    alert("Node not found by label.");
+    return;
+  }
+
+  nodes.update({
+    id: node.id,
+    label: newLabel || node.label,
+    color: newColor || node.color,
+    group: newLabel || node.label  // ensure group is also updated
+  });
+}
+
+
+function generateFormattedGraphData(nodes, edges) {
+  const subgraphs = {};
+
+  // Collect node and edge info grouped by subgraph name (only valid ones)
+  nodes.forEach(node => {
+    const subgraph = node.group || node.label;
+    if (!validSubgraphs.has(subgraph)) return;
+
+    if (!subgraphs[subgraph]) {
+      subgraphs[subgraph] = {
+        name: subgraph,
+        nodes: new Set(),
+        edges: []
+      };
+    }
+
+    subgraphs[subgraph].nodes.add(node.label);
+  });
+
+  edges.forEach(edge => {
+    const fromNode = nodes.find(n => n.id === edge.from);
+    const toNode = nodes.find(n => n.id === edge.to);
+    const subgraph = fromNode.group || fromNode.label;
+
+    if (!validSubgraphs.has(subgraph)) return;
+
+    subgraphs[subgraph].edges.push({
+      start: fromNode.label,
+      end: toNode.label,
+      weight: edge.weight || 1,
+      time: edge.time || 1
+    });
+
+    subgraphs[subgraph].nodes.add(toNode.label);
+  });
+
+  // Generate final output
+  let content = "";
+  for (const key in subgraphs) {
+    const sg = subgraphs[key];
+    content += `Num_of_Nodes: ${sg.nodes.size}\n`;
+    content += `Name: ${sg.name}\n`;
+    content += `ConnectedNodes: ${[...sg.nodes].join(" ")}\n`;
+
+    sg.edges.forEach(e => {
+      content += `EdgeStart: ${e.start}\nEdgeEnd: ${e.end}\nEdgeWeight: ${e.weight}\nEdgeTimeNeeded: ${e.time}\n`;
+    });
+
+    content += "*****\n";
+  }
+
+  return content.trim();
+}
+
+
+
+   function deleteNode() {
+  const label = document.getElementById("editNodeLabelOld").value.trim();
+  const node = nodes.get().find(n => n.label === label);
+  if (!node) {
+    alert("Node not found.");
+    return;
+  }
+
+  const id = node.id;
+  const connectedEdges = edges.get({
+    filter: edge => edge.from === id || edge.to === id,
+  });
+
+  edges.remove(connectedEdges.map(e => e.id));
+  nodes.remove({ id });
+}
+  function editEdge() {
+  const fromLabel = document.getElementById("editEdgeStart").value.trim();
+  const toLabel = document.getElementById("editEdgeEnd").value.trim();
+  const newWeight = document.getElementById("editEdgeWeight").value.trim();
+  const newTime = document.getElementById("editEdgeTime").value.trim();
+
+  if (!fromLabel || !toLabel || !newWeight || !newTime) {
+    alert("Please fill all edge fields.");
+    return;
+  }
+
+  const allNodes = nodes.get();
+  const fromNode = allNodes.find(n => n.label === fromLabel);
+  const toNode = allNodes.find(n => n.label === toLabel);
+
+  if (!fromNode || !toNode) {
+    alert("Invalid node labels.");
+    return;
+  }
+
+  const allEdges = edges.get();
+  const edge = allEdges.find(e => e.from === fromNode.id && e.to === toNode.id);
+
+  if (!edge) {
+    alert("Edge not found between the given nodes.");
+    return;
+  }
+
+  edges.update({
+    id: edge.id,
+    label: `${newWeight}, ${newTime}`,
+    weight: parseInt(newWeight),
+    time: parseInt(newTime),
+    arrows: 'to'
+  });
+}
+
+
+    function loadFromFile() {
+      const file = document.getElementById("fileInput").files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const content = e.target.result;
+        parseGraphFile(content);
+      };
+      reader.readAsText(file);
+    }
+
+    function parseGraphFile(text) {
+      nodes.clear();
+      edges.clear();
+      const sections = text.trim().split("*****");
+      const nameToId = {};
+      let currentId = 1;
+      sections.forEach(section => {
+  const lines = section.trim().split("\n");
+  let color = getRandomPastelColor();
+  let localNodes = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.startsWith("Name:")) {
+  const name = line.split(":")[1].trim();
+  validSubgraphs.add(name); // Track valid subgraph
+
+if (!nameToId[name]) {
+  nameToId[name] = currentId++;
+  nodes.add({ id: nameToId[name], label: name, color, group: name });
+} else {
+  const existing = nodes.get(nameToId[name]);
+  if (!existing.group) {
+    nodes.update({ id: nameToId[name], color, group: name });
+  }
+}
+localNodes.push(name);
+
+
+      localNodes.push(name);
+    } else if (line.startsWith("ConnectedNodes:")) {
+      const subnodes = line.split(":")[1].trim().split(" ");
+      subnodes.forEach(n => {
+        if (!nameToId[n]) {
+          nameToId[n] = currentId++;
+          nodes.add({ id: nameToId[n], label: n, color, group: name });
+
+        }
+        localNodes.push(n);
+      });
+    } else if (line.startsWith("EdgeStart:")) {
+      const from = line.split(":")[1].trim();
+      const toLine = lines[i + 1]?.trim();
+      const weightLine = lines[i + 2]?.trim();
+      const timeLine = lines[i + 3]?.trim();
+
+      if (toLine?.startsWith("EdgeEnd:") && weightLine?.startsWith("EdgeWeight:") && timeLine?.startsWith("EdgeTimeNeeded:")) {
+        const to = toLine.split(":")[1].trim();
+        const weight = weightLine.split(":")[1].trim();
+        const time = timeLine.split(":")[1].trim();
+
+        if (nameToId[from] && nameToId[to]) {
+            edges.add({
+             from: nameToId[from],
+              to: nameToId[to],
+            label: `${weight}, ${time}`,
+              weight: parseInt(weight),
+              time: parseInt(time),
+              arrows: 'to'
+            });
+
+        }
+        i += 3;
+      }
+    }
+  }
+
+  // Optional: Color already existing nodes to the same subgraph color
+  localNodes.forEach(name => {
+    const id = nameToId[name];
+    const existing = nodes.get(id);
+    if (existing && existing.color !== color) {
+      nodes.update({ id, color });  // Update color to reflect current subgraph
+    }
+  });
+});
+
+    }
+
+    function getRandomPastelColor() {
+      const r = Math.round((Math.random() * 127) + 127);
+      const g = Math.round((Math.random() * 127) + 127);
+      const b = Math.round((Math.random() * 127) + 127);
+      return `rgb(${r},${g},${b})`;
+    }
+
+    function downloadGraphData() {
+  const nodeList = nodes.get();
+  const edgeList = edges.get();
+
+  const formattedText = generateFormattedGraphData(nodeList, edgeList);
+
+  const blob = new Blob([formattedText], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "graph_data.txt";
+  a.click();
+}
+
+function addManualSubgraph() {
+  const subgraphName = document.getElementById("manualSubgraph").value.trim();
+  if (subgraphName) {
+    validSubgraphs.add(subgraphName);
+    alert(`Subgraph '${subgraphName}' added.`);
+  } else {
+    alert("Please enter a subgraph name.");
+  }
+}
+
+
+  </script>
+</body>
+</html>
