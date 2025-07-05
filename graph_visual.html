@@ -111,7 +111,7 @@
   <script>
     const nodes = new vis.DataSet();  //Nodes
     const edges = new vis.DataSet();  //Edges
-    const validSubgraphs = new Set(); //Will hold subgraph names from the file or manual input
+    const validSubgraphs = new Set(); //Holds subgraph names from the file or manual input
 
     const container = document.getElementById("graph-container");
     const data = {nodes, edges};
@@ -140,7 +140,7 @@
         }
 
         const id=nodes.length + 1 + Math.floor(Math.random() * 1000);
-        nodes.add({ id, label, color, group: label }); // <-- Add group field
+        nodes.add({ id, label, color, group: label }); 
     }
 
 
@@ -200,7 +200,7 @@
 function generateFormattedGraphData(nodes, edges) {
   const subgraphs = {};
 
-  // Collect node and edge info grouped by subgraph name (only valid ones)
+  //Collect node and edge info grouped by subgraph name (only valid ones)
   nodes.forEach(node => {
     const subgraph = node.group || node.label;
     if (!validSubgraphs.has(subgraph)) return;
@@ -233,7 +233,7 @@ function generateFormattedGraphData(nodes, edges) {
     subgraphs[subgraph].nodes.add(toNode.label);
   });
 
-  // Generate final output
+  //Generate txt file
   let content = "";
   for (const key in subgraphs) {
     const sg = subgraphs[key];
@@ -333,7 +333,7 @@ function generateFormattedGraphData(nodes, edges) {
     const line = lines[i];
     if (line.startsWith("Name:")) {
   const name = line.split(":")[1].trim();
-  validSubgraphs.add(name); // Track valid subgraph
+  validSubgraphs.add(name); 
 
 if (!nameToId[name]) {
   nameToId[name] = currentId++;
@@ -384,13 +384,11 @@ localNodes.push(name);
       }
     }
   }
-
-  // Optional: Color already existing nodes to the same subgraph color
   localNodes.forEach(name => {
     const id = nameToId[name];
     const existing = nodes.get(id);
     if (existing && existing.color !== color) {
-      nodes.update({ id, color });  // Update color to reflect current subgraph
+      nodes.update({ id, color }); 
     }
   });
 });
