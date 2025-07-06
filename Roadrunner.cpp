@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 #include <conio.h> //needed for getch() - Windoews Only
-//#include "abbreviation.h"
+#include "abbreviation.h"
 using namespace std;
 
 // ANSI Color Codes
@@ -274,7 +274,7 @@ string smartSearchOneWord(string &word, vector<string> &allTopics, Trie &trie)
 map<string, int> getPresentSkillset(Trie &trie, vector<string> &allTopics)
 {
     map<string, int> present_skillset;
-
+    cout << "\t\t===========Before we move on!===========\n\t You may enter your present topics of DSA in knowledge. One's you have confiedence.";
     cout << "\nDo you have any previous skills? (y/n): ";
     char hasSkills;
     cin >> hasSkills;
@@ -1014,7 +1014,6 @@ public:
 
 };
 
-
     void buildTrie(Trie &trie, vector<string> &topics)
     {
         for (auto a : topics)
@@ -1044,7 +1043,6 @@ public:
         roadrunner.createGraphsUsingFile("GraphDetails.txt");
 
         vector<string> allTopics = getAllUniqueTopics(roadrunner);
-        map<string, int> present_skillset = getPresentSkillset(trie, allTopics);
         string startTopic, endTopic;
         int timeConstraint = 0;
         int timeConstraintInUnits = 0;
@@ -1064,7 +1062,7 @@ public:
         while (true)
         {
             int choice = roadrunner.displayOptions();
-
+            map<string, int> present_skillset = getPresentSkillset(trie, allTopics);
             string topic, str, start, end;
             int maxTime, alpha, beta, ch;
             vector<string> completePath;
