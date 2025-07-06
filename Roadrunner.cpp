@@ -54,8 +54,8 @@ public:
             if (node->child[c])
                 node = node->child[c];
             else
-                node->child[c] = new TrieNode();
-            node = node->child[c];
+                {node->child[c] = new TrieNode();
+                node = node->child[c];}
         }
         node->isEnd = true;
         // why?
@@ -217,9 +217,10 @@ vector<string> smartSearch(vector<string> topicsInput, vector<string> &allTopics
     for (string w : topicsInput)
     {
         string corrected = normalize(w);
-
+        string temp = corrected;
+        //transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
         // Store input if in Trie
-        if (trie.search(corrected))
+        if (trie.search(temp))
         {
             results.push_back(corrected);
             continue;
@@ -268,14 +269,16 @@ string smartSearchOneWord(string &word, vector<string> &allTopics, Trie &trie)
     vector<string> temp;
     temp.push_back(word);
     temp = smartSearch(temp, allTopics, trie);
+    cout<< "Temp[o]=" << temp[0]<<endl;
     return temp[0];
 }
 /*  Promopts user to input their Present Skillset (topics-completed) */
 map<string, int> getPresentSkillset(Trie &trie, vector<string> &allTopics)
 {
+    system("cls");
     map<string, int> present_skillset;
-    cout << "\t\t===========Before we move on!===========\n\t You may enter your present topics of DSA in knowledge. One's you have confiedence.";
-    cout << "\nDo you have any previous skills? (y/n): ";
+    cout << "\t     ===========Before we move on!===========\n\t You may enter topics you presently hold knowledge of.\n\t     The one's you are confident in.";
+    cout << "\n\tDo you have any previous skills? (y/n): ";
     char hasSkills;
     cin >> hasSkills;
 
@@ -301,7 +304,21 @@ map<string, int> getPresentSkillset(Trie &trie, vector<string> &allTopics)
             for (auto &skill : present_skillset)
                 cout << "• " << skill.first << "\n";
         }
+        else
+        {
+
+            cout << "\n\tAlright! We have a clean slate to fill,"<< CYAN<<" soldier"<< RESET <<". Buckle up!"<<endl;
+        }
     }
+    else
+    {
+        cout << "\n\tAlright! We have a clean slate to fill,"<< CYAN<<" soldier"<< RESET <<". Buckle up!"<<endl;
+    }
+            cout << "\n\nPress ENTER to go back to Main Menu!" << endl;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.get();
+            system("cls");
+
     return present_skillset;
 }
 
@@ -323,6 +340,15 @@ struct StackNode // USED FOR DFS
     // int diff; //variable constraints!
 };
 
+struct CaseInsensitiveCompare {
+    bool operator()(const string &a, const string &b) const {
+        string aa = a, bb = b;
+        transform(aa.begin(), aa.end(), aa.begin(), ::tolower);
+        transform(bb.begin(), bb.end(), bb.begin(), ::tolower);
+        return aa < bb;
+    }
+};
+
 class Graph
 {
 public:
@@ -332,8 +358,8 @@ public:
                                            // no need to traverse the entire list of connections if we know which node we want to connect with
 
     map<int, string> node_name;                       // stores each node index's name
-    map<string, int> node_ind;                        // stores each node num mapped to its name
-    map<string, pair<int, vector<string>>> outDegree; // strore outdegrees and all the reachable neighbours
+    map<string, int, CaseInsensitiveCompare> node_ind;                        // stores each node num mapped to its name
+    map<string, pair<int, vector<string>>, CaseInsensitiveCompare> outDegree; // strore outdegrees and all the reachable neighbours
     int totalImportance;                              // stores sum of importance of all subnodes --deep
     int totalTime;                                    // stores total time of only direct connections --only main
 
@@ -397,14 +423,16 @@ public:
     }
 };
 
+
+
 class RoadRunner
 {
 public:
     vector<Graph> topic;
-    map<string, Graph> uni_map; // storing each Graph mapped to its name
-    map<string, int> indegree;
-    map<string, int> subtopic_adjustedImportance;
-    map<string, set<string>> graphConnections;
+    map<string, Graph, CaseInsensitiveCompare> uni_map; // storing each Graph mapped to its name
+    map<string, int, CaseInsensitiveCompare> indegree;
+    map<string, int, CaseInsensitiveCompare> subtopic_adjustedImportance;
+    map<string, set<string>, CaseInsensitiveCompare> graphConnections;
 
     void computeIndegree()
     {
@@ -495,7 +523,7 @@ public:
         int no_of_nodes, edgeCount, n = 0;
         string node_name, line, nm;
         vector<vector<int>> edgeDetails; // stores all edges in format: starting node, ending node, edge-weight, time needed
-        map<string, int> mp;             // storing node value of each node
+        map<string, int, CaseInsensitiveCompare> mp;             // storing node value of each node
         map<int, string> rev_mp;         // storing name of each node
         while (getline(file, line))
         {
@@ -1019,6 +1047,8 @@ public:
         for (auto a : topics)
         {
             string word = normalize(a);
+            //transform(word.begin(), word.end(), word.begin(), ::tolower);
+            //cout << word <<endl;
             trie.insert(word);
         }
     }
@@ -1057,12 +1087,15 @@ public:
         roadrunner.computeIndegree();
         roadrunner.computeAdjustedImportance();
 
+        buildTrie(trie, allTopics);
         int n;
-        cout << GREEN << "Welcome to Roadrunner!\nGet ready to embark on a thrilling journey of self assessed growth, where we will provide you with the assistance but the journey will be all yours!\nJust fill up our questionairre and wait until the magic unfolds and we present you with a specially customized roadmap, tailored specifically to your needs and preferences!" << endl;
+        cout << GREEN << "\t\t==================================\n\t\tWelcome to Roadrunner!\n\t\t==================================\nGet ready to embark on a thrilling journey of self assessed growth,\nwhere we will provide you with the assistance but the journey will be all yours!\nJust fill up our questionaire and wait until the magic unfolds and we present you with a specially customized roadmap,\ntailored specifically to your needs and preferences!"<< RESET << endl;
+            cout<<"\n\nPress enter to continue...";
+            cin.ignore();
+        map<string, int> present_skillset = getPresentSkillset(trie, allTopics);
         while (true)
         {
             int choice = roadrunner.displayOptions();
-            map<string, int> present_skillset = getPresentSkillset(trie, allTopics);
             string topic, str, start, end;
             int maxTime, alpha, beta, ch;
             vector<string> completePath;
@@ -1119,6 +1152,7 @@ public:
             case 4:
                 {cout << "Enter the skill you'd like to begin with: " << endl;
                 cin >> topic;
+                topic = smartSearchOneWord(topic, allTopics, trie);
                 cout << "Enter the maximum time you can invest:" << endl;
                 cin >> maxTime;
                 roadrunner.topicsPossibleInTime(topic, maxTime, present_skillset);
@@ -1133,9 +1167,9 @@ public:
                 break;
                 }
             }
-            cout << "Press any key to go back to Main Menu!" << endl;
-            cin.ignore();
+            cout << "Press ENTER to go back to Main Menu!" << endl;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin.get();
-            cin.ignore();
+            system("cls");
         }
     }
