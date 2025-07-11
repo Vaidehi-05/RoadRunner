@@ -340,14 +340,14 @@ struct StackNode // USED FOR DFS
     // int diff; //variable constraints!
 };
 
-struct CaseInsensitiveCompare {
-    bool operator()(const string &a, const string &b) const {
-        string aa = a, bb = b;
-        transform(aa.begin(), aa.end(), aa.begin(), ::tolower);
-        transform(bb.begin(), bb.end(), bb.begin(), ::tolower);
-        return aa < bb;
-    }
-};
+// struct CaseInsensitiveCompare {
+//     bool operator()(const string &a, const string &b) const {
+//         string aa = a, bb = b;
+//         transform(aa.begin(), aa.end(), aa.begin(), ::tolower);
+//         transform(bb.begin(), bb.end(), bb.begin(), ::tolower);
+//         return aa < bb;
+//     }
+// };
 
 class Graph
 {
@@ -358,8 +358,8 @@ public:
                                            // no need to traverse the entire list of connections if we know which node we want to connect with
 
     map<int, string> node_name;                       // stores each node index's name
-    map<string, int, CaseInsensitiveCompare> node_ind;                        // stores each node num mapped to its name
-    map<string, pair<int, vector<string>>, CaseInsensitiveCompare> outDegree; // strore outdegrees and all the reachable neighbours
+    map<string, int > node_ind;                        // stores each node num mapped to its name
+    map<string, pair<int, vector<string>> > outDegree; // strore outdegrees and all the reachable neighbours
     int totalImportance;                              // stores sum of importance of all subnodes --deep
     int totalTime;                                    // stores total time of only direct connections --only main
 
@@ -429,10 +429,10 @@ class RoadRunner
 {
 public:
     vector<Graph> topic;
-    map<string, Graph, CaseInsensitiveCompare> uni_map; // storing each Graph mapped to its name
-    map<string, int, CaseInsensitiveCompare> indegree;
-    map<string, int, CaseInsensitiveCompare> subtopic_adjustedImportance;
-    map<string, set<string>, CaseInsensitiveCompare> graphConnections;
+    map<string, Graph > uni_map; // storing each Graph mapped to its name
+    map<string, int > indegree;
+    map<string, int > subtopic_adjustedImportance;
+    map<string, set<string> > graphConnections;
 
     void computeIndegree()
     {
@@ -523,7 +523,7 @@ public:
         int no_of_nodes, edgeCount, n = 0;
         string node_name, line, nm;
         vector<vector<int>> edgeDetails; // stores all edges in format: starting node, ending node, edge-weight, time needed
-        map<string, int, CaseInsensitiveCompare> mp;             // storing node value of each node
+        map<string, int > mp;             // storing node value of each node
         map<int, string> rev_mp;         // storing name of each node
         while (getline(file, line))
         {
@@ -536,6 +536,7 @@ public:
             else if (line.rfind("Name: ", 0) == 0)
             {
                 string str = line.substr(6);
+                transform(str.begin(), str.end(), str.begin(), ::tolower);
                 nm = trim(str);
                 if (mp.find(nm) == mp.end())
                 {
@@ -547,6 +548,7 @@ public:
             {
                 // "ConnectingNodes:"
                 string str = line.substr(16);
+                transform(str.begin(), str.end(), str.begin(), ::tolower);
                 string nodes = trim(str), wrd = "";
                 int i = 0, len = nodes.length();
                 while (i < len)
@@ -572,6 +574,7 @@ public:
             {
                 edgeCount += 1;
                 string str = line.substr(11);
+                transform(str.begin(), str.end(), str.begin(), ::tolower);
                 string start = trim(str);
 
                 vector<int> a;
@@ -581,6 +584,7 @@ public:
             else if (line.rfind("EdgeEnd: ", 0) == 0)
             {
                 string str = line.substr(9);
+                transform(str.begin(), str.end(), str.begin(), ::tolower);
                 string end = trim(str);
                 edgeDetails[edgeCount].push_back(mp[end]);
             }
