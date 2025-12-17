@@ -35,7 +35,7 @@ Given that hundreds of thousands of CS grads enter the job market every year, DS
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/RoadRunner.git
+git clone https://github.com/Vaidehi-05/RoadRunner.git
 
 # Navigate to the project folder
 cd RoadRunner
